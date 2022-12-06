@@ -1,11 +1,8 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true,
-  },
-  "editor.formatOnSave": true,
-  "i18n-ally.localesPaths": [
-    "locales"
-  ],
-  "scss.lint.unknownAtRules": "ignore"
+  "i18n-ally.localesPaths": ["locales"],
+  "scss.lint.unknownAtRules": "ignore",
+  "npm.packageManager": "pnpm",
+  "prettier.resolveGlobalModules": false,
+  "typescript.disableAutomaticTypeAcquisition": false,
+  "typescript.format.enable": true
 }
