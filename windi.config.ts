@@ -5,6 +5,7 @@ import colors from 'windicss/colors';
 export default defineConfig({
   darkMode: 'class',
   plugins: [typography()],
+  attributify: true,
   theme: {
     fontFamily: {
       sans: ['Open Sans', 'ui-sans-serif', 'system-ui'],

@@ -17,6 +17,7 @@
       </p>
       <div>{{ t('before coding') }} , {{ t('setup ide') }} <strong>VSCode</strong> + <strong>Volar</strong></div>
     </div>
+    <div color=""></div>
   </div>
 </template>
 

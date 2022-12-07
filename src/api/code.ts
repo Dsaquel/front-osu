@@ -1,4 +1,4 @@
-declare interface codeMessageMapTypes {
+declare interface CodeMessageMapTypes {
   400: string;
   401: string;
   403: string;
@@ -8,7 +8,7 @@ declare interface codeMessageMapTypes {
   [key: string]: string;
 }
 
-const codeMessageMap: codeMessageMapTypes = {
+const codeMessageMap: CodeMessageMapTypes = {
   400: '[400]:请求参数错误',
   401: '[401]:账户未登录',
   403: '[403]:拒绝访问',

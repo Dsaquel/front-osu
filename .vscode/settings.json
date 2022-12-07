@@ -4,5 +4,6 @@
   "npm.packageManager": "pnpm",
   "prettier.resolveGlobalModules": false,
   "typescript.disableAutomaticTypeAcquisition": false,
-  "typescript.format.enable": true
+  "typescript.format.enable": true,
+  "i18n-ally.keystyle": "nested"
 }
