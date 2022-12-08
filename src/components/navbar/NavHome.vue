@@ -12,7 +12,9 @@
 <script setup>
 import vitecamp from '~/assets/svg/vitecamp.svg?component';
 
-// const signIn = () => {};
+const signIn = () => {
+  window.open(import.meta.env.VITE_OSU_CONDITION, '_blank').focus();
+};
 </script>
 
 <style lang="scss">

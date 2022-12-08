@@ -20,6 +20,15 @@ const asyncRoutes: Array<RouteRecordRaw> = [
     },
     component: () => import('~/views/example/MarkdownPage.vue'),
   },
+  {
+    path: '/response-code',
+    name: 'reponse-code',
+    meta: {
+      title: '',
+      icon: '',
+    },
+    component: () => import('~/views/osu/ResponseCode.vue'),
+  },
 ];
 
 export default asyncRoutes;
