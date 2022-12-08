@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { isDark, toggleDark } from '@/utils/dark';
+import { isDark, toggleDark } from '~/utils/dark';
 
 const { t, availableLocales, locale } = useI18n();
 const toggleLocales = () => {

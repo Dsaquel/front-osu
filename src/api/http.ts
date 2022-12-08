@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import showCodeMessage from '@/api/code';
-import { formatJsonToUrlParams, instanceObject } from '@/utils/format';
+import showCodeMessage from '~/api/code';
+import { formatJsonToUrlParams, instanceObject } from '~/utils/format';
 
 const BASE_PREFIX = import.meta.env.VITE_API_BASEURL;
 

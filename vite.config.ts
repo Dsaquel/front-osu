@@ -14,7 +14,7 @@ export default defineConfig((env) => {
     // 别名设置
     resolve: {
       alias: {
-        '@': resolve(__dirname, './src'), // 把 @ 指向到 src 目录去
+        '~': resolve(__dirname, './src'), // 把 @ 指向到 src 目录去
       },
     },
     // 服务设置
@@ -54,7 +54,7 @@ export default defineConfig((env) => {
         // 全局引入了 scss 的文件
         scss: {
           additionalData: `
-          @import "@/assets/styles/variables.scss";
+          @import "~/assets/styles/variables.scss";
         `,
           javascriptEnabled: true,
         },
