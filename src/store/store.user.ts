@@ -3,11 +3,17 @@ import { User } from '~/types';
 import apiUser from '~/api/modules/api.user';
 
 const useUserStore = defineStore('user', () => {
-  const user = $ref<User>();
+  let user = $ref<User | null>(null);
 
-  async function fetch(): Promise<User> {
-    return await apiUser.fetch();
+  function store(data: User) {
+    user = { ...data };
   }
+
+  async function fetch() {
+    const data = await apiUser.fetch();
+    store(data);
+  }
+
   return { user, fetch };
 });
 

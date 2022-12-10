@@ -3,7 +3,8 @@ import zhCn from 'element-plus/lib/locale/lang/zh-cn';
 import Cookies from 'js-cookie';
 
 onMounted(() => {
-  userStore().fetch(Cookies.get('AccessToken'));
+  tokenStore().token = Cookies.get('AccessToken');
+  userStore().fetch();
 });
 const locale = zhCn;
 </script>

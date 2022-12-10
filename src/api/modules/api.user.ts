@@ -2,7 +2,7 @@ import service from '~/api/http';
 import { User } from '~/types';
 
 const UserApi = {
-  fetch: (params: object) => service.get<User>(`/me`, params),
+  fetch: () => service.get<User>(`/me`),
 };
 
 export default UserApi;
