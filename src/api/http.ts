@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import showCodeMessage from '~/api/code';
-import { formatJsonToUrlParams, instanceObject } from '~/utils/format';
+import formatJsonToUrlParams, { InstanceObject } from '~/utils/format';
 
 const BASE_PREFIX = import.meta.env.VITE_API_BASEURL;
 
@@ -13,7 +13,7 @@ const axiosInstance: AxiosInstance = axios.create({
   // 请求头
   headers: {
     'Content-Type': 'application/json',
-    // Authorization: `Bearer ${tokenStore.token}`,
+    Authorization: `Bearer ${storeToken().token}`,
   },
 });
 
@@ -69,7 +69,7 @@ const service = {
     axiosInstance.post(url, file, {
       headers: { 'Content-Type': 'multipart/form-data' },
     }),
-  download: (url: string, data: instanceObject) => {
+  download: (url: string, data: InstanceObject) => {
     window.location.href = `${BASE_PREFIX}/${url}?${formatJsonToUrlParams(data)}`;
   },
 };
