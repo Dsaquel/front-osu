@@ -102,7 +102,6 @@ declare global {
   const shallowRef: typeof import('vue')['shallowRef']
   const store: typeof import('./store/index')['default']
   const storeToRefs: typeof import('pinia')['storeToRefs']
-  const storeUser: typeof import('./store/store.user')['default']
   const syncRef: typeof import('@vueuse/core')['syncRef']
   const syncRefs: typeof import('@vueuse/core')['syncRefs']
   const templateRef: typeof import('@vueuse/core')['templateRef']
@@ -259,6 +258,7 @@ declare global {
   const useWindowFocus: typeof import('@vueuse/core')['useWindowFocus']
   const useWindowScroll: typeof import('@vueuse/core')['useWindowScroll']
   const useWindowSize: typeof import('@vueuse/core')['useWindowSize']
+  const userStore: typeof import('./store/user.store')['default']
   const watch: typeof import('vue')['watch']
   const watchArray: typeof import('@vueuse/core')['watchArray']
   const watchAtMost: typeof import('@vueuse/core')['watchAtMost']
@@ -379,7 +379,6 @@ declare module '@vue/runtime-core' {
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
     readonly store: UnwrapRef<typeof import('./store/index')['default']>
     readonly storeToRefs: UnwrapRef<typeof import('pinia')['storeToRefs']>
-    readonly storeUser: UnwrapRef<typeof import('./store/store.user')['default']>
     readonly syncRef: UnwrapRef<typeof import('@vueuse/core')['syncRef']>
     readonly syncRefs: UnwrapRef<typeof import('@vueuse/core')['syncRefs']>
     readonly templateRef: UnwrapRef<typeof import('@vueuse/core')['templateRef']>
@@ -536,6 +535,7 @@ declare module '@vue/runtime-core' {
     readonly useWindowFocus: UnwrapRef<typeof import('@vueuse/core')['useWindowFocus']>
     readonly useWindowScroll: UnwrapRef<typeof import('@vueuse/core')['useWindowScroll']>
     readonly useWindowSize: UnwrapRef<typeof import('@vueuse/core')['useWindowSize']>
+    readonly userStore: UnwrapRef<typeof import('./store/user.store')['default']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchArray: UnwrapRef<typeof import('@vueuse/core')['watchArray']>
     readonly watchAtMost: UnwrapRef<typeof import('@vueuse/core')['watchAtMost']>

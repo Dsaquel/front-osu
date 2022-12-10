@@ -8,5 +8,6 @@ import useAuthStore from '~/store/auth.store';
 const authStore = useAuthStore();
 onMounted(() => {
   authStore.siginIn(useRoute().query.code as string);
+  useRouter().push('/');
 });
 </script>

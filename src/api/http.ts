@@ -13,7 +13,6 @@ const axiosInstance: AxiosInstance = axios.create({
   // 请求头
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${storeToken().token}`,
   },
 });
 
@@ -50,7 +49,7 @@ axiosInstance.interceptors.response.use(
 );
 const service = {
   get<T = any>(url: string, data?: object): Promise<T> {
-    return axiosInstance.get(url, { params: data });
+    return axiosInstance.get(url, { params: data, withCredentials: true });
   },
 
   post<T = any>(url: string, data?: object): Promise<T> {
