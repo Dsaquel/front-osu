@@ -4,7 +4,6 @@
       <vitecamp m="r-2" />
       <div>OsuHow</div>
     </div>
-    <!-- <router-link>click ici</router-link> -->
     <button class="osu-background" p="2" rounded="rounded-2xl" @click="signIn">Se connecter avec osu!</button>
   </div>
 </template>

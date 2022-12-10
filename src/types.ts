@@ -5,3 +5,7 @@ export type User = {
   rank: number;
   discord?: string;
 };
+
+export interface UserToken extends User {
+  accessToken: string;
+}

@@ -13,6 +13,7 @@ const axiosInstance: AxiosInstance = axios.create({
   // 请求头
   headers: {
     'Content-Type': 'application/json',
+    // Authorization: `Bearer ${tokenStore.token}`,
   },
 });
 
@@ -31,7 +32,7 @@ axiosInstance.interceptors.request.use(
 // 响应拦截器
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
-    if (response.status === 200) {
+    if (response.status === 200 || response.status === 201) {
       return response.data;
     }
     ElMessage.info(JSON.stringify(response.status));

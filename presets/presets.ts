@@ -21,12 +21,13 @@ export default (env: ConfigEnv) => {
   return [
     vue({
       include: [/\.vue$/, /\.md$/],
+      reactivityTransform: true,
     }),
     vueJsx(),
     svgLoader(),
     AutoImport({
       dts: './src/auto-imports.d.ts',
-      imports: ['vue', 'pinia', 'vue-router', 'vue-i18n', '@vueuse/core'],
+      imports: ['vue', 'pinia', 'vue-router', 'vue-i18n', 'vue/macros', '@vueuse/core'],
       // Generate corresponding .eslintrc-auto-import.json file.
       // eslint globals Docs - https://eslint.org/docs/user-guide/configuring/language-options#specifying-globals
       eslintrc: {
@@ -35,6 +36,8 @@ export default (env: ConfigEnv) => {
         globalsPropValue: true, // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
       },
       resolvers: [ElementPlusResolver()],
+      vueTemplate: true,
+      dirs: ['./src/store/'],
     }),
     Components({
       dts: './src/components.d.ts',
