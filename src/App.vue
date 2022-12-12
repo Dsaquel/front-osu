@@ -1,18 +1,15 @@
 <script setup lang="ts">
 import zhCn from 'element-plus/lib/locale/lang/zh-cn';
-import Cookies from 'js-cookie';
 
 onMounted(() => {
-  const otot = Cookies.get('AccessToken');
-  const user = userStore().user;
-  if (!user) return;
+  if (userStore().user) return;
   userStore().fetch();
 });
 const locale = zhCn;
 </script>
 
 <template>
-  <div class="m-5">
+  <div>
     <el-config-provider :locale="locale">
       <router-view></router-view>
     </el-config-provider>

@@ -1,6 +1,6 @@
 export type User = {
   osuId: number;
-  username?: string;
+  username: string;
   avatarUrl: string;
   rank: number;
   discord?: string;

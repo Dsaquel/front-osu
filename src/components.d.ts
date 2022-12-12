@@ -7,6 +7,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AvatarUser: typeof import('./components/avatar/AvatarUser.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCol: typeof import('element-plus/es')['ElCol']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
@@ -16,6 +17,7 @@ declare module '@vue/runtime-core' {
     EnProcess: typeof import('./components/EnProcess.md')['default']
     IAkarIconsGithubFill: typeof import('~icons/akar-icons/github-fill')['default']
     ILaLanguage: typeof import('~icons/la/language')['default']
+    'IMdi:loading': typeof import('~icons/mdi/loading')['default']
     IMdiContentDuplicate: typeof import('~icons/mdi/content-duplicate')['default']
     IMdiHomeSearchOutline: typeof import('~icons/mdi/home-search-outline')['default']
     IPhCloudMoonBold: typeof import('~icons/ph/cloud-moon-bold')['default']
@@ -26,6 +28,7 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TheFooter: typeof import('./components/TheFooter.vue')['default']
+    UserAvatar: typeof import('./components/common/UserAvatar.vue')['default']
     ZhProcess: typeof import('./components/ZhProcess.md')['default']
   }
 }

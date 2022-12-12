@@ -1,7 +1,5 @@
 <template>
-  <div container="~">
-    <NavHome />
-  </div>
+  <NavHome />
 </template>
 
 <script setup lang="ts">

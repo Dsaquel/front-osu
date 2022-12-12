@@ -3,10 +3,11 @@ import { User } from '~/types';
 import apiUser from '~/api/modules/api.user';
 
 const useUserStore = defineStore('user', () => {
-  let user = $ref<User | null>(null);
+  const user = ref<User | null>(null);
 
   function store(data: User) {
-    user = { ...data };
+    console.log(data);
+    user.value = { ...data };
   }
 
   async function fetch() {

@@ -3,7 +3,6 @@ import showCodeMessage from '~/api/code';
 import formatJsonToUrlParams, { InstanceObject } from '~/utils/format';
 
 const BASE_PREFIX = import.meta.env.VITE_API_BASEURL;
-
 // 创建实例
 const axiosInstance: AxiosInstance = axios.create({
   // 前缀
@@ -12,8 +11,10 @@ const axiosInstance: AxiosInstance = axios.create({
   timeout: 1000 * 30,
   // 请求头
   headers: {
+    'Cache-Control': 'no-cache',
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
 // 请求拦截器
@@ -31,6 +32,7 @@ axiosInstance.interceptors.request.use(
 // 响应拦截器
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
+    console.log(response?.data);
     if (response.status === 200 || response.status === 201) {
       return response.data;
     }
@@ -49,7 +51,7 @@ axiosInstance.interceptors.response.use(
 );
 const service = {
   get<T = any>(url: string, data?: object): Promise<T> {
-    return axiosInstance.get(url, { params: data, withCredentials: true });
+    return axiosInstance.get(url, { params: data });
   },
 
   post<T = any>(url: string, data?: object): Promise<T> {
