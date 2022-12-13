@@ -13,6 +13,9 @@ export default defineConfig({
       mono: ['Fira Sans', 'ui-monospace', 'SFMono-Regular'],
     },
     extend: {
+      gridTemplateColumns: {
+        main: 'min(250px, 30%) 1fr',
+      },
       typography: {
         DEFAULT: {
           css: {

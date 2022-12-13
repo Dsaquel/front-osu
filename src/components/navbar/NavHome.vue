@@ -1,23 +1,18 @@
-<script setup>
-import vitecamp from '~/assets/svg/vitecamp.svg?component';
+<script setup lang="ts">
+import { User } from '~/types';
 import { isDark, toggleDark } from '~/utils/dark';
 
 const signIn = () => {
   window.open(import.meta.env.VITE_OSU_CONDITION, '_blank').focus();
 };
-
-const { user } = userStore();
+defineProps<{
+  user?: User;
+}>();
 </script>
 
 <template>
   <div flex="~" align="items-center" p="y-2 x-6">
-    <div flex="~" align="items-center">
-      <vitecamp m="r-2" />
-      <div>OsuHow</div>
-    </div>
-
     <div flex="grow" />
-
     <div flex="~" align="self-center">
       <el-tooltip :content="isDark ? 'change light' : 'change dark'" placement="top">
         <button class="icon-btn mr-6 !outline-none" @click="toggleDark()">
@@ -26,8 +21,9 @@ const { user } = userStore();
         </button>
       </el-tooltip>
 
-      <UserAvatar v-if="user" :src="unref(user).avatarUrl" />
-      <button v-else class="osu-background" p="2" rounded="rounded-2xl" @click="signIn">Se connecter avec osu!</button>
+      <button v-if="!user" class="osu-background" p="2" rounded="rounded-2xl" @click="signIn">
+        Se connecter avec osu!
+      </button>
     </div>
   </div>
 </template>

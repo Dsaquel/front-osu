@@ -9,10 +9,9 @@ const locale = zhCn;
 </script>
 
 <template>
-  <div>
-    <el-config-provider :locale="locale">
-      <router-view></router-view>
-    </el-config-provider>
-  </div>
+  <el-config-provider :locale="locale">
+    <router-view />
+  </el-config-provider>
+
   <!-- <TheFooter></TheFooter> -->
 </template>

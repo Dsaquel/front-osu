@@ -1,10 +1,15 @@
 <script setup lang="ts">
+import vitecamp from '~/assets/svg/vitecamp.svg?component';
+
 defineProps<{
   src?: string;
 }>();
 </script>
 
 <template>
-  <img v-if="src" class="w-10 h-10 rounded-full" :src="src" />
-  <i-mdi:loading v-else class="animate-spin h-10 w-10" />
+  <img v-if="src" class="rounded-full" w="10" h="10" cursor="pointer" :src="src" />
+  <vitecamp v-else rounded />
+
+  <!-- NOTE: SPIN BUTTON -->
+  <!-- <i-mdi:loading v-else class="animate-spin h-10 w-10" /> -->
 </template>
