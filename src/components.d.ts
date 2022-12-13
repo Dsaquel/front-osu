@@ -7,6 +7,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AppLayout: typeof import('./components/ui/layout/AppLayout.vue')['default']
     AvatarUser: typeof import('./components/avatar/AvatarUser.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCol: typeof import('element-plus/es')['ElCol']
@@ -23,7 +24,7 @@ declare module '@vue/runtime-core' {
     IPhCloudMoonBold: typeof import('~icons/ph/cloud-moon-bold')['default']
     IPhSunHorizonBold: typeof import('~icons/ph/sun-horizon-bold')['default']
     IRiArticleLine: typeof import('~icons/ri/article-line')['default']
-    MainLayout: typeof import('./components/ui/layout/MainLayout.vue')['default']
+    MainLayout: typeof import('./components/ui/layout/childs/MainLayout.vue')['default']
     NavigationDrawer: typeof import('./components/ui/layout/childs/NavigationDrawer.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
