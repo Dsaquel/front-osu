@@ -2,12 +2,12 @@
 import { User } from '~/types';
 
 defineProps<{
-  user?: User;
+  user?: User | null;
 }>();
 </script>
 
 <template>
-  <section>
+  <section bg="green-500">
     <UserAvatar v-if="user" :src="user.avatarUrl" />
     <p>toto</p>
     <p>tata</p>

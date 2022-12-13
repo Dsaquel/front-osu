@@ -44,4 +44,8 @@ export default defineConfig({
       },
     },
   },
+  shortcuts: {
+    bare: 'block outline-none cursor-pointer hover:underline p-0 border-none bg-none',
+    hovered: 'border cursor-pointer rounded border-gray-300',
+  },
 });
