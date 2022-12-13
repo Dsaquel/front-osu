@@ -4,7 +4,7 @@ import { RouteRecordRaw } from 'vue-router';
 const asyncRoutes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    component: () => import('~/components/layout/MainLayout.vue'),
+    component: () => import('~/components/ui/layout/MainLayout.vue'),
     children: [
       {
         path: '',

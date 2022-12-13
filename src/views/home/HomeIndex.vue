@@ -1,13 +1,9 @@
 <script setup lang="ts">
 // const { t } = useI18n();
 ElMessage.success({ message: 'welcome', duration: 1000 });
-const { user } = userStore();
 </script>
 
-<template>
-  <NavigationDrawer :user="user" />
-  <NavHome :user="user" />
-</template>
+<template>Je suis la home page</template>
 
 <style lang="scss" scoped>
 a {
