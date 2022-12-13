@@ -2,7 +2,7 @@
 
 <template>
   <main>
-    <router-view h="min-full" />
+    <router-view />
   </main>
 </template>
 

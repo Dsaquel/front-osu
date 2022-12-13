@@ -1,5 +1,12 @@
 @import 'element-plus/theme-chalk/dark/css-vars.css';
 
+//global
 body {
-  @apply text-gray-700 dark: bg-gray-800 dark:text-gray-200;
+  @apply text-gray-700 dark: bg-dark-900 dark:text-gray-200;
 }
+
+//side bar
+section {
+  @apply text-gray-50 dark: bg-dark-[#212121] dark: text-[#c9d1d9] hover:backdrop-contrast-200;
+}
+//stop here

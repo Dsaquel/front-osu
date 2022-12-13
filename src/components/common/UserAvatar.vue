@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <img v-if="src" v-bind="useAttrs()" class="rounded-full" w="10" h="10" cursor="pointer" :src="src" />
+  <img v-if="src" v-bind="useAttrs()" class="rounded-full" w="10" h="10" :src="src" />
   <vitecamp v-else rounded />
 
   <!-- NOTE: SPIN BUTTON -->
