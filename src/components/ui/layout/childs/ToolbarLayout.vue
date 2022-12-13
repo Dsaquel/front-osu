@@ -58,7 +58,9 @@ onClickOutside(wrapper, () => {
 </template>
 
 <style SCOPED lang="scss">
-.osu-background {
-  background: var(--c-color-osu);
+header {
+  .osu-background {
+    background: var(--c-color-osu);
+  }
 }
 </style>

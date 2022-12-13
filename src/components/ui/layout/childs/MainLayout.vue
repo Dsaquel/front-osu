@@ -2,7 +2,14 @@
 
 <template>
   <main>
-    Main desu
-    <router-view />
+    <router-view h="min-full" />
   </main>
 </template>
+
+<style scoped lang="scss">
+main {
+  grid-area: main;
+  display: block;
+  overflow: hidden;
+}
+</style>

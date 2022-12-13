@@ -11,18 +11,21 @@ import 'virtual:windi.css';
 // Devtools: https://windicss.org/integrations/vite.html#design-in-devtools
 import 'virtual:windi-devtools';
 import '~/assets/styles/index.scss';
+import initLayouts from './layouts';
 
 const i18n = createI18n({
   locale: 'en',
   messages,
 });
-
 const app = createApp(App);
-
 app.use(router).use(store);
 
 app.use(i18n);
 
-app.use(LayoutSystem);
+app.use(LayoutSystem, {
+  defaultLayout: 'AppLayout',
+});
+
+initLayouts(app);
 
 app.mount('#app');

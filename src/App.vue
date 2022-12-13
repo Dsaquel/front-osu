@@ -10,8 +10,6 @@ const locale = zhCn;
 
 <template>
   <el-config-provider :locale="locale">
-    <router-view />
+    <LayoutSystem />
   </el-config-provider>
-
-  <!-- <TheFooter></TheFooter> -->
 </template>

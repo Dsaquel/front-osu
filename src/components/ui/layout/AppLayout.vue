@@ -6,9 +6,8 @@ const { user } = userStore();
   <div class="area" grid="~ flow-col cols-[110px_1fr] rows-[110px_1fr]" w="full" h="110vh" overflow="hidden">
     <ToolbarLayout :user="user" />
     <NavigationDrawer :user="user" class="sidebar" />
-    <MainLayout class="main" />
+    <router-view />
   </div>
-  <router-view />
 </template>
 
 <style scoped lang="scss">
@@ -20,7 +19,7 @@ const { user } = userStore();
   .sidebar {
     grid-area: sidebar;
   }
-  .sidebar {
+  .main {
     grid-area: main;
   }
 }

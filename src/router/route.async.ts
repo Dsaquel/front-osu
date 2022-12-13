@@ -4,7 +4,7 @@ import { RouteRecordRaw } from 'vue-router';
 const asyncRoutes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    component: () => import('~/components/ui/layout/AppLayout.vue'),
+    component: () => import('~/components/ui/layout/childs/MainLayout.vue'),
     children: [
       {
         path: '',
@@ -15,7 +15,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
   },
   {
     path: '/users/:id',
-    component: () => import('~/components/ui/layout/AppLayout.vue'),
+    component: () => import('~/components/ui/layout/childs/MainLayout.vue'),
     children: [
       {
         path: '',
