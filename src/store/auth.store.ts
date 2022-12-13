@@ -8,7 +8,12 @@ const useAuthStore = defineStore('auth', () => {
 
     useUserStore().user = user;
   }
-  return { siginIn };
+
+  async function logout() {
+    await apiAuth.logout();
+  }
+
+  return { siginIn, logout };
 });
 
 export default useAuthStore;

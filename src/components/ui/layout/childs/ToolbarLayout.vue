@@ -13,7 +13,8 @@ function signIn() {
   window.open(import.meta.env.VITE_OSU_CONDITION, '_blank')?.focus();
 }
 function logout() {
-  console.log('toto');
+  authStore().logout();
+  window.location.reload();
 }
 
 onClickOutside(wrapper, () => {
