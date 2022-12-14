@@ -7,6 +7,10 @@ body {
 
 //side bar
 section {
-  @apply text-gray-50 dark: bg-dark-[#212121] dark: text-[#c9d1d9] hover:backdrop-contrast-200;
+  @apply dark:text-gray-50 dark: bg-dark-[#212121] dark: text-[#c9d1d9];
+
+  .nav {
+    @apply hover:.dark:text-white;
+  }
 }
 //stop here

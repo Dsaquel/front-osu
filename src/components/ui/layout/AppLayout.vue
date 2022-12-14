@@ -3,7 +3,7 @@ const { user } = userStore();
 </script>
 
 <template>
-  <div class="area" grid="~ flow-col cols-[110px_1fr] rows-[110px_1fr]" w="full" h="110vh" overflow="hidden">
+  <div class="area" grid="~ cols-[110px_1fr] rows-[110px_1fr]" w="full" h="100vh" overflow="hidden">
     <ToolbarLayout :user="user" />
     <NavigationDrawer :user="user" class="sidebar" />
     <router-view />
