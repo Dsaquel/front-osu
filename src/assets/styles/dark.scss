@@ -3,6 +3,15 @@
 //global
 body {
   @apply text-gray-700 dark: bg-dark-900 dark:text-gray-200 transition-colors .dark:transition-colors;
+
+  input,
+  select,
+  textarea {
+    @apply text-white dark: bg-dark-900;
+  }
+  .card {
+    @apply dark:text-gray-50 dark: bg-dark-[#212121] dark: text-[#c9d1d9];
+  }
 }
 
 //side bar

@@ -60,12 +60,12 @@ onClickOutside(wrapper, () => {
         v-if="open"
         pos="absolute"
         class="top-full right-0"
-        bg="orange-500"
+        bg="white"
         border="1 gray-300 rounded"
         p="x-3 y-5"
         text="right"
       >
-        <router-link :to="`/users/'${user.id}`" class="bare" p="1">profil</router-link>
+        <router-link :to="`/users/${user.id}`" class="bare" p="1">profil</router-link>
         <button class="bare" p="1" @click="logout">logout</button>
       </div>
     </div>

@@ -45,7 +45,7 @@ export default defineConfig({
     },
   },
   shortcuts: {
-    bare: 'block outline-none cursor-pointer hover:underline p-0 border-none bg-none',
+    bare: 'block text-orange-600 outline-none cursor-pointer hover:underline p-0 border-none bg-none',
     hovered: 'border cursor-pointer rounded border-gray-300',
     'avatar-border': 'border-2 cursor-pointer border-gray-300',
     nav: 'flex flex-col items-center pt-23px px-50px pb-20px text-0.8rem border-b-1 border-b-gray-400 transition-all duration-200 <sm:border-b-0 <sm:pt-10px <sm:px-10px <sm:pb-2px <sm:border-r-0',

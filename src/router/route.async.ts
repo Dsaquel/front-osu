@@ -4,7 +4,7 @@ import { RouteRecordRaw } from 'vue-router';
 const asyncRoutes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    component: () => import('~/components/ui/layout/childs/MainLayout.vue'),
+    component: () => import('~/components/Ui/Layout/childs/MainLayout.vue'),
     children: [
       {
         path: '',
@@ -15,7 +15,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
   },
   {
     path: '/users/:id',
-    component: () => import('~/components/ui/layout/childs/MainLayout.vue'),
+    component: () => import('~/components/Ui/Layout/childs/MainLayout.vue'),
     children: [
       {
         path: '',
@@ -26,12 +26,17 @@ const asyncRoutes: Array<RouteRecordRaw> = [
   },
   {
     path: '/tournaments',
-    component: () => import('~/components/ui/layout/childs/MainLayout.vue'),
+    component: () => import('~/components/Ui/Layout/childs/MainLayout.vue'),
     children: [
       {
         path: '',
-        name: 'tournaments',
-        component: () => import('~/views/tournaments/TournamentsHome.vue'),
+        name: 'tournament',
+        component: () => import('~/views/tournament/TournamentHome.vue'),
+      },
+      {
+        path: 'create',
+        name: 'tournament-create',
+        component: () => import('~/views/tournament/TournamentCreate.vue'),
       },
     ],
   },
