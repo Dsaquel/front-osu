@@ -15,9 +15,8 @@
       <label for="numberOfParticipant">
         <span text="sm"> Nombre de participant max </span>
         <select
-          type="text"
           name="numberOfParticipant"
-          class="mt-1 px-3 py-2 border shadow-sm border-slate-300  focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
+          class="mt-1 px-3 py-2 border shadow-sm border-slate-300 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
           placeholder="16"
         >
           <option p="2">4</option>

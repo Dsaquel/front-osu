@@ -6,16 +6,20 @@ const useUserStore = defineStore('user', () => {
   const user = ref<User | null>(null);
 
   function store(data: User) {
-    console.log(data);
     user.value = { ...data };
   }
 
   async function fetch() {
-    const data = await apiUser.fetch();
-    store(data);
+    const user = await apiUser.fetch();
+    store(user);
   }
 
-  return { user, fetch };
+  async function updateTournamentDraft() {
+    const user = await apiUser.updateTournamentDraft();
+    store(user)
+  }
+
+  return { user, fetch, updateTournamentDraft };
 });
 
 export default useUserStore;
