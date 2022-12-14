@@ -9,19 +9,17 @@ defineProps<{
 
 <template>
   <section display="flex" flex="col" justify="between" z="2" shadow="current sm" bg="green-500">
-    <div>
+    <div class="<sm:flex <sm:justify-around">
       <router-link to="/" class="nav">
         <i-mdi:house w="min-28px" m="b-7px" text="1.4rem" />
-        <div>Home</div>
+        <div class="<sm:hidden">Home</div>
       </router-link>
       <router-link to="/tournaments" class="nav">
         <i-mdi:tournament w="min-28px" m="b-7px" text="1.4rem" />
-        <div>Tournaments</div>
+        <div class="<sm:hidden">Tournaments</div>
       </router-link>
     </div>
 
-    <div>
-      <vitecamp w="full" p="2" />
-    </div>
+    <vitecamp class="<sm:hidden" w="full" p="2" />
   </section>
 </template>

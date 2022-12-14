@@ -24,7 +24,7 @@ onClickOutside(wrapper, () => {
 
 <template>
   <div bg="blue-600">Logo</div>
-  <header display="flex" z="1" align="items-center" justify="between" p="x-6 y-12" bg="orange-500">
+  <header display="flex" z="3" align="items-center" justify="between" p="x-6 y-12" bg="orange-500">
     <div flex="grow" />
 
     <el-tooltip :content="isDark ? 'change light' : 'change dark'" placement="top">
@@ -35,10 +35,27 @@ onClickOutside(wrapper, () => {
     </el-tooltip>
 
     <div v-if="user" ref="wrapper" pos="relative">
-      <div flex="~" align="items-center" p="5" class="hover:hovered" :class="{ hovered: open }" @click="open = !open">
-        <UserAvatar :src="user.avatarUrl" w="15" h="15" />
-        <div m="l-2">{{ user.username }}</div>
+      <div
+        flex="~"
+        align="items-center"
+        p="5"
+        class="<sm:hidden hover:hovered"
+        :class="{ hovered: open }"
+        @click="open = !open"
+      >
+        <UserAvatar class="hover:avatar-hovered" :src="user.avatarUrl" w="15" h="15" />
+        <div class="<sm:hidden" m="l-2">{{ user.username }}</div>
       </div>
+
+      <UserAvatar
+        class="sm:hidden hover:avatar-border"
+        :class="{ 'avatar-border': open }"
+        :src="user.avatarUrl"
+        w="15"
+        h="15"
+        @click="open = !open"
+      />
+
       <div
         v-if="open"
         pos="absolute"

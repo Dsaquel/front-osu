@@ -20,7 +20,18 @@ const asyncRoutes: Array<RouteRecordRaw> = [
       {
         path: '',
         name: 'users',
-        component: () => import('~/views/clients/HomeClients.vue'),
+        component: () => import('~/views/clients/ClientsHome.vue'),
+      },
+    ],
+  },
+  {
+    path: '/tournaments',
+    component: () => import('~/components/ui/layout/childs/MainLayout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'tournaments',
+        component: () => import('~/views/tournaments/TournamentsHome.vue'),
       },
     ],
   },
