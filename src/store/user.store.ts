@@ -18,10 +18,8 @@ const useUserStore = defineStore('user', () => {
 
   async function updateTournamentDraft(payload: { description: string }) {
     const stringify = JSON.stringify(payload);
-    console.log(stringify);
     const data = await apiUser.updateTournamentDraft({ tournamentDraft: stringify });
     const parsed = JSON.parse(data.tournamentDraft as string);
-    console.log(parsed);
     data.tournamentDraft = parsed;
     store(data);
   }

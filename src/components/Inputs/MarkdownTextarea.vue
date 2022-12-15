@@ -3,18 +3,27 @@ import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 import html2md from 'html-to-md';
 
-const { user, updateTournamentDraft } = userStore();
+const { updateTournamentDraft } = userStore();
+const { user } = storeToRefs(userStore());
+
 const { textarea, input } = useTextareaAutosize();
-const { description } = { ...user?.tournamentDraft };
+
 const writing = ref(true);
-input.value = html2md(description) ?? '';
-const text = computed(() => marked(DOMPurify.sanitize(description ?? input.value)));
 
-const timeout = useTimeoutFn(() => {
-  console.log('toto');
-}, 3000);
+const description = computed(() => user.value?.tournamentDraft?.description);
+const text = computed(() => marked(DOMPurify.sanitize(description.value ?? '')));
 
-watch(input, async () => {
+input.value = description.value ?? '';
+
+const timeout = useTimeoutFn(
+  () => {
+    updateTournamentDraft({ description: input.value });
+  },
+  3000,
+  { immediate: false },
+);
+
+watch(input, () => {
   timeout.start();
   if (input.value === html2md(text.value)) {
     timeout.stop();
