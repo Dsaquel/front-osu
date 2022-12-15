@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import zhCn from 'element-plus/lib/locale/lang/zh-cn';
+import en from 'element-plus/lib/locale/lang/en';
 
 onMounted(() => {
   if (userStore().user) return;
   userStore().fetch();
 });
-const locale = zhCn;
+const locale = en;
 </script>
 
 <template>

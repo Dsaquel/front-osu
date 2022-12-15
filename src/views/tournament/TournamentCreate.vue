@@ -1,11 +1,8 @@
-<script setup lang="ts">
-// const { user, updateTournamentDraft } = userStore();
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div m="x-auto" class="card sm:max-w-1200px">
-    <div p="6" grid="~ rows-2 gap-6" m="b-6">
+    <div p="10" grid="~ rows-1 cols-2 gap-6">
       <label for="name">
         <span text="sm"> Name </span>
         <input
@@ -27,10 +24,12 @@
           <option p="2">32</option>
         </select>
       </label>
-      <div>
+      <div grid="col-span-2">
         <span text="sm">Description</span>
         <MarkdownTextarea />
       </div>
+      <CommonDatepicker />
+      <button grid="col-end-3 " w="min-content" place="self-end" text="black" bg="light-50">Submit</button>
     </div>
   </div>
 </template>
