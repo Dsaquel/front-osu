@@ -9,6 +9,14 @@
   width: 100%;
 }
 
+body {
+  .markdown {
+    a {
+      @apply text-orange-400 underline underline-offset-2 underline-orange-500 underline-opacity-30;
+    }
+  }
+}
+
 html:not(.dark) .prose {
   --prism-foreground: #393a34;
   --prism-background: #fbfbfb;

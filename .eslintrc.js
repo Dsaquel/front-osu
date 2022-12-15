@@ -33,5 +33,6 @@ module.exports = {
     'import/extensions': 'off',
     'import/no-extraneous-dependencies': 'off',
     'vue/no-v-html': 'off',
+    'no-undef': 'off',
   },
 };

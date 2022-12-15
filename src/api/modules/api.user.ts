@@ -3,7 +3,7 @@ import { User } from '~/types';
 
 const UserApi = {
   fetch: () => service.get<User>(`/users/me`),
-  updateTournamentDraft: () => service.post<User>(`/users/draft`),
+  updateTournamentDraft: (payload: { tournamentDraft: string }) => service.post<User>(`/users/draft`, payload),
 };
 
 export default UserApi;

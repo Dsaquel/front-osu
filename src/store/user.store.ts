@@ -10,13 +10,20 @@ const useUserStore = defineStore('user', () => {
   }
 
   async function fetch() {
-    const user = await apiUser.fetch();
-    store(user);
+    const data = await apiUser.fetch();
+    const parsed = JSON.parse(data.tournamentDraft as string);
+    data.tournamentDraft = parsed;
+    store(data);
   }
 
-  async function updateTournamentDraft() {
-    const user = await apiUser.updateTournamentDraft();
-    store(user)
+  async function updateTournamentDraft(payload: { description: string }) {
+    const stringify = JSON.stringify(payload);
+    console.log(stringify);
+    const data = await apiUser.updateTournamentDraft({ tournamentDraft: stringify });
+    const parsed = JSON.parse(data.tournamentDraft as string);
+    console.log(parsed);
+    data.tournamentDraft = parsed;
+    store(data);
   }
 
   return { user, fetch, updateTournamentDraft };
