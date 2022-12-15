@@ -8,14 +8,23 @@ const { textarea, input } = useTextareaAutosize();
 const { description } = { ...user?.tournamentDraft };
 const writing = ref(true);
 input.value = html2md(description) ?? '';
-const text = computed(() => marked(DOMPurify.sanitize(input.value)));
+const text = computed(() => marked(DOMPurify.sanitize(description ?? input.value)));
 
-watch(
-  () => input.value,
-  () => {
-    updateTournamentDraft({ description: text.value });
-  },
-);
+const timeout = useTimeoutFn(() => {
+  console.log('toto');
+}, 3000);
+
+watch(input, async () => {
+  timeout.start();
+  if (input.value === html2md(text.value)) {
+    timeout.stop();
+    return;
+  }
+  if (timeout.isPending) {
+    timeout.stop();
+    timeout.start();
+  }
+});
 </script>
 
 <template>

@@ -1,4 +1,7 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+// const { user, updateTournamentDraft } = userStore();
+
+</script>
 
 <template>
   <div m="x-auto" class="card sm:max-w-1200px">
