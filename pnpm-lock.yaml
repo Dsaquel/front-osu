@@ -25,7 +25,6 @@ specifiers:
   eslint-plugin-import: ^2.26.0
   eslint-plugin-prettier: ^4.2.1
   eslint-plugin-vue: ^8.7.1
-  html-to-md: ^0.8.3
   husky: ^7.0.4
   jsdom: ^20.0.3
   lint-staged: ^12.5.0
@@ -86,7 +85,6 @@ devDependencies:
   eslint-plugin-import: 2.26.0_i656iqvetrvx3ajhg4t6psfrl4
   eslint-plugin-prettier: 4.2.1_nrhoyyjffvfyk4vtlt5destxgm
   eslint-plugin-vue: 8.7.1_eslint@8.29.0
-  html-to-md: 0.8.3
   husky: 7.0.4
   jsdom: 20.0.3
   lint-staged: 12.5.0
@@ -3027,10 +3025,6 @@ packages:
   /html-tags/3.2.0:
     resolution: {integrity: sha512-vy7ClnArOZwCnqZgvv+ddgHgJiAFXe3Ge9ML5/mBctVJoUoYPCdxVucOywjDARn6CVoh3dRSFdPHy2sX80L0Wg==}
     engines: {node: '>=8'}
-    dev: true
-
-  /html-to-md/0.8.3:
-    resolution: {integrity: sha512-Va+bB1YOdD6vMRDue9/l7YxbERgwOgsos4erUDRfRN6YE0B2Wbbw8uAj6xZJk9A9vrjVy7mG/WLlhDw6RXfgsA==}
     dev: true
 
   /http-proxy-agent/5.0.0:

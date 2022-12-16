@@ -6,7 +6,8 @@ body {
 
   input,
   select,
-  textarea {
+  textarea,
+  .el-input__wrapper {
     @apply text-white dark: bg-dark-900;
   }
   .card {

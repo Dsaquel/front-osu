@@ -16,7 +16,7 @@ const useUserStore = defineStore('user', () => {
     store(data);
   }
 
-  async function updateTournamentDraft(payload: { description: string }) {
+  async function updateTournamentDraft(payload: Partial<User['tournamentDraft']>) {
     const stringify = JSON.stringify(payload);
     const data = await apiUser.updateTournamentDraft({ tournamentDraft: stringify });
     const parsed = JSON.parse(data.tournamentDraft as string);

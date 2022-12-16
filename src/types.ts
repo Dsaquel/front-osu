@@ -1,7 +1,8 @@
 type TournamentDraft = {
-  name?: string;
-  numberOfParticipant?: number;
-  description?: string;
+  name: string;
+  numbersPlayers: number;
+  description: string;
+  estimateStartDate: string;
 };
 
 export type User = {
@@ -10,6 +11,6 @@ export type User = {
   username: string;
   avatarUrl: string;
   rank: number;
-  discord?: string;
-  tournamentDraft: TournamentDraft | null;
+  discord: string | null;
+  tournamentDraft: TournamentDraft;
 };
