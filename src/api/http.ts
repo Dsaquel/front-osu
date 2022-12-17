@@ -32,7 +32,6 @@ axiosInstance.interceptors.request.use(
 // 响应拦截器
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
-    console.log(response?.data);
     if (response.status === 200 || response.status === 201) {
       return response.data;
     }
