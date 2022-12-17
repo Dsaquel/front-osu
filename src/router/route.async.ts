@@ -22,6 +22,11 @@ const asyncRoutes: Array<RouteRecordRaw> = [
         name: 'users',
         component: () => import('~/views/clients/ClientsHome.vue'),
       },
+      {
+        path: 'tournaments/draft',
+        name: 'user-tournament-draft',
+        component: () => import('~/views/user/UserTournamentDraft.vue'),
+      },
     ],
   },
   {

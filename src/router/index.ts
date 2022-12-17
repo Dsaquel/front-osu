@@ -25,13 +25,14 @@ const router: Router = createRouter({
  * @param {RouteLocationNormalizedLoaded} from  当前导航正在离开的路由
  * @return {*}
  */
-router.beforeEach((to, from) => {
+router.beforeEach((to, from, next) => {
   console.log('全局路由前置守卫：to,from\n', to, from);
   // 设置页面标题
   document.title = (to.meta.title as string) || import.meta.env.VITE_APP_TITLE;
   if (!NProgress.isStarted()) {
     NProgress.start();
   }
+  next();
 });
 
 router.afterEach((to, from) => {

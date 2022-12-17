@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import router from '~/router';
+
 const { updateTournamentDraft } = userStore();
 const { create } = tournamentUserStore();
 const { user } = storeToRefs(userStore());
@@ -48,7 +50,10 @@ function submit() {
     hasQualifier: true,
   };
   create(payload);
-  useRouter().push();
+  router.push({
+    name: 'user-tournament-draft',
+    params: { id: user.value?.id },
+  });
 }
 </script>
 
