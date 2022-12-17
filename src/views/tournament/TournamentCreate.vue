@@ -1,12 +1,13 @@
 <script setup lang="ts">
 const { updateTournamentDraft } = userStore();
+const { create } = tournamentUserStore();
 const { user } = storeToRefs(userStore());
 
 const { name, numbersPlayers, estimateStartDate, description } = computed(() => ({
   ...user.value?.tournamentDraft,
 })).value;
 
-const initialName = ref(name);
+const initialName = ref(name ?? '');
 const initialNumbersPlayers = ref(numbersPlayers);
 const initialEstimateStartDate = ref(estimateStartDate);
 const initialDescription = ref(description);
@@ -38,6 +39,17 @@ watch(
     timeoutManaging();
   },
 );
+
+function submit() {
+  const payload = {
+    name: initialName.value,
+    numbersPlayers: initialNumbersPlayers.value,
+    estimateStartDate: initialEstimateStartDate.value,
+    hasQualifier: true,
+  };
+  create(payload);
+  useRouter().push();
+}
 </script>
 
 <template>
@@ -61,7 +73,9 @@ watch(
         <MarkdownTextarea v-model="initialDescription" />
       </div>
       <CommonDatepicker v-model="initialEstimateStartDate" :title="'Estimation start'" :type="'month'" />
-      <button grid="col-end-3 " w="min-content" place="self-end" text="black" bg="light-50">Submit</button>
+      <button grid="col-end-3 " w="min-content" place="self-end" text="black" bg="light-50" @click="submit">
+        Submit
+      </button>
     </div>
   </div>
 </template>
