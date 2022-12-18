@@ -1,19 +1,18 @@
 <script setup lang="ts">
-const { fetch, tournaments } = tournamentDraftStore();
+const { fetchCollection, drafts } = draftStore();
+const { user } = userStore();
 
-onBeforeMount(() => fetch());
+onBeforeMount(() => fetchCollection());
 </script>
 
 <template>
-  <el-table :data="tournaments" w="full">
+  <el-table :data="drafts" w="full">
     <el-table-column prop="name" label="name" />
     <el-table-column label="last update">
       <template #default="scope">
         {{ useTimeAgo(scope.row.updateAt).value }}
       </template>
     </el-table-column>
-    <el-table-column label="operation">
-      
-    </el-table-column>
   </el-table>
+  <el-button><router-link to="/tournaments/create">Create new draft</router-link></el-button>
 </template>

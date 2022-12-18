@@ -26,7 +26,12 @@ const useDraftStore = defineStore('draft', () => {
     draft.value = data;
   }
 
-  return { draft, fetchCollection, fetch, create };
+  async function update(draftDto: DraftDto) {
+    const data = await apiDraft.create(draftDto);
+    draft.value = data;
+  }
+
+  return { draft, drafts, fetchCollection, fetch, create };
 });
 
 export default useDraftStore;

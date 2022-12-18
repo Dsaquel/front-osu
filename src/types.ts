@@ -22,7 +22,7 @@ export type DraftDto = {
   rangePlayerMin?: number | null;
   numbersPlayers?: number | null;
   estimateStartDate?: string | null;
-  type: 'standard ' | 'taiko';
+  type: 'standard' | 'taiko';
 };
 
 export type Draft = {
@@ -35,7 +35,7 @@ export type Draft = {
   rangePlayerMax: number | null;
   estimateStartDate: string | null;
   numbersPlayers: number | null;
-  type: 'standard ' | 'taiko';
+  type: 'standard' | 'taiko';
   tournamentId: number;
   owner: User;
   ownerId: number;
