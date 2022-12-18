@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import router from '~/router';
 
-const { updateTournamentDraft } = userStore();
+const {  } = draftStore();
 const { create } = tournamentUserStore();
 const { user } = storeToRefs(userStore());
 

@@ -1,10 +1,10 @@
 import service from '~/api/http';
-import { Tournament, CreateTournamentDto } from '~/types';
+import { CreateTournamentDto, Draft } from '~/types';
 
-const UserApi = {
-  fetch: () => service.get<Tournament>(`/tournament`),
-  create: (payload: CreateTournamentDto) => service.post<Tournament>(`/tournament`, payload),
-  fetchDraft: (params: { userId: number }) => service.get<Tournament[]>(`/tournament/draft`, { params }),
+const TournamentApi = {
+  // fetch: () => service.get<Tournament>(`/tournament`),
+  create: (payload: CreateTournamentDto) => service.post<Draft>(`/tournament/draft`, payload),
+  fetchDraft: (params: { userId: number }) => service.get<Draft[]>(`/tournament/draft`, { params }),
 };
 
-export default UserApi;
+export default TournamentApi;

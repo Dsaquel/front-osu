@@ -15,20 +15,28 @@ export type User = {
   tournamentDraft: TournamentDraft;
 };
 
-export type Tournament = {
-  isPublicable: boolean;
-  isPublic: boolean;
+export type DraftDto = {
   name: string;
-  startDate: string | null;
+  details?: string | null;
+  rangePlayerMin?: number | null;
+  rangePlayerMax?: number | null;
+  estimateStartDate?: string | null;
+  numbersPlayers?: number | null;
   type: 'standard ' | 'taiko';
-  description: string | null;
-  rangePlayerMax: number | null;
+};
+
+export type Draft = {
+  id: number;
+  createAt: string;
+  updateAt: string;
+  name: string;
+  details: string | null;
   rangePlayerMin: number | null;
-  numbersPlayers: number;
-  bestOf: number | null;
-  endRegistration: string | null;
-  draft: boolean;
-  commonSchedule: string | null;
+  rangePlayerMax: number | null;
+  estimateStartDate: string | null;
+  numbersPlayers: number | null;
+  type: 'standard ' | 'taiko';
+  tournamentId: number;
   owner: User;
   ownerId: number;
 };
