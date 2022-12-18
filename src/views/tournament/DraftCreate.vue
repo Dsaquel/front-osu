@@ -1,26 +1,31 @@
 <script setup lang="ts">
 import router from '~/router';
+import draftStore from '~/store/draft.store';
+import { DraftDto } from '~/types';
 
-const {  } = draftStore();
-const { create } = tournamentUserStore();
+const { create } = draftStore();
+const { draft } = storeToRefs(draftStore());
 const { user } = storeToRefs(userStore());
 
-const { name, numbersPlayers, estimateStartDate, description } = computed(() => ({
-  ...user.value?.tournamentDraft,
+const { name, numbersPlayers, estimateStartDate, details,rangePlayerMax, rangePlayerMin, type } = computed(() => ({
+  ...draft.value,
 })).value;
 
-const initialName = ref(name ?? '');
+const initialName = ref(name);
+const initialDetails = ref(details);
+const initialRangePlayerMax = ref(rangePlayerMax)
+const initialRangePlayerMin = ref(rangePlayerMin)
 const initialNumbersPlayers = ref(numbersPlayers);
 const initialEstimateStartDate = ref(estimateStartDate);
-const initialDescription = ref(description);
+const initialType = ref(type)
 
 const timeout = useTimeoutFn(
   () => {
-    updateTournamentDraft({
+    updateDraft({
       name: initialName.value,
       numbersPlayers: initialNumbersPlayers.value,
       estimateStartDate: initialEstimateStartDate.value,
-      description: initialDescription.value,
+      details: initialDetails.value,
     });
   },
   3000,
@@ -36,18 +41,21 @@ function timeoutManaging() {
 }
 
 watch(
-  () => [initialName.value, initialNumbersPlayers.value, initialEstimateStartDate.value, initialDescription.value],
+  () => [initialName.value, initialNumbersPlayers.value, initialEstimateStartDate.value, initialDetails.value],
   () => {
     timeoutManaging();
   },
 );
 
 function submit() {
-  const payload = {
+  const payload: DraftDto = {
     name: initialName.value,
     numbersPlayers: initialNumbersPlayers.value,
     estimateStartDate: initialEstimateStartDate.value,
-    hasQualifier: true,
+    numbersPlayers
+    rangePlayerMin
+    rangePlayerMax
+    type
   };
   create(payload);
   router.push({
@@ -74,8 +82,8 @@ function submit() {
         </el-select>
       </div>
       <div grid="col-span-2">
-        <span text="sm">Description</span>
-        <MarkdownTextarea v-model="initialDescription" />
+        <span text="sm">details</span>
+        <MarkdownTextarea v-model="initialDetails" />
       </div>
       <CommonDatepicker v-model="initialEstimateStartDate" :title="'Estimation start'" :type="'month'" />
       <button grid="col-end-3 " w="min-content" place="self-end" text="black" bg="light-50" @click="submit">
