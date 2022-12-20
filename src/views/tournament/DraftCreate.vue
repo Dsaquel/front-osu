@@ -4,6 +4,7 @@ import { DraftDto } from '~/types';
 
 const { create } = draftStore();
 const { user } = storeToRefs(userStore());
+const router = useRouter();
 
 const name = $ref('name');
 const details = $ref(null);
@@ -13,7 +14,7 @@ const numbersPlayers = $ref(null);
 const estimateStartDate = $ref(null);
 const type = $ref<'standard' | 'taiko'>('standard');
 
-function submit() {
+async function submit() {
   const payload: DraftDto = {
     name,
     details,
@@ -23,12 +24,12 @@ function submit() {
     rangePlayerMax,
     type,
   };
-  console.log(payload);
-  // create(payload);
-  // router.push({
-  //   name: 'user-tournament-draft',
-  //   params: { id: user?.id },
-  // });
+  const draftCreate = await create(payload);
+  console.log(draftCreate);
+  router.push({
+    name: 'draft-update',
+    params: { draftId: draftCreate.id },
+  });
 }
 </script>
 
@@ -43,7 +44,9 @@ function submit() {
     v-model:type="type"
   >
     <template #last>
-      <button grid="col-end-3 " w="min-content" place="self-end" text="black" bg="light-50" @click="submit"></button>
+      <button grid="col-end-3 " w="min-content" place="self-end" text="black" bg="light-50" @click="submit">
+        submit
+      </button>
     </template>
   </TemplateDraft>
 </template>

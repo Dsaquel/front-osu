@@ -2,16 +2,21 @@
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 
-defineProps<{
-  details: string | null;
-}>();
-
+const props = withDefaults(
+  defineProps<{
+    details: string | null;
+  }>(),
+  {
+    details: '',
+  },
+);
+console.log(props.details);
 const { textarea, input } = useTextareaAutosize();
 
 const writing = ref(true);
-const text = computed(() => marked(DOMPurify.sanitize(details ?? '')));
+const text = computed(() => marked(DOMPurify.sanitize(props.details ?? '')));
 
-input.value = details ?? '';
+input.value = props.details ?? '';
 </script>
 
 <template>

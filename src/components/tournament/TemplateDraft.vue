@@ -1,20 +1,14 @@
 <script setup lang="ts">
-withDefaults(
-  defineProps<{
-    name: string;
-    details: string | null;
-    rangePlayerMax: number | null;
-    rangePlayerMin: number | null;
-    numbersPlayers: number | null;
-    estimateStartDate: string | null;
-    type: 'standard' | 'taiko';
-  }>(),
-  {
-    name: '',
-    type: 'standard',
-    details: null,
-  },
-);
+defineProps<{
+  name: string;
+  details: string | null;
+  rangePlayerMax: number | null;
+  rangePlayerMin: number | null;
+  numbersPlayers: number | null;
+  estimateStartDate: string | null;
+  type: 'standard' | 'taiko';
+}>();
+
 defineEmits([
   'update:name',
   'update:details',
@@ -24,7 +18,6 @@ defineEmits([
   'update:estimateStartDate',
   'update:type',
 ]);
-console.log(details);
 </script>
 
 <template>
@@ -38,7 +31,7 @@ console.log(details);
       <div text="right">
         <span display="block" text="sm"> Number of players max </span>
         <el-select
-          :model-value="numbersPlayers"
+          :model-value="(numbersPlayers as number)"
           size="large"
           w="full"
           @change="(val) => $emit('update:numbersPlayers', val)"
@@ -50,13 +43,13 @@ console.log(details);
       </div>
       <div grid="col-span-2">
         <span text="sm">details</span>
-        <MarkdownTextarea :details="details" @input="(val) => $emit('update:details', val)" />
+        <MarkdownTextarea :details="details" @input="(val) => $emit('update:details', val.target.value)" />
       </div>
       <CommonDatepicker
         :model-value="estimateStartDate"
         :title="'Estimation start'"
         :type="'month'"
-        @input="(val) => $emit('update:estimateStartDate', val)"
+        @update:model-value="(val) => $emit('update:estimateStartDate', val)"
       />
       <slot name="last" />
     </div>

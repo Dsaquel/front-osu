@@ -16,14 +16,15 @@ const useDraftStore = defineStore('draft', () => {
     store(data);
   }
 
-  async function fetch() {
-    const data = await apiDraft.fetch({ userId: user?.id as number });
+  async function fetch(id: number) {
+    const data = await apiDraft.fetch({ userId: user?.id as number }, id);
     draft.value = data;
   }
 
-  async function create(draftDto: DraftDto) {
+  async function create(draftDto: DraftDto): Promise<Draft> {
     const data = await apiDraft.create(draftDto);
     draft.value = data;
+    return data;
   }
 
   async function update(draftDto: DraftDto) {
