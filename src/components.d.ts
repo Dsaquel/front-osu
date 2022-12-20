@@ -43,6 +43,7 @@ declare module '@vue/runtime-core' {
     NavigationDrawer: typeof import('./components/Ui/Layout/childs/NavigationDrawer.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TemplateDraft: typeof import('./components/tournament/TemplateDraft.vue')['default']
     Textarea: typeof import('./components/Inputs/Textarea.vue')['default']
     TheFooter: typeof import('./components/TheFooter.vue')['default']
     ToolbarLayout: typeof import('./components/Ui/Layout/childs/ToolbarLayout.vue')['default']

@@ -7,10 +7,12 @@ withDefaults(
     rangePlayerMin: number | null;
     numbersPlayers: number | null;
     estimateStartDate: string | null;
-    type: 'standard ' | 'taiko';
+    type: 'standard' | 'taiko';
   }>(),
   {
-    type: 'standard ',
+    name: '',
+    type: 'standard',
+    details: null,
   },
 );
 defineEmits([
@@ -22,6 +24,7 @@ defineEmits([
   'update:estimateStartDate',
   'update:type',
 ]);
+console.log(details);
 </script>
 
 <template>
@@ -29,16 +32,16 @@ defineEmits([
     <div p="10" grid="~ rows-1 cols-2 gap-6">
       <div>
         <span display="block" text="sm"> Name </span>
-        <el-input :value="name" size="large" @input="$emit('update:name', $event.target.value)" />
+        <el-input :model-value="name" size="large" @input="(val) => $emit('update:name', val)" />
       </div>
 
       <div text="right">
         <span display="block" text="sm"> Number of players max </span>
         <el-select
-          :value="numbersPlayers"
+          :model-value="numbersPlayers"
           size="large"
           w="full"
-          @input="$emit('update:numbersPlayers', $event.target.value)"
+          @change="(val) => $emit('update:numbersPlayers', val)"
         >
           <el-option :value="4" />
           <el-option :value="16" />
@@ -47,13 +50,13 @@ defineEmits([
       </div>
       <div grid="col-span-2">
         <span text="sm">details</span>
-        <MarkdownTextarea :value="details" @input="$emit('update:details', $event.target.value)" />
+        <MarkdownTextarea :details="details" @input="(val) => $emit('update:details', val)" />
       </div>
       <CommonDatepicker
-        :value="estimateStartDate"
+        :model-value="estimateStartDate"
         :title="'Estimation start'"
         :type="'month'"
-        @input="$emit('update:estimateStartDate', $event.target.value)"
+        @input="(val) => $emit('update:estimateStartDate', val)"
       />
       <slot name="last" />
     </div>

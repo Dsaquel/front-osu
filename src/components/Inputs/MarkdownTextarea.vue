@@ -2,15 +2,16 @@
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 
-const { user } = storeToRefs(userStore());
+defineProps<{
+  details: string | null;
+}>();
+
 const { textarea, input } = useTextareaAutosize();
 
 const writing = ref(true);
+const text = computed(() => marked(DOMPurify.sanitize(details ?? '')));
 
-const description = computed(() => user.value?.tournamentDraft?.description);
-const text = computed(() => marked(DOMPurify.sanitize(description.value ?? '')));
-
-input.value = description.value ?? '';
+input.value = details ?? '';
 </script>
 
 <template>
