@@ -1,30 +1,45 @@
 <script setup lang="ts">
-import router from '~/router';
 import draftStore from '~/store/draft.store';
-import { DraftDto } from '~/types';
 
-const { update } = draftStore();
-const { user } = storeToRefs(userStore());
+const { update, fetch } = draftStore();
+const { draft } = storeToRefs(draftStore());
+
+const draftId = $ref(parseInt(useRoute().params?.draftId as string, 10));
+
+function init() {
+  if (!draftId) return;
+  fetch(draftId);
+}
+
+onBeforeMount(() => init());
+
+watch(
+  () => draftId,
+  () => init(),
+);
 
 const { name, numbersPlayers, estimateStartDate, details, rangePlayerMax, rangePlayerMin, type } = computed(() => ({
-  ...draft,
-}));
+  ...draft.value,
+})).value;
 
-const name = $('');
-const details = $();
-const rangePlayerMax = $();
-const rangePlayerMin = $();
-const numbersPlayers = $();
-const estimateStartDate = $();
-const type = $();
+const initialName = $ref(name ?? '');
+const initialNumbersPlayers = $ref(numbersPlayers);
+const initialEstimateStartDate = $ref(estimateStartDate);
+const initialDetails = $ref(details);
+const initialRangePlayerMax = $ref(rangePlayerMax);
+const initialRangePlayerMin = $ref(rangePlayerMin);
+const initialType = $ref(type);
 
 const timeout = useTimeoutFn(
   () => {
-    updateDraft({
-      name,
-      numbersPlayers,
-      estimateStartDate,
-      details,
+    update({
+      name: initialName,
+      numbersPlayers: initialNumbersPlayers,
+      estimateStartDate: initialEstimateStartDate,
+      details: initialDetails,
+      rangePlayerMax: initialRangePlayerMax,
+      rangePlayerMin: initialRangePlayerMin,
+      type: initialType,
     });
   },
   3000,
@@ -40,7 +55,15 @@ function timeoutManaging() {
 }
 
 watch(
-  () => [Name, NumbersPlayers, EstimateStartDate, Details],
+  () => [
+    initialName,
+    initialNumbersPlayers,
+    initialEstimateStartDate,
+    details,
+    initialRangePlayerMax,
+    initialRangePlayerMin,
+    initialType,
+  ],
   () => {
     timeoutManaging();
   },
@@ -48,9 +71,17 @@ watch(
 </script>
 
 <template>
-  <TemplateDraft v-model:name="name">
+  <TemplateDraft
+    v-model:name="initialName"
+    v-model:details="details"
+    v-model:numbersPlayers="initialNumbersPlayers"
+    v-model:estimateStartDate="initialEstimateStartDate"
+    v-model:rangePlayerMax="initialRangePlayerMax"
+    v-model:rangePlayerMin="initialRangePlayerMin"
+    v-model:type="initialType"
+  >
     <template name="last">
-      <button grid="col-end-3 " w="min-content" place="self-end" text="black" bg="light-50" @click="submit"></button>
+      <button grid="col-end-3 " w="min-content" place="self-end" text="black" bg="light-50">update</button>
     </template>
   </TemplateDraft>
 </template>

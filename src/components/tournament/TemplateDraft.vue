@@ -1,12 +1,12 @@
 <script setup lang="ts">
 defineProps<{
-  name: string;
-  details: string | null;
-  rangePlayerMax: number | null;
-  rangePlayerMin: number | null;
-  numbersPlayers: number | null;
-  estimateStartDate: string | null;
-  type: 'standard' | 'taiko';
+  name?: string;
+  details?: string | null;
+  rangePlayerMax?: number | null;
+  rangePlayerMin?: number | null;
+  numbersPlayers?: number | null;
+  estimateStartDate?: string | null;
+  type?: 'standard' | 'taiko';
 }>();
 
 defineEmits([

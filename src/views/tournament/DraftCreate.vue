@@ -7,11 +7,11 @@ const { user } = storeToRefs(userStore());
 const router = useRouter();
 
 const name = $ref('name');
-const details = $ref(null);
-const rangePlayerMax = $ref(null);
-const rangePlayerMin = $ref(null);
-const numbersPlayers = $ref(null);
-const estimateStartDate = $ref(null);
+const details = $ref(undefined);
+const rangePlayerMax = $ref(undefined);
+const rangePlayerMin = $ref(undefined);
+const numbersPlayers = $ref(undefined);
+const estimateStartDate = $ref(undefined);
 const type = $ref<'standard' | 'taiko'>('standard');
 
 async function submit() {

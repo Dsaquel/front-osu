@@ -16,8 +16,8 @@ const useDraftStore = defineStore('draft', () => {
     store(data);
   }
 
-  async function fetch(id: number) {
-    const data = await apiDraft.fetch({ userId: user?.id as number }, id);
+  async function fetch(draftId: number) {
+    const data = await apiDraft.fetch({ userId: user?.id as number }, draftId);
     draft.value = data;
   }
 
