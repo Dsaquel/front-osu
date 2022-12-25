@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
+
 defineProps<{
   name?: string;
   details?: string | null;
@@ -8,6 +13,15 @@ defineProps<{
   estimateStartDate?: string | null;
   type?: 'standard' | 'taiko';
 }>();
+// {
+//   name: '',
+//   details: '',
+//   rangePlayerMax: 0,
+//   rangePlayerMin: 0,
+//   estimateStartDate: '',
+//   numbersPlayers: 0,
+//   type: 'standard',
+// },
 
 defineEmits([
   'update:name',
@@ -49,7 +63,7 @@ defineEmits([
         :model-value="estimateStartDate"
         :title="'Estimation start'"
         :type="'month'"
-        @update:model-value="(val) => $emit('update:estimateStartDate', val)"
+        @update:model-value="(val) => $emit('update:estimateStartDate', dayjs(val).utc().format())"
       />
       <slot name="last" />
     </div>

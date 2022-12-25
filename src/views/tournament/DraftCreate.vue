@@ -3,7 +3,7 @@ import draftStore from '~/store/draft.store';
 import { DraftDto } from '~/types';
 
 const { create } = draftStore();
-const { user } = storeToRefs(userStore());
+// const { user } = storeToRefs(userStore());
 const router = useRouter();
 
 const name = $ref('name');

@@ -10,7 +10,7 @@ const props = withDefaults(
     details: '',
   },
 );
-console.log(props.details);
+
 const { textarea, input } = useTextareaAutosize();
 
 const writing = ref(true);

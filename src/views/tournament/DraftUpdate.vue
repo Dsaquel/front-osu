@@ -1,46 +1,36 @@
 <script setup lang="ts">
-import draftStore from '~/store/draft.store';
-
 const { update, fetch } = draftStore();
+
 const { draft } = storeToRefs(draftStore());
 
 const draftId = $ref(parseInt(useRoute().params?.draftId as string, 10));
-
-function init() {
+async function init() {
   if (!draftId) return;
-  fetch(draftId);
+  await fetch(draftId);
 }
 
-onBeforeMount(() => init());
+onMounted(() => init());
 
 watch(
   () => draftId,
   () => init(),
 );
 
-const { name, numbersPlayers, estimateStartDate, details, rangePlayerMax, rangePlayerMin, type } = computed(() => ({
-  ...draft.value,
-})).value;
-
-const initialName = $ref(name ?? '');
-const initialNumbersPlayers = $ref(numbersPlayers);
-const initialEstimateStartDate = $ref(estimateStartDate);
-const initialDetails = $ref(details);
-const initialRangePlayerMax = $ref(rangePlayerMax);
-const initialRangePlayerMin = $ref(rangePlayerMin);
-const initialType = $ref(type);
-
 const timeout = useTimeoutFn(
-  () => {
-    update({
-      name: initialName,
-      numbersPlayers: initialNumbersPlayers,
-      estimateStartDate: initialEstimateStartDate,
-      details: initialDetails,
-      rangePlayerMax: initialRangePlayerMax,
-      rangePlayerMin: initialRangePlayerMin,
-      type: initialType,
-    });
+  async () => {
+    await update(
+      {
+        name: draft.value?.name,
+        numbersPlayers: draft.value?.numbersPlayers as number,
+        estimateStartDate: draft.value?.estimateStartDate as string,
+        details: draft.value?.details as string,
+        rangePlayerMax: draft.value?.rangePlayerMax as number,
+        rangePlayerMin: draft.value?.rangePlayerMin as number,
+        type: draft.value?.type,
+      },
+      draft.value?.id as number,
+    );
+    timeout.stop();
   },
   3000,
   { immediate: false },
@@ -53,35 +43,39 @@ function timeoutManaging() {
     timeout.start();
   }
 }
-
-watch(
-  () => [
-    initialName,
-    initialNumbersPlayers,
-    initialEstimateStartDate,
-    details,
-    initialRangePlayerMax,
-    initialRangePlayerMin,
-    initialType,
-  ],
-  () => {
+watchEffect(() => {
+  if (draft.value) {
+    console.log('...');
     timeoutManaging();
+  }
+});
+watch(
+  draft,
+  (val) => {
+    console.log('val');
+    if (val) {
+      timeoutManaging();
+    }
   },
+  { deep: true },
 );
 </script>
 
 <template>
-  <TemplateDraft
-    v-model:name="initialName"
-    v-model:details="details"
-    v-model:numbersPlayers="initialNumbersPlayers"
-    v-model:estimateStartDate="initialEstimateStartDate"
-    v-model:rangePlayerMax="initialRangePlayerMax"
-    v-model:rangePlayerMin="initialRangePlayerMin"
-    v-model:type="initialType"
-  >
-    <template name="last">
-      <button grid="col-end-3 " w="min-content" place="self-end" text="black" bg="light-50">update</button>
-    </template>
-  </TemplateDraft>
+  <div v-if="draft">
+    <TemplateDraft
+      v-model:name="draft.name"
+      v-model:details="draft.details"
+      v-model:numbersPlayers="draft.numbersPlayers"
+      v-model:estimateStartDate="draft.estimateStartDate"
+      v-model:rangePlayerMax="draft.rangePlayerMax"
+      v-model:rangePlayerMin="draft.rangePlayerMin"
+      v-model:type="draft.type"
+    >
+      <template #last>
+        <button grid="col-end-3 " w="min-content" place="self-end" text="black" bg="light-50">update</button>
+      </template>
+    </TemplateDraft>
+  </div>
+  <div v-else>no draft to update</div>
 </template>

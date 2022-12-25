@@ -17,11 +17,11 @@ export type User = {
 
 export type DraftDto = {
   name: string;
-  details?: string;
-  rangePlayerMax?: number;
-  rangePlayerMin?: number;
-  numbersPlayers?: number;
-  estimateStartDate?: string;
+  details?: string | null;
+  rangePlayerMax?: number | null;
+  rangePlayerMin?: number | null;
+  numbersPlayers?: number | null;
+  estimateStartDate?: string | null;
   type?: 'standard' | 'taiko';
 };
 

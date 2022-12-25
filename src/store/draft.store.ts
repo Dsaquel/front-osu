@@ -4,8 +4,10 @@ import apiDraft from '~/api/modules/api.draft';
 
 const useDraftStore = defineStore('draft', () => {
   const { user } = userStore();
-  const draft = ref<Draft | null>(null);
+  const draft = ref(undefined as Draft | undefined);
   const drafts = ref<Draft[]>([]);
+
+  const getter = computed(() => draft.value);
 
   function store(data: Draft[]) {
     drafts.value.push(...data);
@@ -27,12 +29,12 @@ const useDraftStore = defineStore('draft', () => {
     return data;
   }
 
-  async function update(draftDto: DraftDto) {
-    const data = await apiDraft.create(draftDto);
-    draft.value = data;
+  async function update(draftDto: Partial<DraftDto>, draftId: number) {
+    const data = await apiDraft.update(draftDto, draftId);
+    Object.assign(draft.value as Draft, data);
   }
 
-  return { draft, drafts, fetchCollection, fetch, create };
+  return { draft, drafts, getter, fetchCollection, fetch, create, update };
 });
 
 export default useDraftStore;

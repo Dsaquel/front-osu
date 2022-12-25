@@ -57,8 +57,8 @@ const service = {
     return axiosInstance.post(url, data);
   },
 
-  put<T = any>(url: string, data?: object): Promise<T> {
-    return axiosInstance.put(url, data);
+  put<T = any>(url: string, data?: object, params?: object): Promise<T> {
+    return axiosInstance.put(url, data, { params });
   },
 
   delete<T = any>(url: string, data?: object): Promise<T> {
