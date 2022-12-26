@@ -7,10 +7,6 @@ const useDraftStore = defineStore('draft', () => {
   const draft = ref(undefined as Draft | undefined);
   const drafts = ref<Draft[]>([]);
 
-  const getter = computed(() => draft.value);
-
-  // function store(data: Draft[]) {}
-
   async function fetchCollection() {
     const data = await apiDraft.fetchCollection({ userId: user?.id as number });
     drafts.value = data;
@@ -32,7 +28,7 @@ const useDraftStore = defineStore('draft', () => {
     Object.assign(draft.value as Draft, data);
   }
 
-  return { draft, drafts, getter, fetchCollection, fetch, create, update };
+  return { draft, drafts, fetchCollection, fetch, create, update };
 });
 
 export default useDraftStore;

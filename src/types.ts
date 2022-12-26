@@ -54,3 +54,20 @@ export type CreateTournamentDto = {
   isPublic?: boolean;
   estimateStartDate?: string;
 };
+
+export type Tournament = {
+  id: number;
+  createAt: string;
+  updateAt: string;
+  isPublicable: boolean;
+  isPublic: boolean;
+  name: string;
+  startDate: string | null;
+  type: 'standard' | 'taiko';
+  description: string | null;
+  rangePlayerMax: number | null;
+  rangePlayerMin: number;
+  numbersPlayers: number | null;
+  endRegistration: string | null;
+  commonSchedule: string | null;
+};

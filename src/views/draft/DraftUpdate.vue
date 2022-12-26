@@ -1,9 +1,10 @@
 <script setup lang="ts">
 const { update, fetch } = draftStore();
-
 const { draft } = storeToRefs(draftStore());
+
 let loading = $ref(true);
 const draftId = $ref(parseInt(useRoute().params?.draftId as string, 10));
+
 async function init() {
   if (!draftId) return;
   await fetch(draftId);
