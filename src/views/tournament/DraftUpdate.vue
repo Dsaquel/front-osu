@@ -2,7 +2,7 @@
 const { update, fetch } = draftStore();
 
 const { draft } = storeToRefs(draftStore());
-
+let loading = $ref(true);
 const draftId = $ref(parseInt(useRoute().params?.draftId as string, 10));
 async function init() {
   if (!draftId) return;
@@ -18,6 +18,7 @@ watch(
 
 const timeout = useTimeoutFn(
   async () => {
+    loading = true;
     await update(
       {
         name: draft.value?.name,
@@ -30,6 +31,7 @@ const timeout = useTimeoutFn(
       },
       draft.value?.id as number,
     );
+    loading = false;
     timeout.stop();
   },
   3000,
@@ -45,37 +47,45 @@ function timeoutManaging() {
 }
 watchEffect(() => {
   if (draft.value) {
-    console.log('...');
     timeoutManaging();
   }
 });
 watch(
   draft,
-  (val) => {
-    console.log('val');
-    if (val) {
-      timeoutManaging();
-    }
+  () => {
+    timeoutManaging();
   },
   { deep: true },
 );
 </script>
 
 <template>
-  <div v-if="draft">
-    <TemplateDraft
-      v-model:name="draft.name"
-      v-model:details="draft.details"
-      v-model:numbersPlayers="draft.numbersPlayers"
-      v-model:estimateStartDate="draft.estimateStartDate"
-      v-model:rangePlayerMax="draft.rangePlayerMax"
-      v-model:rangePlayerMin="draft.rangePlayerMin"
-      v-model:type="draft.type"
-    >
-      <template #last>
-        <button grid="col-end-3 " w="min-content" place="self-end" text="black" bg="light-50">update</button>
-      </template>
-    </TemplateDraft>
-  </div>
+  <TemplateDraft
+    v-if="draft"
+    v-model:name="draft.name"
+    v-model:details="draft.details"
+    v-model:numbersPlayers="draft.numbersPlayers"
+    v-model:estimateStartDate="draft.estimateStartDate"
+    v-model:rangePlayerMax="draft.rangePlayerMax"
+    v-model:rangePlayerMin="draft.rangePlayerMin"
+    v-model:type="draft.type"
+  >
+    <template #last>
+      <div
+        v-if="loading"
+        v-loading="loading"
+        grid="col-end-3"
+        w="min-content"
+        place="self-end"
+        text="black"
+        bg="light-50"
+        m="r-8"
+      />
+      <div v-else grid="col-end-3" w="min-content" place="self-end" class="whitespace-nowrap">
+        last update: {{ useTimeAgo(draft.updateAt).value }}
+      </div>
+    </template>
+  </TemplateDraft>
+
   <div v-else>no draft to update</div>
 </template>

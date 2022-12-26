@@ -16,7 +16,7 @@ const disabledDate = (time: Date) => {
 
 <template>
   <div>
-    <span display="block">{{ title }}</span>
-    <el-date-picker v-bind="useAttrs()" :type="type" :disabled-date="disabledDate" />
+    <span display="block" text="sm">{{ title }}</span>
+    <el-date-picker v-bind="useAttrs()" size="large" :type="type" :disabled-date="disabledDate" />
   </div>
 </template>
