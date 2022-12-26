@@ -9,7 +9,10 @@ async function init() {
   await fetch(draftId);
 }
 
-onMounted(() => init());
+onMounted(() => {
+  loading = false;
+  init();
+});
 
 watch(
   () => draftId,

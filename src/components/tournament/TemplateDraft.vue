@@ -25,14 +25,15 @@ defineEmits([
 ]);
 
 const rankRang = computed(() =>
-  (props.rangePlayerMin === 1 || props.rangePlayerMin === null) && props.rangePlayerMax === null
+  ((props.rangePlayerMin === 1 || props.rangePlayerMin === null) && props.rangePlayerMax === null) ||
+  (props.rangePlayerMin === undefined && props.rangePlayerMax === undefined)
     ? 'Open rank'
     : `${props.rangePlayerMin} to ${props.rangePlayerMax}`,
 );
 </script>
 
 <template>
-  <div m="x-auto" class="card sm:max-w-900px">
+  <div class="card">
     <div p="10" grid="~ rows-1 cols-2 gap-6">
       <div>
         <span display="block" text="sm"> Name </span>

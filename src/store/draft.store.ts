@@ -9,13 +9,11 @@ const useDraftStore = defineStore('draft', () => {
 
   const getter = computed(() => draft.value);
 
-  function store(data: Draft[]) {
-    drafts.value.push(...data);
-  }
+  // function store(data: Draft[]) {}
 
   async function fetchCollection() {
     const data = await apiDraft.fetchCollection({ userId: user?.id as number });
-    store(data);
+    drafts.value = data;
   }
 
   async function fetch(draftId: number) {

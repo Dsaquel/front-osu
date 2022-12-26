@@ -1,8 +1,17 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+withDefaults(
+  defineProps<{
+    minWindow: boolean;
+  }>(),
+  {
+    minWindow: false,
+  },
+);
+</script>
 
 <template>
   <main p="5" h="min-full" overflow="y-scroll">
-    <router-view />
+    <router-view :class="{ 'sm:max-w-900px mx-auto': minWindow }" />
   </main>
 </template>
 

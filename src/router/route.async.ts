@@ -5,6 +5,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
   {
     path: '/',
     component: () => import('~/components/Ui/Layout/childs/MainLayout.vue'),
+    props: { minWindow: true },
     children: [
       {
         path: '',
@@ -16,6 +17,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
   {
     path: '/users/:userId',
     component: () => import('~/components/Ui/Layout/childs/MainLayout.vue'),
+    props: { minWindow: true },
     children: [
       {
         path: 'tournaments',
@@ -38,6 +40,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
   {
     path: '/tournaments',
     component: () => import('~/components/Ui/Layout/childs/MainLayout.vue'),
+    props: { minWindow: true },
     children: [
       {
         path: '',
