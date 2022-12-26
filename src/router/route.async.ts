@@ -24,17 +24,6 @@ const asyncRoutes: Array<RouteRecordRaw> = [
         name: 'user-tournament',
         component: () => import('~/views/user/UserTournament.vue'),
       },
-      {
-        path: 'drafts/:draftId',
-        name: 'drafts',
-        children: [
-          {
-            path: 'update',
-            name: 'draft-update',
-            component: () => import('~/views/tournament/DraftUpdate.vue'),
-          },
-        ],
-      },
     ],
   },
   {
@@ -48,9 +37,24 @@ const asyncRoutes: Array<RouteRecordRaw> = [
         component: () => import('~/views/tournament/TournamentHome.vue'),
       },
       {
-        path: 'create',
-        name: 'tournament-create',
-        component: () => import('~/views/tournament/DraftCreate.vue'),
+        path: 'drafts',
+        children: [
+          {
+            path: 'create',
+            name: 'draft-create',
+            component: () => import('~/views/draft/DraftCreate.vue'),
+          },
+          {
+            path: ':draftId',
+            children: [
+              {
+                path: 'update',
+                name: 'draft-update',
+                component: () => import('~/views/draft/DraftUpdate.vue'),
+              },
+            ],
+          },
+        ],
       },
     ],
   },
