@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import useTournamentStore from '../../store/tournament.store';
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
-const { fetch } = useTournamentStore();
-const { tournament } = storeToRefs(useTournamentStore());
+const { fetch } = tournamentStore();
+const { tournament } = storeToRefs(tournamentStore());
 
 async function init() {
   if (!tournamentId) return;

@@ -11,6 +11,14 @@ const exceptionRoutes: Array<RouteRecordRaw> = [
     component: () => import('~/views/exception/401.vue'),
   },
   {
+    path: '/403',
+    name: '403',
+    meta: {
+      title: 'Access forbidden',
+    },
+    component: () => import('~/views/exception/Exeception-403.vue'),
+  },
+  {
     path: '/404',
     name: '404',
     meta: {
