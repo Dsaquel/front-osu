@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import apiTournament from '~/api/modules/api.tournament';
 import router from '~/router';
-import { Tournament } from '~/types';
+import { Tournament, UpdateTournamentDto } from '~/types';
 
 const useTournamentStore = defineStore('tournament', () => {
   const tournament = ref(undefined as Tournament | undefined);
@@ -11,7 +11,6 @@ const useTournamentStore = defineStore('tournament', () => {
       const data = await apiTournament.fetch(tournamentId);
       tournament.value = data;
     } catch (e) {
-      console.log('bruh ?');
       router.push({ name: '403' });
     }
   }
@@ -20,8 +19,13 @@ const useTournamentStore = defineStore('tournament', () => {
     //
   }
 
-  async function update() {
-    //
+  async function update(updateTournamentDto: UpdateTournamentDto) {
+    try {
+      const data = await apiTournament.update(updateTournamentDto, tournament.value?.id as number);
+      tournament.value = data;
+    } catch (e: any) {
+      console.log(e.message);
+    }
   }
 
   return { tournament, fetch, fetchCollection, update };

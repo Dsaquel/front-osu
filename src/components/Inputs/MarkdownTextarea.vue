@@ -1,22 +1,18 @@
 <script setup lang="ts">
-import { marked } from 'marked';
-import DOMPurify from 'dompurify';
-
 const props = withDefaults(
   defineProps<{
-    details: string | null;
+    text: string | null;
   }>(),
   {
-    details: '',
+    text: '',
   },
 );
 
 const { textarea, input } = useTextareaAutosize();
 
 const writing = ref(true);
-const text = computed(() => marked(DOMPurify.sanitize(props.details ?? '')));
 
-input.value = props.details ?? '';
+input.value = props.text ?? '';
 </script>
 
 <template>
@@ -35,9 +31,7 @@ input.value = props.details ?? '';
         v-bind="useAttrs()"
       />
 
-      <div v-else-if="text" class="markdown" h="min-200px" border="b b-gray-500 opacity-60" v-html="text" />
-
-      <div v-else h="min-200px" border="1 b-gray-400">Nothing to show</div>
+      <MarkdownRender v-else :text="text" />
     </div>
   </div>
 </template>

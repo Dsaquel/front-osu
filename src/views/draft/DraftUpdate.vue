@@ -49,11 +49,6 @@ function timeoutManaging() {
     timeout.start();
   }
 }
-watchEffect(() => {
-  if (draft.value) {
-    timeoutManaging();
-  }
-});
 watch(
   draft,
   () => {

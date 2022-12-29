@@ -71,3 +71,16 @@ export type Tournament = {
   endRegistration: string | null;
   commonSchedule: string | null;
 };
+
+export type UpdateTournamentDto = {
+  isPublicable?: boolean;
+  name?: string;
+  startDate?: string | null;
+  type?: 'standard' | 'taiko';
+  description?: string | null;
+  rangePlayerMax?: number | null;
+  rangePlayerMin?: number;
+  numbersPlayers?: number;
+  endRegistration?: string | null;
+  commonSchedule?: string | null;
+};
