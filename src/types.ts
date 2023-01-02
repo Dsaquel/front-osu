@@ -44,13 +44,12 @@ export type Draft = {
 export type CreateTournamentDto = {
   name: string;
   startDate?: string;
-  private?: boolean;
   description?: string;
   rangePlayerMax?: number;
   rangePlayerMin?: number;
   numbersPlayers?: number;
   commonSchedule?: string;
-  hasQualifier: boolean | null;
+  hasQualifier?: boolean;
   isPublic?: boolean;
   estimateStartDate?: string;
 };
@@ -70,6 +69,7 @@ export type Tournament = {
   numbersPlayers: number | null;
   endRegistration: string | null;
   commonSchedule: string | null;
+  hasQualifier: boolean;
 };
 
 export type UpdateTournamentDto = {
@@ -83,4 +83,5 @@ export type UpdateTournamentDto = {
   numbersPlayers?: number;
   endRegistration?: string | null;
   commonSchedule?: string | null;
+  hasQualifier?: boolean;
 };

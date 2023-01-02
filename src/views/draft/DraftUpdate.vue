@@ -51,7 +51,9 @@ function timeoutManaging() {
 }
 watch(
   draft,
-  () => {
+  (newVal, oldVal) => {
+    if (oldVal === undefined && newVal !== undefined) return;
+    console.log('change ?');
     timeoutManaging();
   },
   { deep: true },

@@ -43,6 +43,7 @@ const timeout = useTimeoutFn(
       rangePlayerMin: tournament.value?.rangePlayerMin,
       type: tournament.value?.type,
       endRegistration: tournament.value?.endRegistration,
+      hasQualifier: tournament.value?.hasQualifier,
     });
     loading = false;
     timeout.stop();
@@ -60,7 +61,8 @@ function timeoutManaging() {
 }
 watch(
   tournament,
-  () => {
+  (newVal, oldVal) => {
+    if (oldVal === undefined && newVal !== undefined) return;
     timeoutManaging();
   },
   { deep: true },
@@ -80,7 +82,7 @@ watch(
           :model-value="(tournament.numbersPlayers as number)"
           size="large"
           w="full"
-          @change="(val) => (tournament.numbersPlayers = val)"
+          @change="(val) => (tournament!.numbersPlayers = val)"
         >
           <el-option :value="4" />
           <el-option :value="16" />
@@ -90,13 +92,16 @@ watch(
       <div grid="col-span-2">
         <span text="sm">Details</span>
         <!-- to test -->
-        <MarkdownTextarea v-model:text="tournament.description" />
+        <MarkdownTextarea
+          :text="tournament.description"
+          @input="(val: Event) => tournament!.description =  (val.target as HTMLTextAreaElement).value"
+        />
       </div>
       <CommonDatepicker
         :model-value="tournament.startDate"
-        :title="'Estimation start'"
+        :title="'Start date'"
         :type="'month'"
-        @update:model-value="(val) => (tournament.startDate = dayjs(val).utc().format())"
+        @update:model-value="(val) => (tournament!.startDate = dayjs(val).utc().format())"
       />
       <div grid="~ cols-2">
         <div m="x-2">
@@ -117,15 +122,19 @@ watch(
           :model-value="tournament.endRegistration"
           :title="'End of registration (utc)'"
           :type="'datetime'"
-          @update:model-value="(val) => (tournament.endRegistration = dayjs(val).utc().format())"
+          @update:model-value="(val) => (tournament!.endRegistration = dayjs(val).utc().format())"
         />
       </div>
       <div text="right">
         <span display="block" text="sm"> type </span>
-        <el-select :model-value="tournament.type" size="large" w="full" @change="(val) => (tournament.type = val)">
+        <el-select :model-value="tournament.type" size="large" w="full" @change="(val) => (tournament!.type = val)">
           <el-option value="standard" />
           <el-option value="taiko" />
         </el-select>
+      </div>
+      <div>
+        <span text="sm"> Create qualifier </span>
+        <el-switch v-model="tournament.hasQualifier" />
       </div>
       <div
         v-if="loading"

@@ -11,7 +11,7 @@ const props = withDefaults(
 const { textarea, input } = useTextareaAutosize();
 
 const writing = ref(true);
-
+defineEmits(['update:description']);
 input.value = props.text ?? '';
 </script>
 
