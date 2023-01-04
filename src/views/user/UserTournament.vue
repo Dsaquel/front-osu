@@ -9,11 +9,9 @@ onBeforeMount(() => fetchCollection());
 <template>
   <div>
     <el-table :data="drafts" w="full">
-      <el-table-column prop="name" label="name" />
+      <el-table-column prop="name" label="draft name" />
       <el-table-column label="last update">
-        <template #default="scope">
-          {{ useTimeAgo(scope.row.updateAt).value }}
-        </template>
+        <template #default="scope"> {{ useTimeAgo(scope.row.updateAt).value }} </template>
       </el-table-column>
       <el-table-column label="actions" align="right" width="150" fixed="right">
         <template #default="scope">

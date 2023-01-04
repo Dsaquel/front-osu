@@ -6,7 +6,7 @@ import { Tournament, UpdateTournamentDto } from '~/types';
 const useTournamentStore = defineStore('tournament', () => {
   const tournament = ref(undefined as Tournament | undefined);
 
-  async function fetch(tournamentId: number) {
+  async function fetchTournament(tournamentId: number) {
     try {
       const data = await apiTournament.fetch(tournamentId);
       tournament.value = data;
@@ -28,7 +28,7 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
-  return { tournament, fetch, fetchCollection, update };
+  return { tournament, fetchTournament, fetchCollection, update };
 });
 
 export default useTournamentStore;

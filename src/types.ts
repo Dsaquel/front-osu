@@ -1,21 +1,27 @@
-type TournamentDraft = {
+/* eslint-disable no-use-before-define */
+interface Node {
+  id: number;
+  createAt: string;
+  updateAt: string;
+}
+
+interface TournamentDraft {
   name: string;
   numbersPlayers: number;
   description: string;
   estimateStartDate: string;
-};
+}
 
-export type User = {
-  id: number;
+export interface User extends Node {
   osuId: number;
   username: string;
   avatarUrl: string;
   rank: number;
   discord: string | null;
   tournamentDraft: TournamentDraft;
-};
+}
 
-export type DraftDto = {
+export interface DraftDto {
   name: string;
   details?: string | null;
   rangePlayerMax?: number | null;
@@ -23,12 +29,9 @@ export type DraftDto = {
   numbersPlayers?: number | null;
   estimateStartDate?: string | null;
   type?: 'standard' | 'taiko';
-};
+}
 
-export type Draft = {
-  id: number;
-  createAt: string;
-  updateAt: string;
+export interface Draft extends Node {
   name: string;
   details: string | null;
   rangePlayerMin: number | null;
@@ -39,9 +42,9 @@ export type Draft = {
   tournamentId: number;
   owner: User;
   ownerId: number;
-};
+}
 
-export type CreateTournamentDto = {
+export interface CreateTournamentDto {
   name: string;
   startDate?: string;
   description?: string;
@@ -52,12 +55,29 @@ export type CreateTournamentDto = {
   hasQualifier?: boolean;
   isPublic?: boolean;
   estimateStartDate?: string;
-};
+}
 
-export type Tournament = {
-  id: number;
-  createAt: string;
-  updateAt: string;
+export interface Qualifier extends Node {
+  showMappoolQualifier: boolean;
+  participantsLimit: number | null;
+  displayMappoolsSchedule: string | null;
+  tournamentId: number;
+  mappool: MappoolQualifier;
+}
+
+export interface MappoolQualifier extends Node {
+  isVisible: boolean;
+  noMod: number;
+  hidden: number;
+  hardRock: number;
+  doubleTime: number;
+  freeMod: number;
+  tieBreaker: number;
+  qualifier: Qualifier;
+  qualifierId: number;
+}
+
+export interface Tournament extends Node {
   isPublicable: boolean;
   isPublic: boolean;
   name: string;
@@ -70,9 +90,10 @@ export type Tournament = {
   endRegistration: string | null;
   commonSchedule: string | null;
   hasQualifier: boolean;
-};
+  qualifier: Qualifier | null;
+}
 
-export type UpdateTournamentDto = {
+export interface UpdateTournamentDto {
   isPublicable?: boolean;
   name?: string;
   startDate?: string | null;
@@ -84,4 +105,10 @@ export type UpdateTournamentDto = {
   endRegistration?: string | null;
   commonSchedule?: string | null;
   hasQualifier?: boolean;
-};
+}
+
+export interface UpdateQualifierDto {
+  showMappoolQualifier?: boolean;
+  participantsLimit?: number | null;
+  displayMappoolsSchedule?: string | null;
+}

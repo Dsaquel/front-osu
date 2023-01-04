@@ -6,12 +6,12 @@ export default {
 
 <script setup lang="ts">
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
-const { fetch } = tournamentStore();
+const { fetchTournament } = tournamentStore();
 const { tournament } = storeToRefs(tournamentStore());
 
 async function init() {
   if (!tournamentId) return;
-  fetch(tournamentId);
+  fetchTournament(tournamentId);
 }
 
 onMounted(() => {

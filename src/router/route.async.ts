@@ -40,11 +40,22 @@ const asyncRoutes: Array<RouteRecordRaw> = [
         path: ':tournamentId',
         name: 'tournament-id',
         component: () => import('~/views/tournament/TournamentDetail.vue'),
+        children: [],
       },
       {
         path: ':tournamentId/update',
         name: 'tournament-update',
         component: () => import('~/views/tournament/TournamentUpdate.vue'),
+      },
+      {
+        path: ':tournamentId/qualifier',
+        name: 'qualifier-detail',
+        component: () => import('~/views/qualifier/QualifierDetail.vue'),
+      },
+      {
+        path: ':tournamentId/qualifier/update',
+        name: 'qualifier-update',
+        component: () => import('~/views/qualifier/QualifierUpdate.vue'),
       },
       {
         path: 'drafts',
@@ -66,6 +77,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
           },
         ],
       },
+      // {},
     ],
   },
   {

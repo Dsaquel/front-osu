@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import { isEqual } from 'lodash';
 
 dayjs.extend(utc);
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
-const { fetch, update } = tournamentStore();
+const { fetchTournament, update } = tournamentStore();
 const { tournament } = storeToRefs(tournamentStore());
 async function init() {
   if (!tournamentId) return;
-  fetch(tournamentId);
+  fetchTournament(tournamentId);
 }
 
 let loading = $ref(false);
@@ -60,9 +61,9 @@ function timeoutManaging() {
   }
 }
 watch(
-  tournament,
+  () => tournament.value,
   (newVal, oldVal) => {
-    if (oldVal === undefined && newVal !== undefined) return;
+    if ((oldVal === undefined && newVal !== undefined) || !isEqual(newVal, oldVal)) return;
     timeoutManaging();
   },
   { deep: true },
@@ -91,7 +92,6 @@ watch(
       </div>
       <div grid="col-span-2">
         <span text="sm">Details</span>
-        <!-- to test -->
         <MarkdownTextarea
           :text="tournament.description"
           @input="(val: Event) => tournament!.description =  (val.target as HTMLTextAreaElement).value"
@@ -135,6 +135,9 @@ watch(
       <div>
         <span text="sm"> Create qualifier </span>
         <el-switch v-model="tournament.hasQualifier" />
+        <router-link v-if="tournament.hasQualifier" :to="{ name: 'qualifier-detail' }" display="block"
+          ><el-button>qualifier detail</el-button></router-link
+        >
       </div>
       <div
         v-if="loading"
