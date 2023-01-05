@@ -6,7 +6,7 @@ import { isEqual } from 'lodash';
 dayjs.extend(utc);
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
-const { fetchTournament, update } = tournamentStore();
+const { fetchTournament, updateTournament } = tournamentStore();
 const { tournament } = storeToRefs(tournamentStore());
 async function init() {
   if (!tournamentId) return;
@@ -35,7 +35,7 @@ const rankRang = computed(() =>
 const timeout = useTimeoutFn(
   async () => {
     if (!tournament.value) loading = true;
-    await update({
+    await updateTournament({
       name: tournament.value?.name,
       numbersPlayers: tournament.value?.numbersPlayers ?? undefined,
       startDate: tournament.value?.startDate as string,
@@ -71,8 +71,9 @@ watch(
 </script>
 
 <template>
-  <div v-if="tournament" class="card">
-    <div p="10" grid="~ rows-1 cols-2 gap-6">
+  <div v-if="tournament">
+    <div class="card" p="10" grid="~ rows-1 cols-2 gap-6">
+      <div grid="col-span-2" text="center xl">Tournament settings</div>
       <div>
         <span display="block" text="sm"> Name </span>
         <el-input v-model="tournament.name" size="large" />
@@ -152,6 +153,10 @@ watch(
       <div v-else grid="col-end-3" w="min-content" place="self-end" class="whitespace-nowrap">
         last update: {{ useTimeAgo(tournament.updateAt).value }}
       </div>
+    </div>
+    <div v-if="tournament.qualifier" class="card" m="t-6" p="10">
+      <div text="center xl">Qualifier settings</div>
+      <!-- redirect mappool, lobbies, participants, etc... -->
     </div>
   </div>
   <div v-else>No tournament</div>

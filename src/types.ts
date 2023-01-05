@@ -5,6 +5,17 @@ interface Node {
   updateAt: string;
 }
 
+interface Mappool extends Node {
+  displayMappoolsSchedule: string | null;
+  isVisible: boolean;
+  noMod: number;
+  hidden: number;
+  hardRock: number;
+  doubleTime: number;
+  freeMod: number;
+  tieBreaker: number;
+}
+
 interface TournamentDraft {
   name: string;
   numbersPlayers: number;
@@ -58,21 +69,11 @@ export interface CreateTournamentDto {
 }
 
 export interface Qualifier extends Node {
-  showMappoolQualifier: boolean;
-  participantsLimit: number | null;
-  displayMappoolsSchedule: string | null;
   tournamentId: number;
   mappool: MappoolQualifier;
 }
 
-export interface MappoolQualifier extends Node {
-  isVisible: boolean;
-  noMod: number;
-  hidden: number;
-  hardRock: number;
-  doubleTime: number;
-  freeMod: number;
-  tieBreaker: number;
+export interface MappoolQualifier extends Mappool {
   qualifier: Qualifier;
   qualifierId: number;
 }
@@ -105,10 +106,4 @@ export interface UpdateTournamentDto {
   endRegistration?: string | null;
   commonSchedule?: string | null;
   hasQualifier?: boolean;
-}
-
-export interface UpdateQualifierDto {
-  showMappoolQualifier?: boolean;
-  participantsLimit?: number | null;
-  displayMappoolsSchedule?: string | null;
 }

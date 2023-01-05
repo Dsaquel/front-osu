@@ -31,7 +31,7 @@ watch(
   <div v-if="qualifier && tournament">
     <el-alert
       v-if="!tournament.isPublic"
-      title="qualifier not yet public"
+      title="Qualifier not  public yet"
       type="info"
       show-icon
       pos="absolute inset-0"
@@ -40,7 +40,7 @@ watch(
     <div class="container" display="grid" grid="row-start-2" v-bind="useAttrs()">
       <div text="xl">For tournament: {{ tournament.name }}</div>
       <div>Is mappool qualifier watchable: {{ qualifier.showMappoolQualifier || 'no set yet' }}</div>
-      <div>limit accept for qualification: {{ qualifier.participantsLimit }}</div>
+      <div>limit accept for qualification: {{ qualifier.participantsLimit || 'no set yet' }}</div>
       <div>show mappool to participant schedule: {{ qualifier.displayMappoolsSchedule || 'no set yet' }}</div>
       <router-link :to="{ name: 'qualifier-update' }">
         <el-button>edit the qualifier</el-button>

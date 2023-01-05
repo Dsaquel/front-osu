@@ -23,7 +23,7 @@ const useQualifierStore = defineStore('qualifier', () => {
     try {
       const data = await apiQualifier.update(updateQualifierDto, qualifier.value?.id as number);
       qualifier.value = data;
-    } catch (e: Error) {
+    } catch (e) {
       console.log(e.message);
     }
   }
