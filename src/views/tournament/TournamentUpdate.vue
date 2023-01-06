@@ -64,6 +64,7 @@ watch(
   () => tournament.value,
   (newVal, oldVal) => {
     if ((oldVal === undefined && newVal !== undefined) || !isEqual(newVal, oldVal)) return;
+    console.log(',t,rt');
     timeoutManaging();
   },
   { deep: true },
@@ -156,6 +157,10 @@ watch(
     </div>
     <div v-if="tournament.qualifier" class="card" m="t-6" p="10">
       <div text="center xl">Qualifier settings</div>
+
+      <router-link class="bare" :to="{ name: 'mappool-detail' }">See mappool qualifier</router-link>
+      <router-link class="bare" :to="{ name: 'qualifier-lobbies' }">See lobbies qualifier</router-link>
+
       <!-- redirect mappool, lobbies, participants, etc... -->
     </div>
   </div>
