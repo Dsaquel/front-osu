@@ -19,11 +19,6 @@ onMounted(() => {
   init();
 });
 
-watch(
-  () => tournamentId,
-  () => init(),
-);
-
 const rankRang = computed(() =>
   ((tournament?.value?.rangePlayerMin === 1 || tournament?.value?.rangePlayerMin === null) &&
     tournament?.value.rangePlayerMax === null) ||
@@ -64,7 +59,6 @@ watch(
   () => tournament.value,
   (newVal, oldVal) => {
     if ((oldVal === undefined && newVal !== undefined) || !isEqual(newVal, oldVal)) return;
-    console.log(',t,rt');
     timeoutManaging();
   },
   { deep: true },
@@ -158,7 +152,7 @@ watch(
     <div v-if="tournament.qualifier" class="card" m="t-6" p="10">
       <div text="center xl">Qualifier settings</div>
 
-      <router-link class="bare" :to="{ name: 'mappool-detail' }">See mappool qualifier</router-link>
+      <router-link class="bare" :to="{ name: 'mappool-detail', hash: '#qualifier' }">See mappool qualifier</router-link>
       <router-link class="bare" :to="{ name: 'qualifier-lobbies' }">See lobbies qualifier</router-link>
 
       <!-- redirect mappool, lobbies, participants, etc... -->

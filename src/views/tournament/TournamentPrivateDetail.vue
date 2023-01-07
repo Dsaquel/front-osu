@@ -17,11 +17,6 @@ async function init() {
 onMounted(() => {
   init();
 });
-
-watch(
-  () => tournamentId,
-  () => init(),
-);
 </script>
 
 <template>
