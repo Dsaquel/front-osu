@@ -2,13 +2,13 @@
 import { onBeforeMount } from 'vue';
 import { Tournament } from '~/types';
 
-const { tournamentMatch } = tournamentStore();
+const { fetchMatches } = matchStore();
 const props = defineProps<{
   tournament: Tournament;
 }>();
 
 onBeforeMount(async () => {
-  await tournamentMatch();
+  await fetchMatches(props.tournament.id);
 });
 </script>
 <template>

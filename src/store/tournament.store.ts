@@ -19,10 +19,6 @@ const useTournamentStore = defineStore('tournament', () => {
     //
   }
 
-  async function tournamentMatch() {
-    return 'oui';
-  }
-
   async function updateTournament(updateTournamentDto: UpdateTournamentDto) {
     try {
       const data = await apiTournament.update(updateTournamentDto, tournament.value?.id as number);
@@ -32,7 +28,7 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
-  return { tournament, fetchTournament, fetchCollection, updateTournament, tournamentMatch };
+  return { tournament, fetchTournament, fetchCollection, updateTournament };
 });
 
 export default useTournamentStore;
