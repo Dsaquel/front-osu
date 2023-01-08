@@ -14,12 +14,10 @@ onMounted(() => {
 });
 </script>
 <template>
-  <div v-if="tournament">
+  <div v-if="tournament" class="card" p="4">
     <div text="xl center">
       {{ tournament.name }}
     </div>
-    <div h="500"></div>
-    <h2 id="qualifier">Qualifier desu</h2>
-    <div h="500"></div>
+    <div>start create a mappool</div>
   </div>
 </template>

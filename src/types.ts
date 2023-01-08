@@ -71,6 +71,7 @@ export interface CreateTournamentDto {
 export interface Qualifier extends Node {
   tournamentId: number;
   mappool: MappoolQualifier;
+  lobbies: any;
 }
 
 export interface MappoolQualifier extends Mappool {
@@ -92,6 +93,26 @@ export interface Tournament extends Node {
   commonSchedule: string | null;
   hasQualifier: boolean;
   qualifier: Qualifier | null;
+}
+
+export interface Match extends Node {
+  tournament: Tournament;
+  tournamentId: number;
+  referee_id: number;
+  location: string;
+  first_to: number;
+  startDate: string;
+  rule_lobby: string;
+  history_osu: string;
+  player1_id: number;
+  player2_id: number;
+  winner_id: number;
+  state: string;
+  identifier: number | null;
+  parent_identifier: number | null;
+  player1_prev_identifier: number | null;
+  player2_prev_identifier: number | null;
+  round: number;
 }
 
 export interface UpdateTournamentDto {

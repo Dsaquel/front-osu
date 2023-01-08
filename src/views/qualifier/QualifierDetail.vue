@@ -39,12 +39,8 @@ watch(
     />
     <div class="container" display="grid" grid="row-start-2" v-bind="useAttrs()">
       <div text="xl">For tournament: {{ tournament.name }}</div>
-      <div>Is mappool qualifier watchable: {{ qualifier.showMappoolQualifier || 'no set yet' }}</div>
-      <div>limit accept for qualification: {{ qualifier.participantsLimit || 'no set yet' }}</div>
-      <div>show mappool to participant schedule: {{ qualifier.displayMappoolsSchedule || 'no set yet' }}</div>
-      <router-link :to="{ name: 'qualifier-update' }">
-        <el-button>edit the qualifier</el-button>
-      </router-link>
+      <div>Is mappool qualifier watchable: {{ qualifier.mappool || 'no set yet' }}</div>
+      <div>show mappool to participant schedule: {{ qualifier.lobbies || 'no set yet' }}</div>
     </div>
   </div>
   <div v-else>nothing to show</div>

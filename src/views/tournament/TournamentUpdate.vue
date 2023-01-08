@@ -67,6 +67,8 @@ watch(
 
 <template>
   <div v-if="tournament">
+    <TournamentMatch :tournament="tournament" />
+
     <div class="card" p="10" grid="~ rows-1 cols-2 gap-6">
       <div grid="col-span-2" text="center xl">Tournament settings</div>
       <div>
@@ -152,10 +154,8 @@ watch(
     <div v-if="tournament.qualifier" class="card" m="t-6" p="10">
       <div text="center xl">Qualifier settings</div>
 
-      <router-link class="bare" :to="{ name: 'mappool-detail', hash: '#qualifier' }">See mappool qualifier</router-link>
+      <router-link class="bare" :to="{ name: 'mappool-detail' }">See mappool qualifier</router-link>
       <router-link class="bare" :to="{ name: 'qualifier-lobbies' }">See lobbies qualifier</router-link>
-
-      <!-- redirect mappool, lobbies, participants, etc... -->
     </div>
   </div>
   <div v-else>No tournament</div>

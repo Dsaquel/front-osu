@@ -56,6 +56,8 @@ declare module '@vue/runtime-core' {
     Textarea: typeof import('./components/Inputs/Textarea.vue')['default']
     TheFooter: typeof import('./components/TheFooter.vue')['default']
     ToolbarLayout: typeof import('./components/Ui/Layout/childs/ToolbarLayout.vue')['default']
+    TournamentMatch: typeof import('./components/tournament/TournamentMatch.vue')['default']
+    TournamentPreview: typeof import('./components/tournament/TournamentPreview.vue')['default']
     UserAvatar: typeof import('./components/Common/UserAvatar.vue')['default']
     ZhProcess: typeof import('./components/ZhProcess.md')['default']
   }
