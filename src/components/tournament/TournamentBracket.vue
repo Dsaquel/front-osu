@@ -1,12 +1,10 @@
 <script setup lang="ts">
+import _ from 'lodash';
 import { onBeforeMount } from 'vue';
-import { Tournament } from '~/types';
-// import topToBottom from '~/assets/svg/branches/topToBottom.svg';
-// import bottomToTop from '~/assets/svg/branches/bottomToTop.svg';
-// import middle from '~/assets/svg/branches/middle.svg';
+import { Match, Tournament } from '~/types';
 
 const { fetchMatches } = matchStore();
-// const { matches } = storeToRefs(matchStore());
+const { matches, matchesGrouped } = storeToRefs(matchStore());
 const props = defineProps<{
   tournament: Tournament;
 }>();
@@ -14,9 +12,11 @@ const props = defineProps<{
 onBeforeMount(async () => {
   await fetchMatches(props.tournament.id);
 });
+
+console.log(groupBy(matchesGrouped.value, 'round'));
 </script>
 <template>
-  <div class="container">
+  <div v-if="matches" class="container">
     <div class="tournament-bracket tournament-bracket--rounded">
       <div class="tournament-bracket__round tournament-bracket__round--quarterfinals">
         <h3 class="tournament-bracket__round-title">Quarterfinals</h3>

@@ -5,6 +5,14 @@ interface Node {
   updateAt: string;
 }
 
+export function groupBy<T>(arr: T[], key: keyof T) {
+  const initialValue = {};
+  return arr.reduce((acc, cval) => {
+    acc[cval[key]] = [...(acc[cval[key]] || []), cval];
+    return acc;
+  }, initialValue);
+}
+
 interface Mappool extends Node {
   displayMappoolsSchedule: string | null;
   isVisible: boolean;
@@ -96,7 +104,7 @@ export interface Tournament extends Node {
 }
 
 export interface Match extends Node {
-  tournament: Tournament;
+  // tournament: Tournament;
   tournamentId: number;
   referee_id: number;
   location: string;
@@ -108,7 +116,7 @@ export interface Match extends Node {
   player2_id: number;
   winner_id: number;
   state: string;
-  identifier: number | null;
+  identifier: number;
   parent_identifier: number | null;
   player1_prev_identifier: number | null;
   player2_prev_identifier: number | null;
