@@ -21,7 +21,9 @@ onMounted(() => {
 
 <template>
   <div v-if="tournament">
-    <el-alert
+    <TournamentBracket :tournament="tournament" />
+
+    <!-- <el-alert
       v-if="!tournament.isPublic"
       title="tournament not yet public"
       type="info"
@@ -43,6 +45,6 @@ onMounted(() => {
       <router-link :to="{ name: 'tournament-update', params: { tournamentId: tournament.id } }">
         <el-button>edit the tournament</el-button>
       </router-link>
-    </div>
+    </div> -->
   </div>
 </template>

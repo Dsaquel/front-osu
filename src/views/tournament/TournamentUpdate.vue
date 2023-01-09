@@ -67,8 +67,6 @@ watch(
 
 <template>
   <div v-if="tournament">
-    <TournamentMatch :tournament="tournament" />
-
     <div class="card" p="10" grid="~ rows-1 cols-2 gap-6">
       <div grid="col-span-2" text="center xl">Tournament settings</div>
       <div>
