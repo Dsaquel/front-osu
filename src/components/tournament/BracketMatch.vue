@@ -42,6 +42,9 @@
 </template>
 
 <style scoped lang="scss">
+.match {
+  width: 100%;
+}
 .match-affix-wrapper {
   position: relative;
   top: 50%;
