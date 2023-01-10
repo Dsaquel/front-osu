@@ -15,6 +15,7 @@ const useMatchStore = defineStore('match', () => {
       const lower = _.pickBy(object, (v, k) => {
         return +k < 0;
       });
+
       return { upper, lower };
     }
     return null;

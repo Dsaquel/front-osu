@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { onBeforeMount } from 'vue';
-import { Match, Tournament } from '~/types';
+import { Tournament } from '~/types';
 
 const { fetchMatches } = matchStore();
-const { matches, matchesGrouped } = storeToRefs(matchStore());
+const { matchesGrouped } = storeToRefs(matchStore());
 const props = defineProps<{
   tournament: Tournament;
 }>();
@@ -11,15 +11,11 @@ const props = defineProps<{
 onBeforeMount(async () => {
   await fetchMatches(props.tournament.id);
 });
-
-watch(matchesGrouped, () => {
-  console.log(matchesGrouped?.value);
-});
 </script>
 <template>
   <div v-if="matchesGrouped" class="container">
-    <UpperBracket :upperBracketMatches="matchesGrouped.upper" />
-    <LowerBracket :lowerBracketMatches="matchesGrouped.lower" />
+    <!-- <UpperBracket :upper-bracket-matches="matchesGrouped.upper" /> -->
+    <LowerBracket :lower-bracket-matches="matchesGrouped.lower" />
   </div>
 </template>
 

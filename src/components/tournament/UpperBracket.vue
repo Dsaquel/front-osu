@@ -1,13 +1,14 @@
 <script setup lang="ts">
+import { Dictionary } from 'lodash';
 import { Match } from '~/types';
 
 defineProps<{
-  upperBracketMatches?: Match;
+  upperBracketMatches: Dictionary<Match[]>;
 }>();
 </script>
 
 <template>
-  <div class="tournament-bracket tournament-bracket--rounded">
+  <div v-if="upperBracketMatches" class="tournament-bracket tournament-bracket--rounded">
     <div
       v-for="(matchesUpper, i) in upperBracketMatches"
       :key="i"
