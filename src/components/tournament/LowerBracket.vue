@@ -2,7 +2,7 @@
 import { Dictionary } from 'lodash';
 import { Match } from '~/types';
 
-const props = defineProps<{
+defineProps<{
   lowerBracketMatches: Dictionary<Match[]>;
 }>();
 </script>
@@ -16,7 +16,15 @@ const props = defineProps<{
     >
       <h3 class="tournament-bracket__round-title">les nuls</h3>
       <ul class="tournament-bracket__list">
-        <li v-for="(match, z) in matchesLower" :key="z" class="tournament-bracket__item">
+        <li
+          v-for="(match, z) in matchesLower"
+          :key="z"
+          class="tournament-bracket__item"
+          :class="{
+            'no-height':
+              lowerBracketMatches[+i - 1] && lowerBracketMatches[+i].length === lowerBracketMatches[+i - 1].length,
+          }"
+        >
           <BracketMatch :match="match" />
         </li>
       </ul>
@@ -87,11 +95,6 @@ $breakpoint-lg: 72em;
   .tournament-bracket__round:last-child & {
     border: 0;
   }
-}
-
-.last-items-row {
-  flex-wrap: nowrap;
-  transform: translateY(20px);
 }
 
 .tournament-bracket__item {
@@ -172,7 +175,7 @@ $breakpoint-lg: 72em;
         height: 0;
       }
       &:last-child {
-        transform: translateX(-3%);
+        transform: translateY(-23px);
       }
       &:last-child::after {
         display: none;
@@ -181,8 +184,11 @@ $breakpoint-lg: 72em;
 
     .tournament-bracket__round:nth-last-child(2) & {
       &::after {
+        border-top: 0;
+        border-bottom: 2px solid #9e9e9e;
         border-radius: 0;
         height: 15px;
+        top: 45%;
       }
     }
   }
@@ -193,6 +199,12 @@ $breakpoint-lg: 72em;
     &::after {
       width: 1.5em;
     }
+  }
+}
+
+.no-height {
+  &::after {
+    height: 0;
   }
 }
 </style>
