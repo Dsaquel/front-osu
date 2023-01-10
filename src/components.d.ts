@@ -49,6 +49,7 @@ declare module '@vue/runtime-core' {
     IPhCloudMoonBold: typeof import('~icons/ph/cloud-moon-bold')['default']
     IPhSunHorizonBold: typeof import('~icons/ph/sun-horizon-bold')['default']
     IRiArticleLine: typeof import('~icons/ri/article-line')['default']
+    LowerBracket: typeof import('./components/tournament/LowerBracket.vue')['default']
     MainLayout: typeof import('./components/Ui/Layout/childs/MainLayout.vue')['default']
     MarkdownRender: typeof import('./components/Inputs/MarkdownRender.vue')['default']
     MarkdownTextarea: typeof import('./components/Inputs/MarkdownTextarea.vue')['default']
@@ -62,6 +63,7 @@ declare module '@vue/runtime-core' {
     TournamentBracket: typeof import('./components/tournament/TournamentBracket.vue')['default']
     TournamentMatch: typeof import('./components/tournament/TournamentMatch.vue')['default']
     TournamentPreview: typeof import('./components/tournament/TournamentPreview.vue')['default']
+    UpperBracket: typeof import('./components/tournament/UpperBracket.vue')['default']
     UserAvatar: typeof import('./components/Common/UserAvatar.vue')['default']
     ZhProcess: typeof import('./components/ZhProcess.md')['default']
   }
