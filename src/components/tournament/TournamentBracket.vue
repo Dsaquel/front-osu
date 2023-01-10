@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import _ from 'lodash';
 import { onBeforeMount } from 'vue';
 import { Match, Tournament } from '~/types';
 
@@ -13,80 +12,37 @@ onBeforeMount(async () => {
   await fetchMatches(props.tournament.id);
 });
 
-console.log(groupBy(matchesGrouped.value, 'round'));
+watch(matchesGrouped, () => {
+  console.log(matchesGrouped?.value);
+});
 </script>
 <template>
-  <div v-if="matches" class="container">
+  <div v-if="matchesGrouped" class="container">
     <div class="tournament-bracket tournament-bracket--rounded">
-      <div class="tournament-bracket__round tournament-bracket__round--quarterfinals">
-        <h3 class="tournament-bracket__round-title">Quarterfinals</h3>
-        <ul class="tournament-bracket__list">
-          <li class="tournament-bracket__item">
-            <BracketMatch />
-          </li>
-          <li class="tournament-bracket__item">
-            <BracketMatch />
-          </li>
-          <li class="tournament-bracket__item">
-            <BracketMatch />
-          </li>
-
-          <li class="tournament-bracket__item">
-            <BracketMatch />
-          </li>
-
-          <li class="tournament-bracket__item">
-            <BracketMatch />
-          </li>
-
-          <li class="tournament-bracket__item">
-            <BracketMatch />
-          </li>
-          <li class="tournament-bracket__item">
-            <BracketMatch />
-          </li>
-          <li class="tournament-bracket__item">
-            <BracketMatch />
-          </li>
-        </ul>
-      </div>
-      <div class="tournament-bracket__round tournament-bracket__round--semifinals">
-        <h3 class="tournament-bracket__round-title">Semifinals</h3>
-        <ul class="tournament-bracket__list">
-          <li class="tournament-bracket__item">
-            <BracketMatch />
-          </li>
-          <li class="tournament-bracket__item">
-            <BracketMatch />
-          </li>
-          <li class="tournament-bracket__item">
-            <BracketMatch />
-          </li>
-          <li class="tournament-bracket__item">
-            <BracketMatch />
-          </li>
-        </ul>
-      </div>
-      <div class="tournament-bracket__round tournament-bracket__round--bronze">
-        <h3 class="tournament-bracket__round-title">Bronze medal game</h3>
-        <ul class="tournament-bracket__list">
-          <li class="tournament-bracket__item">
-            <BracketMatch />
-          </li>
-          <li class="tournament-bracket__item">
-            <BracketMatch />
-          </li>
-        </ul>
-      </div>
-      <div class="tournament-bracket__round tournament-bracket__round--gold">
-        <h3 class="tournament-bracket__round-title">Gold medal game</h3>
-        <ul class="tournament-bracket__list">
-          <li class="tournament-bracket__item">
-            <BracketMatch />
+      <div
+        v-for="(matchesUpper, i) in matchesGrouped.upper"
+        :key="i"
+        class="tournament-bracket__round"
+        :class="{ 'items-row': !matchesGrouped.upper[+i + 1] }"
+      >
+        <h3 class="tournament-bracket__round-title">les nuls</h3>
+        <ul class="tournament-bracket__list" :class="{ 'last-items-row': !matchesGrouped.upper[+i + 1] }">
+          <li v-for="(match, z) in matchesUpper" :key="z" class="tournament-bracket__item">
+            <BracketMatch :match="match" />
           </li>
         </ul>
       </div>
     </div>
+    <!-- <div class="tournament-bracket tournament-bracket--rounded">
+      <div v-for="(matchesLower, i) in matchesGrouped.lower" :key="i" class="tournament-bracket__round">
+        <h3 class="tournament-bracket__round-title">les nuls</h3>
+        <ul class="tournament-bracket__list">
+          <li v-for="(match, z) in matchesLower" :key="z" class="tournament-bracket__item">
+            <BracketMatch :match="match" />
+          </li>
+        </ul>
+      </div>
+    </div> -->
   </div>
 </template>
 
@@ -107,8 +63,12 @@ $breakpoint-lg: 72em;
 
 .tournament-bracket__round {
   display: block;
-  margin-left: -3px;
+  margin-left: -7px;
   flex: 1;
+}
+
+.items-row {
+  flex: 2;
 }
 
 .tournament-bracket__round-title {
@@ -127,7 +87,6 @@ $breakpoint-lg: 72em;
   justify-content: center;
   height: 100%;
   min-height: 100%;
-  gap: 10px;
   padding-bottom: 2em;
   margin-bottom: 2em;
   border: 0;
@@ -152,6 +111,11 @@ $breakpoint-lg: 72em;
   }
 }
 
+.last-items-row {
+  flex-wrap: nowrap;
+  transform: translateY(20px);
+}
+
 .tournament-bracket__item {
   display: flex;
   flex: 0 1 auto;
@@ -162,7 +126,7 @@ $breakpoint-lg: 72em;
   padding: 2% 0;
   width: 48%;
   transition: padding 0.2s linear;
-  z &:nth-child(odd) {
+  &:nth-child(odd) {
     margin-right: 2%;
   }
 
@@ -224,23 +188,25 @@ $breakpoint-lg: 72em;
         border-bottom-right-radius: 0.6em;
       }
     }
-    .tournament-bracket__round:first-child & {
-      padding-left: 0;
-    }
     .tournament-bracket__round:last-child & {
-      padding-right: 0;
-
-      &::after {
+      &:first-child::after {
+        border-radius: 0;
+        height: 0;
+      }
+      &:last-child {
+        transform: translateX(-3%);
+      }
+      &:last-child::after {
         display: none;
       }
     }
 
-    // .tournament-bracket__round:nth-last-child(2) & {
-    //   &::after {
-    //     border-radius: 0;
-    //     border-right: 0;
-    //   }
-    // }
+    .tournament-bracket__round:nth-last-child(2) & {
+      &::after {
+        border-radius: 0;
+        height: 15px;
+      }
+    }
   }
 
   @media (min-width: $breakpoint-lg) {

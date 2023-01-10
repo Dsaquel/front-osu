@@ -5,12 +5,11 @@ interface Node {
   updateAt: string;
 }
 
-export function groupBy<T>(arr: T[], key: keyof T) {
-  const initialValue = {};
-  return arr.reduce((acc, cval) => {
-    acc[cval[key]] = [...(acc[cval[key]] || []), cval];
+export function groupBy<T extends Record<K, PropertyKey>, K extends keyof T>(items: readonly T[], key: K) {
+  return items.reduce((acc, item) => {
+    (acc[item[key]] = acc[item[key]] || []).push(item);
     return acc;
-  }, initialValue);
+  }, {} as Record<T[K], T[]>);
 }
 
 interface Mappool extends Node {

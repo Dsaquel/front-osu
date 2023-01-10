@@ -1,3 +1,11 @@
+<script setup lang="ts">
+import { Match } from '~/types';
+
+defineProps<{
+  match: Match;
+}>();
+</script>
+
 <template>
   <div class="match has-identifier reportable" v-bind="useAttrs()" tabindex="0">
     <div class="match-affix-wrapper">
@@ -6,14 +14,12 @@
           <div class="match-player entrant winner">
             <div class="match-player-name">
               <div class="flex-item-grower text-ellipsis">
-                <span>
-                  <span class="match-player-name-container"
-                    ><span class="prefix text-muted">ZETA </span>あcola</span
-                  ></span
-                >
+                <span class="match-player-name-container">{{ match.player1_id }}</span>
               </div>
             </div>
-            <div class="match-player-info"><div class="match-player-stocks">3</div></div>
+            <div class="match-player-info">
+              <div class="match-player-stocks">{{ match.id }}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -23,19 +29,18 @@
           <div class="match-player entrant loser">
             <div class="match-player-name">
               <div class="flex-item-grower text-ellipsis">
-                <span>
-                  <span class="match-player-name-container"
-                    ><span class="prefix text-muted">Kanga </span>Jdizzle</span
-                  ></span
-                >
+                <span class="match-player-name-container">{{ match.player2_id }}</span>
               </div>
             </div>
-            <div class="match-player-info"><div class="match-player-stocks">0</div></div>
+            <div class="match-player-info">
+              <div class="match-player-stocks">{{ match.id }}</div>
+            </div>
           </div>
         </div>
       </div>
       <span class="label label-default match-label"
-        ><span class="identifier-container">E</span> <i-ant-design:caret-right-filled class="caret"
+        ><span class="identifier-container">{{ match.identifier }}</span>
+        <i-ant-design:caret-right-filled class="caret"
       /></span>
     </div>
   </div>
