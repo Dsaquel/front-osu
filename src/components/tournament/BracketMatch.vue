@@ -15,7 +15,7 @@ defineProps<{
             <div class="match-player-name">
               <div class="flex-item-grower text-ellipsis">
                 <span class="match-player-name-container">{{
-                  match.player1_prev_identifier ? `Meilleur du match ${match.player1_prev_identifier}` : ''
+                  match.player1PrevIdentifier ? `Meilleur du match ${match.player1PrevIdentifier}` : ''
                 }}</span>
               </div>
             </div>
@@ -32,7 +32,7 @@ defineProps<{
             <div class="match-player-name">
               <div class="flex-item-grower text-ellipsis">
                 <span class="match-player-name-container">{{
-                  match.player2_prev_identifier ? `Meilleur du match ${match.player2_prev_identifier}` : ''
+                  match.player2PrevIdentifier ? `Meilleur du match ${match.player2PrevIdentifier}` : ''
                 }}</span>
               </div>
             </div>

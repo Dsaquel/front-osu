@@ -103,23 +103,22 @@ export interface Tournament extends Node {
 }
 
 export interface Match extends Node {
-  // tournament: Tournament;
-  tournamentId: number;
-  referee_id: number;
-  location: string;
-  first_to: number;
-  startDate: string;
-  rule_lobby: string;
-  history_osu: string;
-  player1_id: number;
-  player2_id: number;
-  winner_id: number;
-  state: string;
   identifier: number;
-  parent_identifier: number | null;
-  player1_prev_identifier: number | null;
-  player2_prev_identifier: number | null;
   round: number;
+  player1Score: number;
+  player2Score: number;
+  startDate: string;
+  player1PrevIdentifier: number;
+  player2PrevIdentifier: number;
+  state: string;
+  firstTo: number;
+  refereeId: number;
+  ruleLobby: string;
+  matchesHistoryOsu: string;
+  tournamentId: number;
+  winnerId: number;
+  player1Id: number;
+  player2Id: number;
 }
 
 export interface UpdateTournamentDto {

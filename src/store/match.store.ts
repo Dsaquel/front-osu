@@ -9,7 +9,7 @@ const useMatchStore = defineStore('match', () => {
   const matchesGrouped = computed(() => {
     if (matches.value) {
       const object = groupBy(matches.value, 'round');
-      console.log(object);
+
       const upper = _.pickBy(object, (v, k) => {
         return +k >= 0;
       });
