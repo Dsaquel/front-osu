@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 import apiMappool from '~/api/modules/api.mappool';
-import { Mappool, MappoolQualifier } from '~/types';
+import { TournamentMappool, QualifierMappool } from '~/types';
 // import useUserStore from './user.store';
 
 const useMappoolStore = defineStore('mappool', () => {
-  const tournamentMappools = ref(undefined as Mappool[] | undefined);
-  const qualifierMappool = ref(undefined as MappoolQualifier | undefined);
+  const tournamentMappools = ref(undefined as TournamentMappool[] | undefined);
+  const qualifierMappool = ref(undefined as QualifierMappool | undefined);
 
   async function fetchTournamentMappools(tournamentId: number) {
     try {
@@ -20,7 +20,7 @@ const useMappoolStore = defineStore('mappool', () => {
     qualifierMappool.value = data;
   }
 
-  return { tournamentmappools, qualifierMappool, fetchTournamentMappools, fetchQualifierMappool };
+  return { tournamentMappools, qualifierMappool, fetchTournamentMappools, fetchQualifierMappool };
 });
 
 export default useMappoolStore;
