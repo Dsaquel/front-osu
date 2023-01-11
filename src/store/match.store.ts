@@ -9,9 +9,15 @@ const useMatchStore = defineStore('match', () => {
   const matchesGrouped = computed(() => {
     if (matches.value) {
       const object = groupBy(matches.value, 'round');
+      console.log(object);
       const upper = _.pickBy(object, (v, k) => {
         return +k >= 0;
       });
+      for (const key in upper) {
+        if (Object.prototype.hasOwnProperty.call(upper, key)) {
+          upper[key] = upper[key].sort((matchA, matchB) => matchA.identifier - matchB.identifier);
+        }
+      }
       const lower = _.pickBy(object, (v, k) => {
         return +k < 0;
       });

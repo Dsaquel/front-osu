@@ -34,5 +34,6 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off',
     'vue/no-v-html': 'off',
     'no-undef': 'off',
+    'no-restricted-syntax': 'off',
   },
 };

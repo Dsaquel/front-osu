@@ -2,7 +2,7 @@
 import { Dictionary } from 'lodash';
 import { Match } from '~/types';
 
-defineProps<{
+const props = defineProps<{
   upperBracketMatches: Dictionary<Match[]>;
 }>();
 </script>
@@ -92,7 +92,7 @@ $breakpoint-lg: 72em;
 
 .last-items-row {
   flex-wrap: nowrap;
-  transform: translateY(20px);
+  transform: translateY(25px);
 }
 
 .tournament-bracket__item {
@@ -183,7 +183,7 @@ $breakpoint-lg: 72em;
     .tournament-bracket__round:nth-last-child(2) & {
       &::after {
         border-radius: 0;
-        height: 15px;
+        height: 20px;
       }
     }
   }

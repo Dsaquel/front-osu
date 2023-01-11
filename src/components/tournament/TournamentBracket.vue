@@ -14,7 +14,8 @@ onBeforeMount(async () => {
 </script>
 <template>
   <div v-if="matchesGrouped" class="container">
-    <!-- <UpperBracket :upper-bracket-matches="matchesGrouped.upper" /> -->
+    <UpperBracket :upper-bracket-matches="matchesGrouped.upper" />
+    <div h="100px"></div>
     <LowerBracket :lower-bracket-matches="matchesGrouped.lower" />
   </div>
 </template>
