@@ -22,6 +22,12 @@ const useMatchStore = defineStore('match', () => {
         return +k < 0;
       });
 
+      for (const key in lower) {
+        if (Object.prototype.hasOwnProperty.call(lower, key)) {
+          lower[key] = lower[key].sort((matchA, matchB) => matchA.identifier - matchB.identifier);
+        }
+      }
+
       return { upper, lower };
     }
     return null;

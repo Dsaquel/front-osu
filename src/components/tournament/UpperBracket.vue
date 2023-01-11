@@ -2,7 +2,7 @@
 import { Dictionary } from 'lodash';
 import { Match } from '~/types';
 
-const props = defineProps<{
+defineProps<{
   upperBracketMatches: Dictionary<Match[]>;
 }>();
 </script>
