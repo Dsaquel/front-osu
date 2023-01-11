@@ -21,9 +21,7 @@ onMounted(() => {
 
 <template>
   <div v-if="tournament">
-    <TournamentBracket :tournament="tournament" />
-
-    <!-- <el-alert
+    <el-alert
       v-if="!tournament.isPublic"
       title="tournament not yet public"
       type="info"
@@ -31,6 +29,13 @@ onMounted(() => {
       pos="absolute inset-0"
       m="b-3"
     />
+    <TournamentBracket :tournament="tournament">
+      <template #mappoolers>
+        <MappoolManager :tournament="tournament" />
+      </template>
+    </TournamentBracket>
+    <div h="100px"></div>
+
     <div class="container" display="grid" grid="row-start-2" v-bind="useAttrs()">
       <div>Tournament name: {{ tournament.name }}</div>
       <div>
@@ -45,6 +50,6 @@ onMounted(() => {
       <router-link :to="{ name: 'tournament-update', params: { tournamentId: tournament.id } }">
         <el-button>edit the tournament</el-button>
       </router-link>
-    </div> -->
+    </div>
   </div>
 </template>

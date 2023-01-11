@@ -15,12 +15,14 @@ defineProps<{
             <div class="match-player-name">
               <div class="flex-item-grower text-ellipsis">
                 <span class="match-player-name-container">{{
-                  match.player1PrevIdentifier ? `Meilleur du match ${match.player1PrevIdentifier}` : ''
+                  match.player1PrevIdentifier && match.round < 0
+                    ? `perdant du match ${match.player1PrevIdentifier}`
+                    : ''
                 }}</span>
               </div>
             </div>
             <div class="match-player-info">
-              <div class="match-player-stocks">{{ match.id }}</div>
+              <div class="match-player-stocks">{{ match.state === 'pending' ? '' : match.player1Score }}</div>
             </div>
           </div>
         </div>
@@ -31,13 +33,11 @@ defineProps<{
           <div class="match-player entrant loser">
             <div class="match-player-name">
               <div class="flex-item-grower text-ellipsis">
-                <span class="match-player-name-container">{{
-                  match.player2PrevIdentifier ? `Meilleur du match ${match.player2PrevIdentifier}` : ''
-                }}</span>
+                <span class="match-player-name-container"></span>
               </div>
             </div>
             <div class="match-player-info">
-              <div class="match-player-stocks">{{ match.id }}</div>
+              <div class="match-player-stocks">{{ match.state === 'pending' ? '' : match.player2Score }}</div>
             </div>
           </div>
         </div>

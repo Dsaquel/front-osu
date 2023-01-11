@@ -51,6 +51,7 @@ declare module '@vue/runtime-core' {
     IRiArticleLine: typeof import('~icons/ri/article-line')['default']
     LowerBracket: typeof import('./components/tournament/LowerBracket.vue')['default']
     MainLayout: typeof import('./components/Ui/Layout/childs/MainLayout.vue')['default']
+    MappoolManager: typeof import('./components/tournament/MappoolManager.vue')['default']
     MarkdownRender: typeof import('./components/Inputs/MarkdownRender.vue')['default']
     MarkdownTextarea: typeof import('./components/Inputs/MarkdownTextarea.vue')['default']
     NavigationDrawer: typeof import('./components/Ui/Layout/childs/NavigationDrawer.vue')['default']
