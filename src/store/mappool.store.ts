@@ -1,25 +1,26 @@
 import { defineStore } from 'pinia';
 import apiMappool from '~/api/modules/api.mappool';
-import { Mappool } from '~/types';
+import { Mappool, MappoolQualifier } from '~/types';
 // import useUserStore from './user.store';
 
 const useMappoolStore = defineStore('mappool', () => {
-  const tournamentmappools = ref(undefined as Mappool[] | undefined);
-  const qualifierMappool = ref(undefined as MappoolQualifier | undefined)
+  const tournamentMappools = ref(undefined as Mappool[] | undefined);
+  const qualifierMappool = ref(undefined as MappoolQualifier | undefined);
 
-  async function fetchMappools(tournamentId: number) {
+  async function fetchTournamentMappools(tournamentId: number) {
     try {
-      const data = await apiMappool.fetchMappools(tournamentId);
-      mappools.value = data;
+      const data = await apiMappool.fetchTournamentMappools(tournamentId);
+      tournamentMappools.value = data;
     } catch (e) {
       console.log(e);
     }
   }
-  async function fetchMappoolQualifier() {
-    const data = api.fetchMappoolQualifier(qualifierId)
+  async function fetchQualifierMappool(qualifierId: number) {
+    const data = await apiMappool.fetchQualifierMappool(qualifierId);
+    qualifierMappool.value = data;
   }
 
-  return { mappools, fetchMappools };
+  return { tournamentmappools, qualifierMappool, fetchTournamentMappools, fetchQualifierMappool };
 });
 
 export default useMappoolStore;

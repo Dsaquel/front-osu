@@ -12,7 +12,7 @@ export function groupBy<T extends Record<K, PropertyKey>, K extends keyof T>(ite
   }, {} as Record<T[K], T[]>);
 }
 
-export interface Mappool extends Node {
+interface Mappool extends Node {
   displayMappoolsSchedule: string | null;
   isVisible: boolean;
   noMod: number;
@@ -28,6 +28,17 @@ interface TournamentDraft {
   numbersPlayers: number;
   description: string;
   estimateStartDate: string;
+}
+
+export interface QualifierMappool extends Mappool {
+  qualifierId: number;
+  // maps: MapQualifier[];
+}
+
+export interface TournamentMappool extends Mappool {
+  round: number | null;
+  tournamentId: number;
+  // maps: MapTournament[];
 }
 
 export interface User extends Node {
@@ -120,8 +131,6 @@ export interface Match extends Node {
   player1Id: number;
   player2Id: number;
 }
-
-
 
 export interface UpdateTournamentDto {
   isPublicable?: boolean;
