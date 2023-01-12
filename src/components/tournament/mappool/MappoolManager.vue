@@ -24,6 +24,7 @@ onBeforeMount(async () => {
 function mappoolUpdate(mappoolId: number) {
   updateTournamentMappool(props.tournament.id, mappoolId, {
     displayMappoolsSchedule: tournamentMappools.value?.find((t) => t.id === mappoolId)?.displayMappoolsSchedule,
+    isVisible: tournamentMappools.value?.find((t) => t.id === mappoolId)?.isVisible,
   });
 }
 
