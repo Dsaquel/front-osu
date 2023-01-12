@@ -30,7 +30,7 @@ async function createMappool() {
 const roundOptions = computed(() => {
   if (!props.tournament.numbersPlayers) return undefined;
   let incrementations = 0;
-  let res: number[] = [];
+  const res: number[] = [];
   for (let i = 1; i < props.tournament.numbersPlayers; i *= 2) {
     res.push((incrementations += 1));
   }
@@ -38,9 +38,7 @@ const roundOptions = computed(() => {
 
   const forDeletion = tournamentMappools.value?.map((mappool) => mappool.round);
 
-  res = res.filter((item) => !forDeletion?.includes(item));
-
-  return res;
+  return res.filter((item) => !forDeletion?.includes(item));
 });
 </script>
 <template>
