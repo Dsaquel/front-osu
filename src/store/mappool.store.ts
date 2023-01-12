@@ -16,8 +16,12 @@ const useMappoolStore = defineStore('mappool', () => {
     }
   }
   async function fetchQualifierMappool(qualifierId: number) {
-    const data = await apiMappool.fetchQualifierMappool(qualifierId);
-    qualifierMappool.value = data;
+    try {
+      const data = await apiMappool.fetchQualifierMappool(qualifierId);
+      qualifierMappool.value = data;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return { tournamentMappools, qualifierMappool, fetchTournamentMappools, fetchQualifierMappool };

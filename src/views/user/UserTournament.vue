@@ -31,6 +31,6 @@ onBeforeMount(() => fetchCollection());
         </template>
       </el-table-column>
     </el-table>
-    <el-button><router-link to="/tournaments/create">Create new draft</router-link></el-button>
+    <el-button><router-link :to="{ name: 'draft-create' }">Create new draft</router-link></el-button>
   </div>
 </template>

@@ -15,12 +15,6 @@ export function groupBy<T extends Record<K, PropertyKey>, K extends keyof T>(ite
 interface Mappool extends Node {
   displayMappoolsSchedule: string | null;
   isVisible: boolean;
-  noMod: number;
-  hidden: number;
-  hardRock: number;
-  doubleTime: number;
-  freeMod: number;
-  tieBreaker: number;
 }
 
 interface TournamentDraft {
