@@ -17,10 +17,10 @@ const props = defineProps<{
 let showCreate = $ref(false);
 let loading = $ref(false);
 const rounds = ref([]);
-const mappoolDateCreate = ref(undefined);
+const mappoolDateCreate = ref<string | undefined>(undefined);
 const activeCollapse: number[] = [];
 
-const roundOtions = computed(() => {
+const roundOptions = computed(() => {
   if (!props.tournament.numbersPlayers) return undefined;
   let incrementations = 0;
   let res: number[] = [];
@@ -48,9 +48,7 @@ async function createMappool() {
     displayMappoolsSchedule: mappoolDateCreate.value,
   });
   loading = false;
-  setTimeout(() => {
-    showCreate = false;
-  }, 500);
+  showCreate = false;
 }
 </script>
 
@@ -58,14 +56,17 @@ async function createMappool() {
   <div class="card" m="t-2" p="4">
     <h2 text="center xl">Tournament mappools</h2>
     <div>
-      <el-button type="primary" text @click="showCreate = true">create new mappool</el-button>
+      <el-button v-if="roundOptions?.length" type="primary" text @click="showCreate = true"
+        >create new mappool</el-button
+      >
+      <div v-if="!roundOptions">Before create mappool, please set the numbers player</div>
 
       <el-dialog v-model="showCreate" title="Tips" w="3/10">
         <div display="grid" grid="cols-2 gap-2" justify="items-center">
           <div>
             <span display="block">Rounds</span>
             <el-select v-model="rounds" size="large" multiple collapse-tags>
-              <el-option v-for="(item, i) in roundOtions" :key="i" :value="item" />
+              <el-option v-for="(item, i) in roundOptions" :key="i" :value="item" />
             </el-select>
           </div>
           <CommonDatepicker
