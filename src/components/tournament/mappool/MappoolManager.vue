@@ -1,88 +1,26 @@
 <script setup lang="ts">
 import { onBeforeMount } from 'vue';
-// import { Plus, Minus } from '@element-plus/icons-vue';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 import { Tournament } from '~/types';
 
-dayjs.extend(utc);
-
-const { fetchTournamentMappools, fetchQualifierMappool, createTournamentMappool } = mappoolStore();
+const { fetchTournamentMappools, fetchQualifierMappool } = mappoolStore();
 const { qualifierMappool, tournamentMappools } = storeToRefs(mappoolStore());
+const activeCollapse: number[] = [];
 
 const props = defineProps<{
   tournament: Tournament;
 }>();
 
-let showCreate = $ref(false);
-let loading = $ref(false);
-const rounds = ref([]);
-const mappoolDateCreate = ref<string | undefined>(undefined);
-const activeCollapse: number[] = [];
-
-const roundOptions = computed(() => {
-  if (!props.tournament.numbersPlayers) return undefined;
-  let incrementations = 0;
-  let res: number[] = [];
-  for (let i = 1; i < props.tournament.numbersPlayers; i *= 2) {
-    res.push((incrementations += 1));
-  }
-  res.push((incrementations += 1));
-
-  const forDeletion = tournamentMappools.value?.map((mappool) => mappool.round);
-
-  res = res.filter((item) => !forDeletion?.includes(item));
-
-  return res;
-});
-
 onBeforeMount(async () => {
   await fetchTournamentMappools(props.tournament.id);
   if (props.tournament.qualifier) await fetchQualifierMappool(props.tournament.qualifier.id);
 });
-
-async function createMappool() {
-  loading = true;
-  await createTournamentMappool(props.tournament.id, {
-    rounds: rounds.value,
-    displayMappoolsSchedule: mappoolDateCreate.value,
-  });
-  loading = false;
-  showCreate = false;
-}
 </script>
 
 <template>
   <div class="card" m="t-2" p="4">
     <h2 text="center xl">Tournament mappools</h2>
     <div>
-      <el-button v-if="roundOptions?.length" type="primary" text @click="showCreate = true"
-        >create new mappool</el-button
-      >
-      <div v-if="!roundOptions">Before create mappool, please set the numbers player</div>
-
-      <el-dialog v-model="showCreate" title="Tips" w="3/10">
-        <div display="grid" grid="cols-2 gap-2" justify="items-center">
-          <div>
-            <span display="block">Rounds</span>
-            <el-select v-model="rounds" size="large" multiple collapse-tags>
-              <el-option v-for="(item, i) in roundOptions" :key="i" :value="item" />
-            </el-select>
-          </div>
-          <CommonDatepicker
-            :model-value="mappoolDateCreate"
-            :title="'Date where the mappool can be public'"
-            :type="'datetime'"
-            @update:model-value="(val) => (mappoolDateCreate = dayjs(val).utc().format())"
-          />
-        </div>
-        <template #footer>
-          <span class="dialog-footer">
-            <el-button v-loading="loading" @click="showCreate = false">Cancel</el-button>
-            <el-button type="primary" @click="createMappool">Confirm </el-button>
-          </span>
-        </template>
-      </el-dialog>
+      <MappoolCreate :tournament="tournament" />
 
       <el-collapse v-model="activeCollapse">
         <el-collapse-item
