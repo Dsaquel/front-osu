@@ -7,16 +7,17 @@ import { Tournament } from '~/types';
 
 dayjs.extend(utc);
 
-const { fetchTournamentMappools, fetchQualifierMappool } = mappoolStore();
+const { fetchTournamentMappools, fetchQualifierMappool, createTournamentMappool } = mappoolStore();
 const { qualifierMappool, tournamentMappools } = storeToRefs(mappoolStore());
 
 const props = defineProps<{
   tournament: Tournament;
 }>();
 
-const showCreate = ref(false);
+let showCreate = $ref(false);
+let loading = $ref(false);
 const rounds = ref([]);
-const mappoolDateCreate = ref('');
+const mappoolDateCreate = ref(undefined);
 const activeCollapse: number[] = [];
 
 const roundOtions = computed(() => {
@@ -35,6 +36,18 @@ onBeforeMount(async () => {
   await fetchTournamentMappools(props.tournament.id);
   if (props.tournament.qualifier) await fetchQualifierMappool(props.tournament.qualifier.id);
 });
+
+async function createMappool() {
+  loading = true;
+  await createTournamentMappool(props.tournament.id, {
+    rounds: rounds.value,
+    displayMappoolsSchedule: mappoolDateCreate.value,
+  });
+  loading = false;
+  setTimeout(() => {
+    showCreate = false;
+  }, 500);
+}
 </script>
 
 <template>
@@ -60,8 +73,8 @@ onBeforeMount(async () => {
         </div>
         <template #footer>
           <span class="dialog-footer">
-            <el-button @click="showCreate = false">Cancel</el-button>
-            <el-button type="primary" @click="showCreate = false"> Confirm </el-button>
+            <el-button v-loading="loading" @click="showCreate = false">Cancel</el-button>
+            <el-button type="primary" @click="createMappool">Confirm </el-button>
           </span>
         </template>
       </el-dialog>

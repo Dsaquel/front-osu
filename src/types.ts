@@ -24,6 +24,11 @@ interface TournamentDraft {
   estimateStartDate: string;
 }
 
+export interface CreateMappoolDto {
+  rounds: number[];
+  displayMappoolsSchedule?: string;
+}
+
 export interface QualifierMappool extends Mappool {
   qualifierId: number;
   // maps: MapQualifier[];
