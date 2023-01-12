@@ -35,12 +35,23 @@ const useMappoolStore = defineStore('mappool', () => {
     }
   }
 
+  async function updateTournamentMappool(tournamentId: number) {
+    //
+  }
+
+  async function deleteTournamentMappool(tournamentId: number, mappoolId: number) {
+    const data = await apiMappool.deleteTournamentMappool(tournamentId, mappoolId);
+    tournamentMappools.value = data;
+  }
+
   return {
     tournamentMappools: tournamentMappoolsSort,
     qualifierMappool,
     fetchTournamentMappools,
     fetchQualifierMappool,
     createTournamentMappool,
+    updateTournamentMappool,
+    deleteTournamentMappool,
   };
 });
 

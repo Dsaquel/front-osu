@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { onBeforeMount } from 'vue';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { Tournament } from '~/types';
 
-const { fetchTournamentMappools, fetchQualifierMappool } = mappoolStore();
+dayjs.extend(utc);
+
+const { fetchTournamentMappools, fetchQualifierMappool, deleteTournamentMappool } = mappoolStore();
 const { qualifierMappool, tournamentMappools } = storeToRefs(mappoolStore());
 const activeCollapse: number[] = [];
 
@@ -14,6 +18,14 @@ onBeforeMount(async () => {
   await fetchTournamentMappools(props.tournament.id);
   if (props.tournament.qualifier) await fetchQualifierMappool(props.tournament.qualifier.id);
 });
+
+function mappoolUpdate() {
+  //
+}
+
+function deleteMappool(mappoolId: number) {
+  deleteTournamentMappool(props.tournament.id, mappoolId);
+}
 </script>
 
 <template>
@@ -29,6 +41,15 @@ onBeforeMount(async () => {
           :title="`Round ${tournamentMappool.round}`"
           :name="tournamentMappool.id"
         >
+          <!-- <div text="xl" font="700"></div> -->
+          <CommonDatepicker
+            :model-value="tournamentMappool.displayMappoolsSchedule"
+            :title="'Date where the mappool can be public'"
+            :type="'datetime'"
+            @update:model-value="(val) => (tournamentMappool.displayMappoolsSchedule = dayjs(val).utc().format())"
+          />
+          <el-button type="primary" :disabled="true">Save change</el-button>
+          <el-button type="danger" plain @click="deleteMappool(tournamentMappool.id)">Delete</el-button>
         </el-collapse-item>
         <el-collapse-item v-if="qualifierMappool" title="Qualifier mappool">
           {{ qualifierMappool.isVisible }}
