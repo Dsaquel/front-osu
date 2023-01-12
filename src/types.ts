@@ -35,7 +35,7 @@ export interface QualifierMappool extends Mappool {
 }
 
 export interface TournamentMappool extends Mappool {
-  round: number | null;
+  round: number;
   tournamentId: number;
   // maps: MapTournament[];
 }

@@ -23,12 +23,16 @@ const activeCollapse: number[] = [];
 const roundOtions = computed(() => {
   if (!props.tournament.numbersPlayers) return undefined;
   let incrementations = 0;
-  const res: number[] = [];
+  let res: number[] = [];
   for (let i = 1; i < props.tournament.numbersPlayers; i *= 2) {
     res.push((incrementations += 1));
   }
   res.push((incrementations += 1));
-  // here delete all round where they are a mappool
+
+  const forDeletion = tournamentMappools.value?.map((mappool) => mappool.round);
+
+  res = res.filter((item) => !forDeletion?.includes(item));
+
   return res;
 });
 
@@ -83,7 +87,7 @@ async function createMappool() {
         <el-collapse-item
           v-for="(tournamentMappool, i) in tournamentMappools"
           :key="i"
-          :title="tournamentMappool.round"
+          :title="`Round ${tournamentMappool.round}`"
           :name="tournamentMappool.id"
         >
         </el-collapse-item>
