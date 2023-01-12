@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import apiMappool from '~/api/modules/api.mappool';
-import { TournamentMappool, QualifierMappool, CreateMappoolDto } from '~/types';
+import { TournamentMappool, QualifierMappool, CreateMappoolDto, UpdateMappoolDto } from '~/types';
 // import useUserStore from './user.store';
 
 const useMappoolStore = defineStore('mappool', () => {
@@ -35,13 +35,22 @@ const useMappoolStore = defineStore('mappool', () => {
     }
   }
 
-  async function updateTournamentMappool(tournamentId: number) {
-    //
+  async function updateTournamentMappool(tournamentId: number, mappoolId: number, updateMappoolDto: UpdateMappoolDto) {
+    try {
+      const data = await apiMappool.updateTournamentMappool(tournamentId, mappoolId, updateMappoolDto);
+      tournamentMappools.value = data;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async function deleteTournamentMappool(tournamentId: number, mappoolId: number) {
-    const data = await apiMappool.deleteTournamentMappool(tournamentId, mappoolId);
-    tournamentMappools.value = data;
+    try {
+      const data = await apiMappool.deleteTournamentMappool(tournamentId, mappoolId);
+      tournamentMappools.value = data;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return {

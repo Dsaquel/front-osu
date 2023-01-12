@@ -26,8 +26,11 @@ interface TournamentDraft {
 
 export interface CreateMappoolDto {
   rounds: number[];
-  displayMappoolsSchedule?: string;
+  isVisible?: boolean;
+  displayMappoolsSchedule?: string | null;
 }
+
+export type UpdateMappoolDto = Omit<CreateMappoolDto, 'rounds'>;
 
 export interface QualifierMappool extends Mappool {
   qualifierId: number;

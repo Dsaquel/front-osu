@@ -2,11 +2,13 @@
 import { onBeforeMount } from 'vue';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { Tournament } from '~/types';
+import { isEqual } from 'lodash';
+import { Tournament, TournamentMappool } from '~/types';
 
 dayjs.extend(utc);
 
-const { fetchTournamentMappools, fetchQualifierMappool, deleteTournamentMappool } = mappoolStore();
+const { fetchTournamentMappools, fetchQualifierMappool, updateTournamentMappool, deleteTournamentMappool } =
+  mappoolStore();
 const { qualifierMappool, tournamentMappools } = storeToRefs(mappoolStore());
 const activeCollapse: number[] = [];
 
@@ -19,8 +21,10 @@ onBeforeMount(async () => {
   if (props.tournament.qualifier) await fetchQualifierMappool(props.tournament.qualifier.id);
 });
 
-function mappoolUpdate() {
-  //
+function mappoolUpdate(mappoolId: number) {
+  updateTournamentMappool(props.tournament.id, mappoolId, {
+    displayMappoolsSchedule: tournamentMappools.value?.find((t) => t.id === mappoolId)?.displayMappoolsSchedule,
+  });
 }
 
 function deleteMappool(mappoolId: number) {
@@ -48,7 +52,7 @@ function deleteMappool(mappoolId: number) {
             :type="'datetime'"
             @update:model-value="(val) => (tournamentMappool.displayMappoolsSchedule = dayjs(val).utc().format())"
           />
-          <el-button type="primary" :disabled="true">Save change</el-button>
+          <el-button type="primary" @click="mappoolUpdate(tournamentMappool.id)">Save change</el-button>
           <el-button type="danger" plain @click="deleteMappool(tournamentMappool.id)">Delete</el-button>
         </el-collapse-item>
         <el-collapse-item v-if="qualifierMappool" title="Qualifier mappool">
@@ -57,20 +61,4 @@ function deleteMappool(mappoolId: number) {
       </el-collapse>
     </div>
   </div>
-  <!-- <el-button type="success" :icon="Plus" plain @click="showCreate = true" />
-    <el-button type="danger" :icon="Minus" plain />
-    <div v-if="showCreate">
-      <el-input v-model="round" />
-      <CommonDatepicker
-        :model-value="tournament.startDate"
-        :title="'show mappool'"
-        :type="'datetime'"
-        @update:model-value="(val) => (tournament!.startDate = dayjs(val).utc().format())"
-      ></CommonDatepicker>
-    </div>
-  </div>
-  <div v-if="qualifierMappool" class="card" m="t-2" p="4">
-    <h2 text="center xl">Qualifier mappools</h2>
-    <div>il y a une mappool qualifier</div>
-  </div> -->
 </template>
