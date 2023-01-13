@@ -1,0 +1,102 @@
+<script setup lang="ts">
+import dayjs from 'dayjs';
+import { QualifierMappool, TournamentMappool } from '~/types';
+
+const { fetchBeatmap } = mapStore();
+const { beatmap } = storeToRefs(mapStore());
+
+defineProps<{
+  qualifierMappool?: QualifierMappool;
+  tournamentMappool?: TournamentMappool;
+}>();
+
+const showCreate = ref(false);
+const options = ['noMod', 'hidden', 'hardRock', 'doubleTime', 'freeMod', 'tieBreaker'];
+const optionValue = ref(undefined);
+const mapInput = ref<string>('');
+const loading = ref(false);
+const errorInput = ref('');
+
+async function searchBeatmap() {
+  try {
+    new URL(mapInput.value);
+    if (new URL(mapInput.value).origin !== 'https://osu.ppy.sh') return;
+    // const firstId = mapInput.value.split('/')[4].split('#')[0];
+    const beatmapId = mapInput.value.split('#')[1].split('/')[1];
+    await fetchBeatmap(+beatmapId);
+  } catch (_) {
+    errorInput.value = 'Give me url from the map';
+  }
+}
+
+function createMap() {
+  return null;
+}
+
+const isDisabled = computed(() => {
+  if (beatmap.value !== undefined && !optionValue.value) return true;
+  return false;
+});
+</script>
+
+<template>
+  <el-button type="success" plain @click="showCreate = true">Create new map</el-button>
+
+  <el-dialog
+    v-model="showCreate"
+    :title="
+      tournamentMappool?.round ? `Create map for round ${tournamentMappool.round}` : `Create map for the qualifier`
+    "
+    w="5/10"
+  >
+    <div display="grid" grid="cols-2 gap-2" justify="items-center">
+      <el-input
+        v-model="mapInput"
+        placeholder="https://osu.ppy.sh/beatmapsets/1813899#osu/3911471"
+        size="large"
+        @input="searchBeatmap"
+      />
+      <div>
+        <el-select v-model="optionValue" size="large" placeholder="mods">
+          <el-option v-for="(item, v) in options" :key="v" :value="item" />
+        </el-select>
+      </div>
+      <div v-if="beatmap" grid="col-span-2" w="full">
+        <el-descriptions direction="horizontal" :column="2" :title="beatmap.version" border>
+          <!-- <img :src="beatmap.beatmapset.covers.list" /> -->
+          <el-descriptions-item p="0" :span="2" label-class-name="my-label" class-name="my-content">
+            <el-image loading="lazy" :src="beatmap.beatmapset.covers['slimcover@2x']" />
+          </el-descriptions-item>
+          <el-descriptions-item :span="2" label="circle size"> {{ beatmap.cs }}</el-descriptions-item>
+          <el-descriptions-item :span="2" label="Approche rate"> {{ beatmap.ar }}</el-descriptions-item>
+          <el-descriptions-item :span="2" label="BPM"> {{ beatmap.bpm }}</el-descriptions-item>
+          <el-descriptions-item :span="2" width="300px" label="length">
+            {{ dayjs().startOf('day').second(beatmap.total_length).format('m:s') }}
+          </el-descriptions-item>
+
+          <!-- <el-descriptions-item p="0" :span="1"> bbalalal </el-descriptions-item> -->
+        </el-descriptions>
+      </div>
+    </div>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button v-loading="loading" @click="showCreate = false">Cancel</el-button>
+        <el-button type="primary" :disabled="!isDisabled" @click="createMap">Confirm </el-button>
+      </span>
+    </template>
+  </el-dialog>
+</template>
+
+<style scoped>
+::v-deep .my-label {
+  display: none;
+  width: 0;
+}
+::v-deep .my-content {
+  padding: 0 !important;
+}
+
+::v-deep .el-image {
+  display: block;
+}
+</style>

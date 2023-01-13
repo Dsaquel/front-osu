@@ -154,9 +154,27 @@ export interface Beatmap {
   beatmapset_id: number;
   bpm: number;
   convert: boolean;
-  total_length: number;
+  total_length: number; // sec
   cs: number;
   hit_length: number;
   is_scoreable: boolean;
   url: string;
+  difficulty_rating: number;
+  version: string;
+  mode: 'osu' | 'mania' | 'fruits' | 'taiko';
+  status: 'graveyard' | 'wip' | 'pending' | 'ranked' | 'approved' | 'qualified' | 'loved';
+  beatmapset: {
+    preview_url: string;
+    title: string;
+    creator: string;
+    covers: {
+      card: string;
+      'card@2x': string;
+      'cover@2x': string;
+      list: string;
+      'list@2x': string;
+      slimcover: string;
+      'slimcover@2x': string;
+    };
+  };
 }

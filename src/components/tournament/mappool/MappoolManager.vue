@@ -2,7 +2,7 @@
 import { onBeforeMount } from 'vue';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { Minus, Plus } from '@element-plus/icons-vue';
+// import { Minus, Plus } from '@element-plus/icons-vue';
 import { Tournament } from '~/types';
 
 dayjs.extend(utc);
@@ -10,7 +10,6 @@ dayjs.extend(utc);
 const { fetchTournamentMappools, fetchQualifierMappool, updateTournamentMappool, deleteTournamentMappool } =
   mappoolStore();
 const { qualifierMappool, tournamentMappools } = storeToRefs(mappoolStore());
-const { beatmap } = mapStore();
 
 const activeCollapse: number[] = [];
 
@@ -33,22 +32,6 @@ function mappoolUpdate(mappoolId: number) {
 function deleteMappool(mappoolId: number) {
   deleteTournamentMappool(props.tournament.id, mappoolId);
 }
-
-const options = ['noMod', 'hidden', 'hardRock', 'doubleTime', 'freeMod', 'tieBreaker'];
-const optionValue = ref('');
-const mapInput = ref<string>('');
-const errorInput = ref('');
-
-function searchBeatmap() {
-  try {
-    new URL(mapInput.value);
-    if (new URL(mapInput.value).origin !== 'https://osu.ppy.sh') return;
-    const firstId = mapInput.value.split('/')[4].split('#')[0];
-    const secondId = mapInput.value.split('#')[1].split('/')[1];
-  } catch (_) {
-    errorInput.value = 'Give me url from the map';
-  }
-}
 </script>
 
 <template>
@@ -64,7 +47,7 @@ function searchBeatmap() {
           :title="`Round ${tournamentMappool.round}`"
           :name="tournamentMappool.id"
         >
-          <!-- <div text="xl" font="700"></div> -->
+          <MapCreate :tournament-mappool="tournamentMappool" />
           <CommonDatepicker
             :model-value="tournamentMappool.displayMappoolsSchedule"
             :title="'Date where the mappool can be public'"
@@ -72,16 +55,7 @@ function searchBeatmap() {
             @update:model-value="(val) => (tournamentMappool.displayMappoolsSchedule = dayjs(val).utc().format())"
           />
           <div>
-            <el-input
-              v-model="mapInput"
-              placeholder="https://osu.ppy.sh/beatmapsets/1813899#osu/3911471"
-              @input="searchBeatmap"
-            />
-            <el-select v-model="optionValue">
-              <el-option v-for="(item, v) in options" :key="v" :value="item" />
-            </el-select>
-            <el-button type="success" :icon="Plus" plain />
-            <el-button type="danger" :icon="Minus" plain />
+            <!-- <el-button type="danger" :icon="Minus" plain /> -->
           </div>
           <el-button type="primary" @click="mappoolUpdate(tournamentMappool.id)">Save change</el-button>
           <el-button type="danger" plain @click="deleteMappool(tournamentMappool.id)">Delete</el-button>
