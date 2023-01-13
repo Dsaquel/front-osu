@@ -57,6 +57,7 @@ declare global {
   const mapActions: typeof import('pinia')['mapActions']
   const mapGetters: typeof import('pinia')['mapGetters']
   const mapState: typeof import('pinia')['mapState']
+  const mapStore: typeof import('./store/map.store')['default']
   const mapStores: typeof import('pinia')['mapStores']
   const mapWritableState: typeof import('pinia')['mapWritableState']
   const mappoolStore: typeof import('./store/mappool.store')['default']
@@ -339,6 +340,7 @@ declare module '@vue/runtime-core' {
     readonly mapActions: UnwrapRef<typeof import('pinia')['mapActions']>
     readonly mapGetters: UnwrapRef<typeof import('pinia')['mapGetters']>
     readonly mapState: UnwrapRef<typeof import('pinia')['mapState']>
+    readonly mapStore: UnwrapRef<typeof import('./store/map.store')['default']>
     readonly mapStores: UnwrapRef<typeof import('pinia')['mapStores']>
     readonly mapWritableState: UnwrapRef<typeof import('pinia')['mapWritableState']>
     readonly mappoolStore: UnwrapRef<typeof import('./store/mappool.store')['default']>

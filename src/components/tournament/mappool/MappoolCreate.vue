@@ -25,6 +25,8 @@ async function createMappool() {
   });
   loading = false;
   showCreate = false;
+  rounds.value = [];
+  mappoolDateCreate.value = undefined;
 }
 
 const roundOptions = computed(() => {

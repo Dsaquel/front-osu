@@ -147,3 +147,16 @@ export interface UpdateTournamentDto {
   commonSchedule?: string | null;
   hasQualifier?: boolean;
 }
+
+export interface Beatmap {
+  accuracy: number;
+  ar: number;
+  beatmapset_id: number;
+  bpm: number;
+  convert: boolean;
+  total_length: number;
+  cs: number;
+  hit_length: number;
+  is_scoreable: boolean;
+  url: string;
+}
