@@ -167,6 +167,7 @@ export interface Beatmap {
     preview_url: string;
     title: string;
     creator: string;
+    artist: string;
     covers: {
       card: string;
       'card@2x': string;

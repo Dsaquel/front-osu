@@ -47,7 +47,8 @@ const isDisabled = computed(() => {
     :title="
       tournamentMappool?.round ? `Create map for round ${tournamentMappool.round}` : `Create map for the qualifier`
     "
-    w="5/10"
+    w="5/10 min-[600px]"
+    class="<sm:min-w-full"
   >
     <div display="grid" grid="cols-2 gap-2" justify="items-center">
       <el-input
@@ -62,19 +63,47 @@ const isDisabled = computed(() => {
         </el-select>
       </div>
       <div v-if="beatmap" grid="col-span-2" w="full">
-        <el-descriptions direction="horizontal" :column="2" :title="beatmap.version" border>
+        <el-descriptions
+          direction="horizontal"
+          :title="`${beatmap.beatmapset?.artist} - ${beatmap.beatmapset.title} `"
+          :column="2"
+          border
+        >
           <!-- <img :src="beatmap.beatmapset.covers.list" /> -->
           <el-descriptions-item p="0" :span="2" label-class-name="my-label" class-name="my-content">
             <el-image loading="lazy" :src="beatmap.beatmapset.covers['slimcover@2x']" />
           </el-descriptions-item>
-          <el-descriptions-item :span="2" label="circle size"> {{ beatmap.cs }}</el-descriptions-item>
-          <el-descriptions-item :span="2" label="Approche rate"> {{ beatmap.ar }}</el-descriptions-item>
-          <el-descriptions-item :span="2" label="BPM"> {{ beatmap.bpm }}</el-descriptions-item>
-          <el-descriptions-item :span="2" width="300px" label="length">
-            {{ dayjs().startOf('day').second(beatmap.total_length).format('m:s') }}
+
+          <el-descriptions-item :span="2" label="Version"> {{ beatmap.version }}</el-descriptions-item>
+          <el-descriptions-item :span="2">
+            <template #label>
+              <div class="description-item"><i-material-symbols:star /></div>
+            </template>
+            {{ beatmap.difficulty_rating }}
           </el-descriptions-item>
 
-          <!-- <el-descriptions-item p="0" :span="1"> bbalalal </el-descriptions-item> -->
+          <el-descriptions-item :span="2">
+            <template #label>
+              <div class="description-item"><i-material-symbols:circle />Circle size</div>
+            </template>
+            {{ beatmap.cs }}
+          </el-descriptions-item>
+
+          <el-descriptions-item :span="2" label="Approche rate"> {{ beatmap.ar }}</el-descriptions-item>
+
+          <el-descriptions-item :span="2">
+            <template #label>
+              <div class="description-item"><i-mdi:bpm /> Bpm</div>
+            </template>
+            {{ beatmap.bpm }}
+          </el-descriptions-item>
+
+          <el-descriptions-item :span="2" width="300px">
+            <template #label>
+              <div class="description-item"><i-mdi:clock-time-eight /> Length</div>
+            </template>
+            {{ dayjs().startOf('day').second(beatmap.total_length).format('m:s') }}
+          </el-descriptions-item>
         </el-descriptions>
       </div>
     </div>
@@ -87,16 +116,28 @@ const isDisabled = computed(() => {
   </el-dialog>
 </template>
 
-<style scoped>
-::v-deep .my-label {
+<style scoped lang="scss">
+:deep(.my-label) {
   display: none;
   width: 0;
 }
-::v-deep .my-content {
+:deep(.my-content) {
   padding: 0 !important;
 }
 
-::v-deep .el-image {
+:deep(.el-image) {
   display: block;
+}
+
+:deep(.description-item) {
+  display: flex;
+  align-items: center;
+  :first-child {
+    margin-right: 6px;
+  }
+}
+
+:deep(td) {
+  white-space: nowrap;
 }
 </style>
