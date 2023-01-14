@@ -42,7 +42,13 @@ export interface TournamentMappool extends Mappool {
   tournamentId: number;
   // maps: MapTournament[];
 }
-
+export interface CreateMapDto {
+  type: string;
+  beatmapsetId: number;
+  beatmapId: number;
+  tournamentId?: number;
+  qualifierId?: number;
+}
 export interface User extends Node {
   osuId: number;
   username: string;
@@ -149,6 +155,7 @@ export interface UpdateTournamentDto {
 }
 
 export interface Beatmap {
+  id: number;
   accuracy: number;
   ar: number;
   beatmapset_id: number;

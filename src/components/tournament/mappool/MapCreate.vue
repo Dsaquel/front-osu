@@ -2,19 +2,19 @@
 import dayjs from 'dayjs';
 import { QualifierMappool, TournamentMappool } from '~/types';
 
-const { fetchBeatmap } = mapStore();
+const { fetchBeatmap, createMap } = mapStore();
 const { beatmap } = storeToRefs(mapStore());
 
-defineProps<{
+const props = defineProps<{
   qualifierMappool?: QualifierMappool;
   tournamentMappool?: TournamentMappool;
 }>();
 
 const showCreate = ref(false);
 const options = ['noMod', 'hidden', 'hardRock', 'doubleTime', 'freeMod', 'tieBreaker'];
-const optionValue = ref(undefined);
+const optionValue = ref<string | undefined>(undefined);
 const mapInput = ref<string>('');
-const loading = ref(false);
+let loading = $ref(false);
 const errorInput = ref('');
 
 async function searchBeatmap() {
@@ -29,14 +29,35 @@ async function searchBeatmap() {
   }
 }
 
-function createMap() {
-  return null;
+async function addMap() {
+  if (!beatmap.value || !optionValue.value) return;
+  if (!props.qualifierMappool && !props.tournamentMappool) return;
+  loading = true;
+  try {
+    console.log('toto');
+    await createMap(
+      {
+        beatmapsetId: beatmap.value.beatmapset_id,
+        beatmapId: beatmap.value.id,
+        qualifierId: props.qualifierMappool?.qualifierId,
+        tournamentId: props.tournamentMappool?.tournamentId,
+        type: optionValue.value,
+      },
+      props.qualifierMappool?.id ?? (props.tournamentMappool?.id as number),
+    );
+  } catch (_) {
+    //
+  } finally {
+    showCreate.value = false;
+    loading = false;
+  }
 }
 
-const isDisabled = computed(() => {
-  if (beatmap.value !== undefined && !optionValue.value) return true;
-  return false;
-});
+function resetSettings() {
+  optionValue.value = undefined;
+  mapInput.value = '';
+  beatmap.value = undefined;
+}
 </script>
 
 <template>
@@ -49,6 +70,7 @@ const isDisabled = computed(() => {
     "
     w="5/10 min-[600px]"
     class="<sm:min-w-full"
+    @close="resetSettings"
   >
     <div display="grid" grid="cols-2 gap-2" justify="items-center">
       <el-input
@@ -109,8 +131,10 @@ const isDisabled = computed(() => {
     </div>
     <template #footer>
       <span class="dialog-footer">
-        <el-button v-loading="loading" @click="showCreate = false">Cancel</el-button>
-        <el-button type="primary" :disabled="!isDisabled" @click="createMap">Confirm </el-button>
+        <el-button :disabled="loading" @click="showCreate = false">Cancel</el-button>
+        <el-button :loading="loading" type="primary" :disabled="!beatmap || !optionValue" @click="addMap"
+          >{{ loading ? 'Adding...' : 'Add beatmap' }}
+        </el-button>
       </span>
     </template>
   </el-dialog>
