@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia';
 import apiMap from '~/api/modules/api.map';
-import { Beatmap, CreateMapDto } from '~/types';
+import apiMappool from '~/api/modules/api.mappool';
+import { Beatmap, CreateMapDto, QualifierMap, TournamentMap } from '~/types';
 
 const useMapStore = defineStore('map', () => {
   const beatmap = ref(undefined as Beatmap | undefined);
-  const beatmaps = ref(undefined as Beatmap[] | undefined);
 
   async function fetchBeatmap(beatmapId: number) {
     try {
@@ -17,9 +17,13 @@ const useMapStore = defineStore('map', () => {
 
   async function createMap(createMapDto: CreateMapDto, mappoolId: number) {
     try {
-      const data = await apiMap.createMap(createMapDto, mappoolId);
-      console.log(data);
-      // beatmaps.value = data;
+      if (createMapDto.qualifierId) {
+        await apiMap.createMap<QualifierMap>(createMapDto, mappoolId);
+        await apiMappool.fetchTournamentMappools(createMapDto.qualifierId);
+      } else if (createMapDto.tournamentId) {
+        await apiMap.createMap<TournamentMap>(createMapDto, mappoolId);
+        await apiMappool.fetchTournamentMappools(createMapDto.tournamentId);
+      }
     } catch (e) {
       console.log('error ', e);
       //

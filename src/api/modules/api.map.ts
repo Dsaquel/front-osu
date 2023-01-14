@@ -3,8 +3,8 @@ import { Beatmap, CreateMapDto } from '~/types';
 
 const MapApi = {
   fetchOne: (beatmapId: number) => service.get<Beatmap>(`/beatmap/${beatmapId}`),
-  createMap: (createMapDto: CreateMapDto, mappoolId: number) =>
-    service.post<Beatmap>(`/mappool/${mappoolId}/map`, createMapDto),
+  createMap: <T>(createMapDto: CreateMapDto, mappoolId: number) =>
+    service.post<T>(`/mappool/${mappoolId}/map`, createMapDto),
   // fetchAll: () => ,
 };
 

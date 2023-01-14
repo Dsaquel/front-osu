@@ -17,11 +17,28 @@ interface Mappool extends Node {
   isVisible: boolean;
 }
 
+type MapType = 'noMod' | 'hidden' | 'hardRock' | 'doubleTime' | 'freeMod' | 'tieBreaker';
+
 interface TournamentDraft {
   name: string;
   numbersPlayers: number;
   description: string;
   estimateStartDate: string;
+}
+
+interface Map extends Node {
+  type: MapType;
+  beatmapsetId: number;
+  beatmapId: number;
+  mappoolId: number;
+}
+
+export interface QualifierMap extends Map {
+  qualifierId: number;
+}
+
+export interface TournamentMap extends Map {
+  tournamentId: number;
 }
 
 export interface CreateMappoolDto {

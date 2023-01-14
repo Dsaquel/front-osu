@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import showCodeMessage from '~/api/code';
 import formatJsonToUrlParams, { InstanceObject } from '~/utils/format';
 
 const BASE_PREFIX = import.meta.env.VITE_API_BASEURL;
@@ -41,10 +40,10 @@ axiosInstance.interceptors.response.use(
   (error: AxiosError) => {
     const { response } = error;
     if (response) {
-      ElMessage.error(showCodeMessage(response.status));
+      ElMessage.error(response.data?.description?.message || response.data);
       return Promise.reject(response.data);
     }
-    ElMessage.warning('网络连接异常,请稍后再试!');
+    ElMessage.warning('The network connection is abnormal, please try again later');
     return Promise.reject(error);
   },
 );
