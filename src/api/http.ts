@@ -40,7 +40,7 @@ axiosInstance.interceptors.response.use(
   (error: AxiosError) => {
     const { response } = error;
     if (response) {
-      ElMessage.error(response.data?.description?.message || response.data);
+      ElMessage.error(response.data?.description?.message || response.data?.message[0] || response.data.message);
       return Promise.reject(response.data);
     }
     ElMessage.warning('The network connection is abnormal, please try again later');

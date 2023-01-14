@@ -74,7 +74,7 @@ const roundOptions = computed(() => {
     <template #footer>
       <span class="dialog-footer">
         <el-button v-loading="loading" @click="showCreate = false">Cancel</el-button>
-        <el-button type="primary" @click="createMappool">Confirm </el-button>
+        <el-button type="primary" :disabled="!rounds.length" @click="createMappool">Confirm </el-button>
       </span>
     </template>
   </el-dialog>

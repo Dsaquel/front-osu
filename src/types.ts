@@ -31,6 +31,7 @@ interface Map extends Node {
   beatmapsetId: number;
   beatmapId: number;
   mappoolId: number;
+  beatmap: Beatmap;
 }
 
 export interface QualifierMap extends Map {
