@@ -15,6 +15,7 @@ const props = defineProps<{
 let showCreate = $ref(false);
 let loading = $ref(false);
 const rounds = ref([]);
+const isMappoolVisible = ref(false);
 const mappoolDateCreate = ref<string | undefined>(undefined);
 
 async function createMappool() {
@@ -22,6 +23,7 @@ async function createMappool() {
   await createTournamentMappool(props.tournament.id, {
     rounds: rounds.value,
     displayMappoolsSchedule: mappoolDateCreate.value,
+    isVisible: isMappoolVisible.value,
   });
   loading = false;
   showCreate = false;
@@ -47,17 +49,24 @@ const roundOptions = computed(() => {
   <el-button v-if="roundOptions?.length" type="primary" text @click="showCreate = true">create new mappool</el-button>
   <div v-if="!roundOptions">Before create mappool, please set the numbers player</div>
 
-  <el-dialog v-model="showCreate" title="Tips" w="3/10">
-    <div display="grid" grid="cols-2 gap-2" justify="items-center">
+  <el-dialog v-model="showCreate" title="Create mappool" w="5/10 min-[600px]" class="<sm:min-w-full">
+    <div display="grid" grid="cols-1 gap-2" justify="items-center">
       <div>
         <span display="block">Rounds</span>
         <el-select v-model="rounds" size="large" multiple collapse-tags>
           <el-option v-for="(item, i) in roundOptions" :key="i" :value="item" />
         </el-select>
       </div>
+      <el-switch
+        v-model="isMappoolVisible"
+        active-text="wont be visible until schedule"
+        inactive-text="will be public when tournament start"
+        size="large"
+      />
       <CommonDatepicker
+        v-if="isMappoolVisible"
         :model-value="mappoolDateCreate"
-        :title="'Date where the mappool can be public'"
+        :title="'Schedule mappool (can be set later)'"
         :type="'datetime'"
         @update:model-value="(val) => (mappoolDateCreate = dayjs(val).utc().format())"
       />
@@ -70,3 +79,9 @@ const roundOptions = computed(() => {
     </template>
   </el-dialog>
 </template>
+
+<style scoped>
+div {
+  white-space: nowrap;
+}
+</style>
