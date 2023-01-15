@@ -72,7 +72,18 @@ watch([tournamentMappools, qualifierMappool], () => {
           />
           <el-button type="danger" plain @click="deleteMappool(tournamentMappool.id)">Delete</el-button>
 
-          <el-table :data="tournamentMappool.maps" height="250">
+          <el-table
+            :data="tournamentMappool.maps"
+            height="250"
+            :cell-class-name="
+              (e) =>
+                e.columnIndex > 1 && e.columnIndex < 5
+                  ? `bg-${e.row.type}`
+                  : e.columnIndex === 7
+                  ? ''
+                  : `bg-${e.row.type}-light`
+            "
+          >
             <el-table-column :width="200">
               <template #default="scope">
                 <el-image :src="scope.row.beatmap.beatmapset.covers.card"></el-image>
@@ -97,6 +108,7 @@ watch([tournamentMappools, qualifierMappool], () => {
             <el-table-column label="stars">
               <template #default="scope"> {{ scope.row.beatmap.difficulty_rating }} </template>
             </el-table-column>
+
             <el-table-column label="bpm">
               <template #default="scope"> {{ scope.row.beatmap.bpm }} </template>
             </el-table-column>
@@ -131,5 +143,32 @@ watch([tournamentMappools, qualifierMappool], () => {
 
 .el-image {
   display: block;
+}
+
+:deep(.bg-hardRock) {
+  background: blue;
+  // &::before {
+  //   z-index: -1;
+  //   content: 'hard rock';
+  //   font-style: italic;
+  //   font-weight: 700;
+  //   color: #fff;
+  //   background: #e06666;
+  //   opacity: 0.3;
+  //   position: absolute;
+  // }
+}
+:deep(.bg-hardRock-light) {
+  background: red;
+  // &::before {
+  //   z-index: -1;
+  //   content: 'hard rock';
+  //   font-style: italic;
+  //   font-weight: 700;
+  //   color: #fff;
+  //   background: #e06666;
+  //   opacity: 0.3;
+  //   position: absolute;
+  // }
 }
 </style>
