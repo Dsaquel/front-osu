@@ -72,16 +72,46 @@ watch([tournamentMappools, qualifierMappool], () => {
           />
           <el-button type="danger" plain @click="deleteMappool(tournamentMappool.id)">Delete</el-button>
 
-          <el-descriptions v-for="map in tournamentMappool.maps" :key="map.id" direction="vertical" border :column="4">
-            <el-descriptions-item label-class-name="image-label" class-name="img-content" rowspan="3">
-              <template #label>
-                <el-image loading="lazy" :src="map.beatmap.beatmapset.covers['card@2x']" />
+          <el-table :data="tournamentMappool.maps" height="250">
+            <el-table-column :width="200">
+              <template #default="scope">
+                <el-image :src="scope.row.beatmap.beatmapset.covers.card"></el-image>
+                <!-- {{ scope.row }} -->
               </template>
-            </el-descriptions-item>
-            <el-descriptions-item label="cs">{{ map.beatmap.cs }}</el-descriptions-item>
-            <el-descriptions-item label="ar">{{ map.beatmap.ar }}</el-descriptions-item>
-            <el-descriptions-item label="length">{{ map.beatmap.total_length }}</el-descriptions-item>
-          </el-descriptions>
+            </el-table-column>
+            <el-table-column label="Beatmap title" :width="350">
+              <template #default="scope">
+                {{
+                  `${scope.row.beatmap.beatmapset.artist} - ${scope.row.beatmap.beatmapset.title} [${scope.row.beatmap.version}]`
+                }}
+              </template>
+            </el-table-column>
+            <el-table-column label="CS" :width="60">
+              <template #default="scope">
+                {{ scope.row.beatmap.cs }}
+              </template>
+            </el-table-column>
+            <el-table-column label="AR" :width="60">
+              <template #default="scope"> {{ scope.row.beatmap.ar }} </template>
+            </el-table-column>
+            <el-table-column label="stars">
+              <template #default="scope"> {{ scope.row.beatmap.difficulty_rating }} </template>
+            </el-table-column>
+            <el-table-column label="bpm">
+              <template #default="scope"> {{ scope.row.beatmap.bpm }} </template>
+            </el-table-column>
+            <el-table-column label="length">
+              <template #default="scope">
+                {{ dayjs().startOf('day').second(scope.row.beatmap.total_length).format('m:s') }}
+              </template>
+            </el-table-column>
+            <el-table-column label="actions">
+              <template #default="scope">
+                <el-button type="primary" size="small" link>osu page</el-button>
+                <el-button type="danger" size="small" text m="l-1">Delete</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </el-collapse-item>
         <el-collapse-item v-if="qualifierMappool" title="Qualifier mappool">
           {{ qualifierMappool.isVisible }}
@@ -92,27 +122,14 @@ watch([tournamentMappools, qualifierMappool], () => {
 </template>
 
 <style scoped lang="scss">
-:deep(.image-label) {
-  padding: 0 !important;
-  max-width: 100px !important;
+:deep(.el-table_1_column_1) {
+  padding: 0;
 }
-:deep(.img-content) {
-  display: none;
+:deep(.el-table_1_column_1 div) {
+  padding: 0;
 }
 
-:deep(.el-image) {
+.el-image {
   display: block;
-}
-
-:deep(.description-item) {
-  display: flex;
-  align-items: center;
-  :first-child {
-    margin-right: 6px;
-  }
-}
-
-:deep(td) {
-  white-space: nowrap;
 }
 </style>
