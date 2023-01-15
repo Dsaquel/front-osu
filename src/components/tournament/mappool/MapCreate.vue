@@ -92,7 +92,7 @@ function resetSettings() {
           border
         >
           <!-- <img :src="beatmap.beatmapset.covers.list" /> -->
-          <el-descriptions-item p="0" :span="2" label-class-name="my-label" class-name="my-content">
+          <el-descriptions-item :span="2" label-class-name="hide-label" class-name="img-content">
             <el-image loading="lazy" :src="beatmap.beatmapset.covers['slimcover@2x']" />
           </el-descriptions-item>
 
@@ -141,11 +141,11 @@ function resetSettings() {
 </template>
 
 <style scoped lang="scss">
-:deep(.my-label) {
+:deep(.hide-label) {
   display: none;
   width: 0;
 }
-:deep(.my-content) {
+:deep(.img-content) {
   padding: 0 !important;
 }
 

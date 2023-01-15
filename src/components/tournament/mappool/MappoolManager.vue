@@ -2,7 +2,6 @@
 import { onBeforeMount } from 'vue';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-// import { Minus, Plus } from '@element-plus/icons-vue';
 import { Tournament } from '~/types';
 
 dayjs.extend(utc);
@@ -64,11 +63,14 @@ async function updateVisibility(isVisible: boolean, mappoolId: number) {
             :loading="isVisibleLoading"
             @update:model-value="(val: boolean) => updateVisibility(val, tournamentMappool.id)"
           />
-          <div>
-            <!-- <el-button type="danger" :icon="Minus" plain /> -->
-          </div>
-          <!-- <el-button type="primary" @click="mappoolUpdate(tournamentMappool.id)">Save change</el-button> -->
           <el-button type="danger" plain @click="deleteMappool(tournamentMappool.id)">Delete</el-button>
+
+          <el-descriptions v-for="map in tournamentMappool.maps" :key="map.id" direction="vertical" border :column="2">
+            <el-descriptions-item label-class-name="hide-label" class-name="img-content">
+              <el-image :span="2" loading="lazy" :src="map.beatmap.beatmapset.covers['card@2x']" />
+            </el-descriptions-item>
+            <el-descriptions-item label="cs">{{ map.beatmap.cs }}</el-descriptions-item>
+          </el-descriptions>
         </el-collapse-item>
         <el-collapse-item v-if="qualifierMappool" title="Qualifier mappool">
           {{ qualifierMappool.isVisible }}
@@ -77,3 +79,29 @@ async function updateVisibility(isVisible: boolean, mappoolId: number) {
     </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+:deep(.hide-label) {
+  display: none;
+  width: 0;
+}
+:deep(.img-content) {
+  padding: 0 !important;
+}
+
+:deep(.el-image) {
+  display: block;
+}
+
+:deep(.description-item) {
+  display: flex;
+  align-items: center;
+  :first-child {
+    margin-right: 6px;
+  }
+}
+
+:deep(td) {
+  white-space: nowrap;
+}
+</style>

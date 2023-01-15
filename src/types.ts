@@ -52,13 +52,13 @@ export type UpdateMappoolDto = Omit<CreateMappoolDto, 'rounds'>;
 
 export interface QualifierMappool extends Mappool {
   qualifierId: number;
-  // maps: MapQualifier[];
+  maps: QualifierMap[];
 }
 
 export interface TournamentMappool extends Mappool {
   round: number;
   tournamentId: number;
-  // maps: MapTournament[];
+  maps: TournamentMap[];
 }
 export interface CreateMapDto {
   type: string;
