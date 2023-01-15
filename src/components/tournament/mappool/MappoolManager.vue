@@ -83,6 +83,7 @@ watch([tournamentMappools, qualifierMappool], () => {
                   ? ''
                   : `bg-${e.row.type}-light`
             "
+            :row-class-name="(e) => `type-${e.row.type}`"
           >
             <el-table-column :width="200">
               <template #default="scope">
@@ -160,15 +161,23 @@ watch([tournamentMappools, qualifierMappool], () => {
 }
 :deep(.bg-hardRock-light) {
   background: red;
-  // &::before {
-  //   z-index: -1;
-  //   content: 'hard rock';
-  //   font-style: italic;
-  //   font-weight: 700;
-  //   color: #fff;
-  //   background: #e06666;
-  //   opacity: 0.3;
-  //   position: absolute;
-  // }
+}
+:deep(.type-hardRock) {
+  // z index 5 on parent
+  position: relative;
+  overflow: hidden;
+  &::after {
+    z-index: 1;
+    content: 'NM';
+    font-weight: 700;
+    line-height: 1;
+    font-size: 50px;
+    color: #fff;
+    position: absolute;
+    left: 50%;
+    scale: 1.3;
+    transform: translate(-15%, 15%) rotate(20deg);
+    overflow: hidden;
+  }
 }
 </style>
