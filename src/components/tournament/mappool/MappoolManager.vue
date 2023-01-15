@@ -35,6 +35,13 @@ async function updateVisibility(isVisible: boolean, mappoolId: number) {
   await updateTournamentMappool(props.tournament.id, mappoolId, { isVisible });
   isVisibleLoading = false;
 }
+
+watch([tournamentMappools, qualifierMappool], () => {
+  const thImages = document.getElementsByClassName('image-label');
+  Array.from(thImages).forEach((element) => {
+    element.setAttribute('rowspan', '2');
+  });
+});
 </script>
 
 <template>
@@ -65,11 +72,15 @@ async function updateVisibility(isVisible: boolean, mappoolId: number) {
           />
           <el-button type="danger" plain @click="deleteMappool(tournamentMappool.id)">Delete</el-button>
 
-          <el-descriptions v-for="map in tournamentMappool.maps" :key="map.id" direction="vertical" border :column="2">
-            <el-descriptions-item label-class-name="hide-label" class-name="img-content">
-              <el-image :span="2" loading="lazy" :src="map.beatmap.beatmapset.covers['card@2x']" />
+          <el-descriptions v-for="map in tournamentMappool.maps" :key="map.id" direction="vertical" border :column="4">
+            <el-descriptions-item label-class-name="image-label" class-name="img-content" rowspan="3">
+              <template #label>
+                <el-image loading="lazy" :src="map.beatmap.beatmapset.covers['card@2x']" />
+              </template>
             </el-descriptions-item>
             <el-descriptions-item label="cs">{{ map.beatmap.cs }}</el-descriptions-item>
+            <el-descriptions-item label="ar">{{ map.beatmap.ar }}</el-descriptions-item>
+            <el-descriptions-item label="length">{{ map.beatmap.total_length }}</el-descriptions-item>
           </el-descriptions>
         </el-collapse-item>
         <el-collapse-item v-if="qualifierMappool" title="Qualifier mappool">
@@ -81,12 +92,12 @@ async function updateVisibility(isVisible: boolean, mappoolId: number) {
 </template>
 
 <style scoped lang="scss">
-:deep(.hide-label) {
-  display: none;
-  width: 0;
+:deep(.image-label) {
+  padding: 0 !important;
+  max-width: 100px !important;
 }
 :deep(.img-content) {
-  padding: 0 !important;
+  display: none;
 }
 
 :deep(.el-image) {
