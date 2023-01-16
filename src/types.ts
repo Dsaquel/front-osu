@@ -17,7 +17,7 @@ interface Mappool extends Node {
   isVisible: boolean;
 }
 
-type MapType = 'noMod' | 'hidden' | 'hardRock' | 'doubleTime' | 'freeMod' | 'tieBreaker';
+export type MapType = 'noMod' | 'hidden' | 'hardRock' | 'doubleTime' | 'freeMod' | 'tieBreaker';
 
 interface TournamentDraft {
   name: string;

@@ -2,7 +2,7 @@
 import { onBeforeMount } from 'vue';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { Tournament } from '~/types';
+import { Tournament, MapType } from '~/types';
 
 dayjs.extend(utc);
 
@@ -16,6 +16,15 @@ const props = defineProps<{
 
 const activeCollapse: number[] = [];
 let isVisibleLoading = $ref(false);
+
+const formattedType = {
+  noMod: 'no mod',
+  hidden: 'hidden',
+  hardRock: 'hard rock',
+  doubleTime: 'double time',
+  freeMod: 'free mod',
+  tieBreaker: 'tie breaker',
+};
 
 onBeforeMount(async () => {
   await fetchTournamentMappools(props.tournament.id);
@@ -42,6 +51,12 @@ watch([tournamentMappools, qualifierMappool], () => {
     element.setAttribute('rowspan', '2');
   });
 });
+
+const formatterMod = (row, column) => {
+  console.log(row, column);
+  console.log('toto');
+  return 3;
+};
 </script>
 
 <template>
@@ -72,19 +87,7 @@ watch([tournamentMappools, qualifierMappool], () => {
           />
           <el-button type="danger" plain @click="deleteMappool(tournamentMappool.id)">Delete</el-button>
 
-          <el-table
-            :data="tournamentMappool.maps"
-            height="250"
-            :cell-class-name="
-              (e) =>
-                e.columnIndex > 1 && e.columnIndex < 5
-                  ? `bg-${e.row.type}`
-                  : e.columnIndex === 7
-                  ? ''
-                  : `bg-${e.row.type}-light`
-            "
-            :row-class-name="(e) => `type-${e.row.type}`"
-          >
+          <el-table :data="tournamentMappool.maps" :default-sort="{ prop: 'type', order: 'ascending' }" height="250">
             <el-table-column :width="200">
               <template #default="scope">
                 <el-image :src="scope.row.beatmap.beatmapset.covers.card"></el-image>
@@ -98,14 +101,17 @@ watch([tournamentMappools, qualifierMappool], () => {
                 }}
               </template>
             </el-table-column>
+
             <el-table-column label="CS" :width="60">
               <template #default="scope">
                 {{ scope.row.beatmap.cs }}
               </template>
             </el-table-column>
+
             <el-table-column label="AR" :width="60">
               <template #default="scope"> {{ scope.row.beatmap.ar }} </template>
             </el-table-column>
+
             <el-table-column label="stars">
               <template #default="scope"> {{ scope.row.beatmap.difficulty_rating }} </template>
             </el-table-column>
@@ -113,11 +119,19 @@ watch([tournamentMappools, qualifierMappool], () => {
             <el-table-column label="bpm">
               <template #default="scope"> {{ scope.row.beatmap.bpm }} </template>
             </el-table-column>
+
             <el-table-column label="length">
               <template #default="scope">
                 {{ dayjs().startOf('day').second(scope.row.beatmap.total_length).format('m:s') }}
               </template>
             </el-table-column>
+
+            <el-table-column label="mod" sortable :sort-method="formatterMod">
+              <template #default="scope">
+                <el-tag disable-transitions>{{ formattedType[scope.row.type as MapType] }}</el-tag>
+              </template>
+            </el-table-column>
+
             <el-table-column label="actions">
               <template #default="scope">
                 <el-button type="primary" size="small" link>osu page</el-button>
@@ -145,39 +159,52 @@ watch([tournamentMappools, qualifierMappool], () => {
 .el-image {
   display: block;
 }
-
-:deep(.bg-hardRock) {
-  background: blue;
-  // &::before {
-  //   z-index: -1;
-  //   content: 'hard rock';
-  //   font-style: italic;
-  //   font-weight: 700;
-  //   color: #fff;
-  //   background: #e06666;
-  //   opacity: 0.3;
-  //   position: absolute;
-  // }
-}
-:deep(.bg-hardRock-light) {
-  background: red;
-}
-:deep(.type-hardRock) {
-  // z index 5 on parent
-  position: relative;
-  overflow: hidden;
-  &::after {
-    z-index: 1;
-    content: 'NM';
-    font-weight: 700;
-    line-height: 1;
-    font-size: 50px;
-    color: #fff;
-    position: absolute;
-    left: 50%;
-    scale: 1.3;
-    transform: translate(-15%, 15%) rotate(20deg);
-    overflow: hidden;
-  }
-}
+// IDEA: for make bg alternate color
+// need to put this on table
+// :cell-class-name="
+//               (e) =>
+//                 e.columnIndex > 1 && e.columnIndex < 5
+//                   ? `bg-${e.row.type}`
+//                   : e.columnIndex === 7
+//                   ? ''
+//                   : `bg-${e.row.type}-light`
+//             "
+//             :row-class-name="(e) => `type ${e.row.type}`"
+// :deep(.bg-hardRock) {
+//   background: blue;
+//   // &::before {
+//   //   z-index: -1;
+//   //   content: 'hard rock';
+//   //   font-style: italic;
+//   //   font-weight: 700;
+//   //   color: #fff;
+//   //   background: #e06666;
+//   //   opacity: 0.3;
+//   //   position: absolute;
+//   // }
+// }
+// :deep(.bg-hardRock-light) {
+//   background: red;
+// }
+// :deep(.type) {
+//   // z index 5 on parent
+//   position: relative;
+//   overflow: hidden;
+//   &::after {
+//     z-index: 1;
+//     font-weight: 700;
+//     line-height: 1;
+//     font-size: 50px;
+//     color: #fff;
+//     position: absolute;
+//     left: 50%;
+//     scale: 1.6;
+//     transform: translate(0, 15%);
+//     transform-origin: 150%;
+//     overflow: hidden;
+//   }
+// }
+// :deep(.hardRock:after) {
+//   content: 'HR';
+// }
 </style>
