@@ -8,7 +8,9 @@ dayjs.extend(utc);
 
 const { fetchTournamentMappools, fetchQualifierMappool, updateTournamentMappool, deleteTournamentMappool } =
   mappoolStore();
+
 const { qualifierMappool, tournamentMappools } = storeToRefs(mappoolStore());
+const { deleteMap } = mapStore();
 
 const props = defineProps<{
   tournament: Tournament;
@@ -51,7 +53,6 @@ watch([tournamentMappools, qualifierMappool], () => {
     element.setAttribute('rowspan', '2');
   });
 });
-console.log(unref(tournamentMappools));
 </script>
 
 <template>
@@ -129,8 +130,17 @@ console.log(unref(tournamentMappools));
 
             <el-table-column label="actions">
               <template #default="scope">
-                <el-button type="primary" size="small" link>osu page</el-button>
-                <el-button type="danger" size="small" text m="l-1">Delete</el-button>
+                <a :href="scope.row.beatmap.url" target="_blank">
+                  <el-button type="primary" size="small" link>osu page</el-button>
+                </a>
+                <el-button
+                  type="danger"
+                  size="small"
+                  text
+                  m="l-1"
+                  @click="deleteMap(tournamentMappool.id, scope.row.id as number, 'tournament', tournament.id)"
+                  >delete</el-button
+                >
               </template>
             </el-table-column>
           </el-table>
@@ -153,6 +163,10 @@ console.log(unref(tournamentMappools));
 
 .el-image {
   display: block;
+}
+
+.noMod {
+  background: black;
 }
 // IDEA: for make bg alternate color
 // need to put this on table

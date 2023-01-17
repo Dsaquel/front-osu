@@ -19,7 +19,7 @@ const useMapStore = defineStore('map', () => {
     try {
       if (createMapDto.qualifierId) {
         await apiMap.createMap<QualifierMap>(createMapDto, mappoolId);
-        await apiMappool.fetchTournamentMappools(createMapDto.qualifierId);
+        await apiMappool.fetchQualifierMappool(createMapDto.qualifierId);
       } else if (createMapDto.tournamentId) {
         await apiMap.createMap<TournamentMap>(createMapDto, mappoolId);
         await apiMappool.fetchTournamentMappools(createMapDto.tournamentId);
@@ -30,10 +30,31 @@ const useMapStore = defineStore('map', () => {
     }
   }
 
+  async function deleteMap(mappoolId: number, mapId: number, type: 'tournament' | 'qualifier', id: number) {
+    try {
+      console.log('proc');
+      if (type === 'qualifier') {
+        await apiMap.deleteOne(mappoolId, mapId, {
+          qualifierId: id,
+        });
+        await apiMappool.fetchQualifierMappool(id);
+      } else if (type === 'tournament') {
+        console.log(id, 'blablabla');
+        await apiMap.deleteOne(mappoolId, mapId, {
+          tournamentId: id,
+        });
+        await apiMappool.fetchTournamentMappools(id);
+      }
+    } catch (e) {
+      console.log('error ', e);
+    }
+  }
+
   return {
     beatmap,
     fetchBeatmap,
     createMap,
+    deleteMap,
   };
 });
 

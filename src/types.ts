@@ -34,6 +34,11 @@ export interface Map extends Node {
   beatmap: Beatmap;
 }
 
+export interface DeleteMapParams {
+  qualifierId?: number;
+  tournamentId?: number;
+}
+
 export interface QualifierMap extends Map {
   qualifierId: number;
 }
