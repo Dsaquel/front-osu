@@ -40,10 +40,14 @@ const useMapStore = defineStore('map', () => {
         await apiMappool.fetchQualifierMappool(id);
       } else if (type === 'tournament') {
         console.log(id, 'blablabla');
-        await apiMap.deleteOne(mappoolId, mapId, {
-          tournamentId: id,
-        });
-        await apiMappool.fetchTournamentMappools(id);
+        try {
+          await apiMap.deleteOne(mappoolId, mapId, {
+            tournamentId: id,
+          });
+          await apiMappool.fetchTournamentMappools(id);
+        } catch (t) {
+          console.log(t);
+        }
       }
     } catch (e) {
       console.log('error ', e);
