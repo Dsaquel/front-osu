@@ -9,12 +9,12 @@ const useMappoolStore = defineStore('mappool', () => {
 
   const tournamentMappoolsSort = computed(() => {
     if (!tournamentMappools.value) return undefined;
-    const temp = [...tournamentMappools.value];
-    temp.forEach((elem) => {
-      elem.maps = elem.maps.sort((a, b) => typeOrder.indexOf(a.type) - typeOrder.indexOf(b.type));
-    });
-    temp.sort((a, b) => a.round - b.round);
-    return temp;
+    return tournamentMappools.value
+      .map((elem) => ({
+        ...elem,
+        maps: elem.maps.sort((a, b) => typeOrder.indexOf(a.type) - typeOrder.indexOf(b.type)),
+      }))
+      .sort((a, b) => a.round - b.round);
   });
 
   async function fetchTournamentMappools(tournamentId: number) {
