@@ -1,13 +1,21 @@
 import { defineStore } from 'pinia';
 import apiMappool from '~/api/modules/api.mappool';
 import { TournamentMappool, QualifierMappool, CreateMappoolDto, UpdateMappoolDto } from '~/types';
-// import useUserStore from './user.store';
 
 const useMappoolStore = defineStore('mappool', () => {
+  const typeOrder = ['noMod', 'hidden', 'hardRock', 'doubleTime', 'freeMod', 'tieBreaker'];
   const tournamentMappools = ref(undefined as TournamentMappool[] | undefined);
   const qualifierMappool = ref(undefined as QualifierMappool | undefined);
 
-  const tournamentMappoolsSort = computed(() => tournamentMappools.value?.sort((a, b) => a.round - b.round));
+  const tournamentMappoolsSort = computed(() => {
+    if (!tournamentMappools.value) return undefined;
+    const temp = [...tournamentMappools.value];
+    temp.forEach((elem) => {
+      elem.maps = elem.maps.sort((a, b) => typeOrder.indexOf(a.type) - typeOrder.indexOf(b.type));
+    });
+    temp.sort((a, b) => a.round - b.round);
+    return temp;
+  });
 
   async function fetchTournamentMappools(tournamentId: number) {
     try {

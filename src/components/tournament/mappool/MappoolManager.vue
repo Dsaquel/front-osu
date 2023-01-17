@@ -14,7 +14,7 @@ const props = defineProps<{
   tournament: Tournament;
 }>();
 
-const activeCollapse: number[] = [];
+const activeCollapse = ref(['1']);
 let isVisibleLoading = $ref(false);
 
 const formattedType = {
@@ -51,12 +51,7 @@ watch([tournamentMappools, qualifierMappool], () => {
     element.setAttribute('rowspan', '2');
   });
 });
-
-const formatterMod = (row, column) => {
-  console.log(row, column);
-  console.log('toto');
-  return 3;
-};
+console.log(unref(tournamentMappools));
 </script>
 
 <template>
@@ -87,7 +82,7 @@ const formatterMod = (row, column) => {
           />
           <el-button type="danger" plain @click="deleteMappool(tournamentMappool.id)">Delete</el-button>
 
-          <el-table :data="tournamentMappool.maps" :default-sort="{ prop: 'type', order: 'ascending' }" height="250">
+          <el-table :data="tournamentMappool.maps" height="450">
             <el-table-column :width="200">
               <template #default="scope">
                 <el-image :src="scope.row.beatmap.beatmapset.covers.card"></el-image>
@@ -126,7 +121,7 @@ const formatterMod = (row, column) => {
               </template>
             </el-table-column>
 
-            <el-table-column label="mod" sortable :sort-method="formatterMod">
+            <el-table-column label="mod">
               <template #default="scope">
                 <el-tag disable-transitions>{{ formattedType[scope.row.type as MapType] }}</el-tag>
               </template>

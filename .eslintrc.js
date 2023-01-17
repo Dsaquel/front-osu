@@ -35,6 +35,7 @@ module.exports = {
     'vue/no-v-html': 'off',
     'no-undef': 'off',
     'no-restricted-syntax': 'off',
-    'no-new': 'off'
+    'no-new': 'off',
+    'no-param-reassign': 'off',
   },
 };

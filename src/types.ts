@@ -26,7 +26,7 @@ interface TournamentDraft {
   estimateStartDate: string;
 }
 
-interface Map extends Node {
+export interface Map extends Node {
   type: MapType;
   beatmapsetId: number;
   beatmapId: number;
