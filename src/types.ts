@@ -31,7 +31,7 @@ export interface Map extends Node {
   beatmapsetId: number;
   beatmapId: number;
   mappoolId: number;
-  beatmap: Beatmap;
+  osuBeatmap: Beatmap;
 }
 
 export interface DeleteMapParams {

@@ -34,7 +34,6 @@ async function addMap() {
   if (!props.qualifierMappool && !props.tournamentMappool) return;
   loading = true;
   try {
-    console.log('toto');
     await createMap(
       {
         beatmapsetId: beatmap.value.beatmapset_id,

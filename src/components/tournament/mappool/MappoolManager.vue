@@ -83,42 +83,42 @@ watch([tournamentMappools, qualifierMappool], () => {
           />
           <el-button type="danger" plain @click="deleteMappool(tournamentMappool.id)">Delete</el-button>
 
-          <el-table :data="tournamentMappool.maps" height="450">
+          <el-table :data="tournamentMappool.maps" row-key="id" :lazy="true" height="450">
             <el-table-column :width="200">
               <template #default="scope">
-                <el-image :src="scope.row.beatmap.beatmapset.covers.card"></el-image>
+                <el-image :src="scope.row.osuBeatmap.beatmapset.covers.card"></el-image>
                 <!-- {{ scope.row }} -->
               </template>
             </el-table-column>
             <el-table-column label="Beatmap title" :width="350">
               <template #default="scope">
                 {{
-                  `${scope.row.beatmap.beatmapset.artist} - ${scope.row.beatmap.beatmapset.title} [${scope.row.beatmap.version}]`
+                  `${scope.row.osuBeatmap.beatmapset.artist} - ${scope.row.osuBeatmap.beatmapset.title} [${scope.row.osuBeatmap.version}]`
                 }}
               </template>
             </el-table-column>
 
             <el-table-column label="CS" :width="60">
               <template #default="scope">
-                {{ scope.row.beatmap.cs }}
+                {{ scope.row.osuBeatmap.cs }}
               </template>
             </el-table-column>
 
             <el-table-column label="AR" :width="60">
-              <template #default="scope"> {{ scope.row.beatmap.ar }} </template>
+              <template #default="scope"> {{ scope.row.osuBeatmap.ar }} </template>
             </el-table-column>
 
             <el-table-column label="stars">
-              <template #default="scope"> {{ scope.row.beatmap.difficulty_rating }} </template>
+              <template #default="scope"> {{ scope.row.osuBeatmap.difficulty_rating }} </template>
             </el-table-column>
 
             <el-table-column label="bpm">
-              <template #default="scope"> {{ scope.row.beatmap.bpm }} </template>
+              <template #default="scope"> {{ scope.row.osuBeatmap.bpm }} </template>
             </el-table-column>
 
             <el-table-column label="length">
               <template #default="scope">
-                {{ dayjs().startOf('day').second(scope.row.beatmap.total_length).format('m:s') }}
+                {{ dayjs().startOf('day').second(scope.row.osuBeatmap.total_length).format('m:s') }}
               </template>
             </el-table-column>
 
@@ -130,7 +130,7 @@ watch([tournamentMappools, qualifierMappool], () => {
 
             <el-table-column label="actions">
               <template #default="scope">
-                <a :href="scope.row.beatmap.url" target="_blank">
+                <a :href="scope.row.osuBeatmap.url" target="_blank">
                   <el-button type="primary" size="small" link>osu page</el-button>
                 </a>
                 <el-button
