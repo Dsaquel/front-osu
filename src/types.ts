@@ -34,7 +34,7 @@ export interface Map extends Node {
   osuBeatmap: Beatmap;
 }
 
-export interface DeleteMapParams {
+export interface MapParams {
   qualifierId?: number;
   tournamentId?: number;
 }

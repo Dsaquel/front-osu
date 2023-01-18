@@ -38,14 +38,28 @@ const useMapStore = defineStore('map', () => {
         });
         await mappoolStore().fetchQualifierMappool(id);
       } else if (type === 'tournament') {
-        try {
-          await apiMap.deleteOne(mappoolId, mapId, {
-            tournamentId: id,
-          });
-          await mappoolStore().fetchTournamentMappools(id);
-        } catch (t) {
-          console.log(t);
-        }
+        await apiMap.deleteOne(mappoolId, mapId, {
+          tournamentId: id,
+        });
+        await mappoolStore().fetchTournamentMappools(id);
+      }
+    } catch (e) {
+      console.log('error ', e);
+    }
+  }
+
+  async function refreshDataBeatmap(mappoolId: number, mapId: number, type: 'tournament' | 'qualifier', id: number) {
+    try {
+      if (type === 'qualifier') {
+        await apiMap.refreshDataBeatmap(mappoolId, mapId, {
+          qualifierId: id,
+        });
+        await mappoolStore().fetchQualifierMappool(id);
+      } else if (type === 'tournament') {
+        await apiMap.refreshDataBeatmap(mappoolId, mapId, {
+          tournamentId: id,
+        });
+        await mappoolStore().fetchTournamentMappools(id);
       }
     } catch (e) {
       console.log('error ', e);
@@ -57,6 +71,7 @@ const useMapStore = defineStore('map', () => {
     fetchBeatmap,
     createMap,
     deleteMap,
+    refreshDataBeatmap,
   };
 });
 

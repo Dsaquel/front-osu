@@ -10,7 +10,7 @@ const { fetchTournamentMappools, fetchQualifierMappool, updateTournamentMappool,
   mappoolStore();
 
 const { qualifierMappool, tournamentMappools } = storeToRefs(mappoolStore());
-const { deleteMap } = mapStore();
+const { deleteMap, refreshDataBeatmap } = mapStore();
 
 const props = defineProps<{
   tournament: Tournament;
@@ -128,7 +128,7 @@ watch([tournamentMappools, qualifierMappool], () => {
               </template>
             </el-table-column>
 
-            <el-table-column label="actions">
+            <el-table-column label="actions" align="center">
               <template #default="scope">
                 <a :href="scope.row.osuBeatmap.url" target="_blank">
                   <el-button type="primary" size="small" link>osu page</el-button>
@@ -141,6 +141,18 @@ watch([tournamentMappools, qualifierMappool], () => {
                   @click="deleteMap(tournamentMappool.id, scope.row.id as number, 'tournament', tournament.id)"
                   >delete</el-button
                 >
+                <el-tooltip content="Refresh the beatmap data" placement="right">
+                  <el-button
+                    size="small"
+                    plain
+                    round
+                    m="l-1"
+                    @click="
+                      refreshDataBeatmap(tournamentMappool.id, scope.row.id as number, 'tournament', tournament.id)
+                    "
+                    ><i-mdi:recycle />
+                  </el-button>
+                </el-tooltip>
               </template>
             </el-table-column>
           </el-table>

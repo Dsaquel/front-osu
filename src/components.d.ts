@@ -64,6 +64,7 @@ declare module '@vue/runtime-core' {
     'IMdi:clockTimeEightOutline': typeof import('~icons/mdi/clock-time-eight-outline')['default']
     'IMdi:house': typeof import('~icons/mdi/house')['default']
     'IMdi:loading': typeof import('~icons/mdi/loading')['default']
+    'IMdi:recycle': typeof import('~icons/mdi/recycle')['default']
     'IMdi:tournament': typeof import('~icons/mdi/tournament')['default']
     IMdicode: typeof import('~icons/mdi/code')['default']
     IMdiContentDuplicate: typeof import('~icons/mdi/content-duplicate')['default']
