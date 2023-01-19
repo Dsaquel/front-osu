@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import { onBeforeMount } from 'vue';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 import { Tournament } from '~/types';
 
-dayjs.extend(utc);
-
-const { fetchTournamentMappools, fetchQualifierMappool, updateTournamentMappool, deleteTournamentMappool } =
-  mappoolStore();
+const { fetchTournamentMappools, fetchQualifierMappool } = mappoolStore();
 
 const { qualifierMappool, tournamentMappools } = storeToRefs(mappoolStore());
 
@@ -16,26 +11,11 @@ const props = defineProps<{
 }>();
 
 const activeCollapse = ref(['1']);
-let isVisibleLoading = $ref(false);
 
 onBeforeMount(async () => {
   await fetchTournamentMappools(props.tournament.id);
   if (props.tournament.qualifier) await fetchQualifierMappool(props.tournament.qualifier.id);
 });
-
-function deleteMappool(mappoolId: number) {
-  deleteTournamentMappool(props.tournament.id, mappoolId);
-}
-
-async function updateDate(displayMappoolsSchedule: string, mappoolId: number) {
-  await updateTournamentMappool(props.tournament.id, mappoolId, { displayMappoolsSchedule });
-}
-
-async function updateVisibility(isVisible: boolean, mappoolId: number) {
-  isVisibleLoading = true;
-  await updateTournamentMappool(props.tournament.id, mappoolId, { isVisible });
-  isVisibleLoading = false;
-}
 
 watch([tournamentMappools, qualifierMappool], () => {
   const thImages = document.getElementsByClassName('image-label');
@@ -52,26 +32,13 @@ watch([tournamentMappools, qualifierMappool], () => {
       <MappoolCreate :tournament="tournament" />
 
       <el-collapse v-model="activeCollapse">
-        <el-collapse-item
-          v-for="(tournamentMappool, i) in tournamentMappools"
-          :key="i"
-          :title="`Round ${tournamentMappool.round}`"
-          :name="tournamentMappool.id"
-        >
-          <MapCreate :tournament-mappool="tournamentMappool" />
-          <CommonDatepicker
-            :model-value="tournamentMappool.displayMappoolsSchedule"
-            :title="'Date where the mappool can be public'"
-            :type="'datetime'"
-            @update:model-value="(val) => (tournamentMappool.displayMappoolsSchedule = dayjs(val).utc().format())"
-            @change="(val: string) => updateDate(dayjs(val).utc().format(), tournamentMappool.id)"
-          />
-          <el-switch
-            v-model="tournamentMappool.isVisible"
-            :loading="isVisibleLoading"
-            @update:model-value="(val: boolean) => updateVisibility(val, tournamentMappool.id)"
-          />
-          <el-button type="danger" plain @click="deleteMappool(tournamentMappool.id)">Delete</el-button>
+        <el-collapse-item v-for="(tournamentMappool, i) in tournamentMappools" :key="i" :name="tournamentMappool.id">
+          <template #title>
+            <div display="flex"></div>
+            {{ `Round ${tournamentMappool.round}` }}<MapCreate :tournament-mappool="tournamentMappool" />
+            <MappoolSettings />
+          </template>
+
           <MappoolTable :mappool="tournamentMappool" />
         </el-collapse-item>
         <el-collapse-item v-if="qualifierMappool" title="Qualifier mappool">
