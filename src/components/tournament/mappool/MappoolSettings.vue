@@ -13,6 +13,8 @@ const props = defineProps<{
   tournament: Tournament;
 }>();
 
+const emits = defineEmits(['update:displayMappoolsSchedule']);
+
 const showDialog = ref(false);
 let isVisibleLoading = $ref(false);
 
@@ -32,18 +34,18 @@ async function updateVisibility(isVisible: boolean, mappoolId: number) {
 </script>
 
 <template>
-  <el-button type="primary" :icon="Setting" @click="showDialog" />
+  <el-button type="primary" :icon="Setting" @click="showDialog = true" />
 
   <el-dialog v-model="showDialog">
     <CommonDatepicker
       :model-value="mappool.displayMappoolsSchedule"
       :title="'Date where the mappool can be public'"
       :type="'datetime'"
-      @update:model-value="(val) => (mappool.displayMappoolsSchedule = dayjs(val).utc().format())"
+      @update:model-value="(val) => emits('update:displayMappoolsSchedule', dayjs(val).utc().format())"
       @change="(val: string) => updateDate(dayjs(val).utc().format(), mappool.id)"
     />
     <el-switch
-      v-model="mappool.isVisible"
+      :model-value="mappool.isVisible"
       :loading="isVisibleLoading"
       @update:model-value="(val: boolean) => updateVisibility(val, mappool.id)"
     />

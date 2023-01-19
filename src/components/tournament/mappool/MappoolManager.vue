@@ -36,7 +36,11 @@ watch([tournamentMappools, qualifierMappool], () => {
           <template #title>
             <div display="flex"></div>
             {{ `Round ${tournamentMappool.round}` }}<MapCreate :tournament-mappool="tournamentMappool" />
-            <MappoolSettings />
+            <MappoolSettings
+              :tournament="tournament"
+              :mappool="tournamentMappool"
+              @update:display-mappools-schedule="(val: string) => tournamentMappool.displayMappoolsSchedule = val"
+            />
           </template>
 
           <MappoolTable :mappool="tournamentMappool" />
