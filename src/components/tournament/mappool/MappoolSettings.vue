@@ -13,17 +13,13 @@ const props = defineProps<{
   tournament: Tournament;
 }>();
 
-const emits = defineEmits(['update:displayMappoolsSchedule']);
-
 const showDialog = ref(false);
 let isVisibleLoading = $ref(false);
 
+const mappoolSchedule = ref(props.mappool.displayMappoolsSchedule);
+
 function deleteMappool(mappoolId: number) {
   deleteTournamentMappool(props.tournament.id, mappoolId);
-}
-
-async function updateDate(displayMappoolsSchedule: string, mappoolId: number) {
-  await updateTournamentMappool(props.tournament.id, mappoolId, { displayMappoolsSchedule });
 }
 
 async function updateVisibility(isVisible: boolean, mappoolId: number) {
@@ -31,19 +27,25 @@ async function updateVisibility(isVisible: boolean, mappoolId: number) {
   await updateTournamentMappool(props.tournament.id, mappoolId, { isVisible });
   isVisibleLoading = false;
 }
+
+async function updateDate(displayMappoolsSchedule: string, mappoolId: number) {
+  await updateTournamentMappool(props.tournament.id, mappoolId, { displayMappoolsSchedule });
+}
 </script>
 
 <template>
-  <el-button type="primary" :icon="Setting" @click="showDialog = true" />
+  <el-button v-bind="useAttrs()" type="primary" :icon="Setting" @click.stop="showDialog = true" />
 
   <el-dialog v-model="showDialog">
+    {{ mappool.displayMappoolsSchedule }}
     <CommonDatepicker
-      :model-value="mappool.displayMappoolsSchedule"
+      :model-value="mappoolSchedule"
       :title="'Date where the mappool can be public'"
       :type="'datetime'"
-      @update:model-value="(val) => emits('update:displayMappoolsSchedule', dayjs(val).utc().format())"
+      @update:model-value="(val) => (mappoolSchedule = dayjs(val).utc().format())"
       @change="(val: string) => updateDate(dayjs(val).utc().format(), mappool.id)"
     />
+
     <el-switch
       :model-value="mappool.isVisible"
       :loading="isVisibleLoading"

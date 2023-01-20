@@ -18,6 +18,7 @@ onBeforeMount(async () => {
 });
 
 watch([tournamentMappools, qualifierMappool], () => {
+  console.log('tkgjfkjg');
   const thImages = document.getElementsByClassName('image-label');
   Array.from(thImages).forEach((element) => {
     element.setAttribute('rowspan', '2');
@@ -31,16 +32,16 @@ watch([tournamentMappools, qualifierMappool], () => {
     <div>
       <MappoolCreate :tournament="tournament" />
 
-      <el-collapse v-model="activeCollapse">
+      <el-collapse v-if="tournamentMappools" v-model="activeCollapse">
         <el-collapse-item v-for="(tournamentMappool, i) in tournamentMappools" :key="i" :name="tournamentMappool.id">
           <template #title>
-            <div display="flex"></div>
-            {{ `Round ${tournamentMappool.round}` }}<MapCreate :tournament-mappool="tournamentMappool" />
-            <MappoolSettings
-              :tournament="tournament"
-              :mappool="tournamentMappool"
-              @update:display-mappools-schedule="(val: string) => tournamentMappool.displayMappoolsSchedule = val"
-            />
+            <div display="flex" justify="between" w="full">
+              <span>{{ `Round ${tournamentMappool.round}` }}</span>
+              <div>
+                <MapCreate :tournament-mappool="tournamentMappool" />
+                <MappoolSettings m="x-2" :tournament="tournament" :mappool="tournamentMappool" />
+              </div>
+            </div>
           </template>
 
           <MappoolTable :mappool="tournamentMappool" />

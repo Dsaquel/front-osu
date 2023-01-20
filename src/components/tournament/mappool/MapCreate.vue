@@ -60,7 +60,7 @@ function resetSettings() {
 </script>
 
 <template>
-  <el-button type="success" plain @click="showCreate = true">Create new map</el-button>
+  <el-button type="success" plain @click="showCreate = true">add new map</el-button>
 
   <el-dialog
     v-model="showCreate"
