@@ -46,7 +46,9 @@ const roundOptions = computed(() => {
 });
 </script>
 <template>
-  <el-button v-if="roundOptions?.length" type="primary" text @click="showCreate = true">create new mappool</el-button>
+  <el-button v-if="roundOptions?.length" v-bind="useAttrs()" type="success" @click="showCreate = true"
+    >create new mappool</el-button
+  >
   <div v-if="!roundOptions">Before create mappool, please set the numbers player</div>
 
   <el-dialog v-model="showCreate" title="Create mappool" w="5/10 min-[600px]" class="<sm:min-w-full">
@@ -72,9 +74,11 @@ const roundOptions = computed(() => {
       />
     </div>
     <template #footer>
-      <span class="dialog-footer">
-        <el-button v-loading="loading" @click="showCreate = false">Cancel</el-button>
-        <el-button type="primary" :disabled="!rounds.length" @click="createMappool">Confirm </el-button>
+      <span>
+        <el-button @click="showCreate = false">Cancel</el-button>
+        <el-button :loading="loading" type="primary" :disabled="!rounds.length" @click="createMappool"
+          >Confirm
+        </el-button>
       </span>
     </template>
   </el-dialog>

@@ -60,7 +60,7 @@ function resetSettings() {
 </script>
 
 <template>
-  <el-button type="success" plain @click="showCreate = true">add new map</el-button>
+  <el-button v-bind="useAttrs()" type="success" plain @click.stop="showCreate = true">add new map</el-button>
 
   <el-dialog
     v-model="showCreate"
@@ -69,6 +69,7 @@ function resetSettings() {
     "
     w="5/10 min-[600px]"
     class="<sm:min-w-full"
+    append-to-body
     @close="resetSettings"
   >
     <div display="grid" grid="cols-2 gap-2" justify="items-center">

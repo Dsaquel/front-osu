@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeMount } from 'vue';
-import { Tournament } from '~/types';
+import { Qualifier, Tournament } from '~/types';
 
 const { fetchTournamentMappools, fetchQualifierMappool } = mappoolStore();
 
@@ -8,6 +8,7 @@ const { qualifierMappool, tournamentMappools } = storeToRefs(mappoolStore());
 
 const props = defineProps<{
   tournament: Tournament;
+  qualifier: Qualifier | null;
 }>();
 
 const activeCollapse = ref(['1']);
@@ -18,7 +19,6 @@ onBeforeMount(async () => {
 });
 
 watch([tournamentMappools, qualifierMappool], () => {
-  console.log('tkgjfkjg');
   const thImages = document.getElementsByClassName('image-label');
   Array.from(thImages).forEach((element) => {
     element.setAttribute('rowspan', '2');
@@ -28,26 +28,37 @@ watch([tournamentMappools, qualifierMappool], () => {
 
 <template>
   <div class="card" m="t-2" p="4">
-    <h2 text="center xl">Tournament mappools</h2>
+    <div display="flex" align="items-center" justify="between" m="b-6">
+      <h2 m="x-auto" text="xl">Tournament mappools</h2>
+      <MappoolCreate align="self-end" :tournament="tournament" />
+    </div>
     <div>
-      <MappoolCreate :tournament="tournament" />
-
       <el-collapse v-if="tournamentMappools" v-model="activeCollapse">
         <el-collapse-item v-for="(tournamentMappool, i) in tournamentMappools" :key="i" :name="tournamentMappool.id">
           <template #title>
-            <div display="flex" justify="between" w="full">
-              <span>{{ `Round ${tournamentMappool.round}` }}</span>
+            <div display="flex" align="items-center" justify="between" w="full">
+              <span text="lg">{{ `Round ${tournamentMappool.round}` }}</span>
               <div>
-                <MapCreate :tournament-mappool="tournamentMappool" />
                 <MappoolSettings m="x-2" :tournament="tournament" :mappool="tournamentMappool" />
               </div>
             </div>
           </template>
 
           <MappoolTable :mappool="tournamentMappool" />
+          <MapCreate m="t-4" :tournament-mappool="tournamentMappool" />
         </el-collapse-item>
-        <el-collapse-item v-if="qualifierMappool" title="Qualifier mappool">
-          {{ qualifierMappool.isVisible }}
+        <el-collapse-item v-if="qualifierMappool">
+          <template #title>
+            <div display="flex" align="items-center" justify="between" w="full">
+              <span text="lg">Qualifier</span>
+              <div>
+                <MappoolSettings m="x-2" :qualifier="qualifier" :mappool="qualifierMappool" />
+              </div>
+            </div>
+          </template>
+
+          <MappoolTable :mappool="qualifierMappool" />
+          <MapCreate m="t-4" :qualifier-mappool="qualifierMappool" />
         </el-collapse-item>
       </el-collapse>
     </div>

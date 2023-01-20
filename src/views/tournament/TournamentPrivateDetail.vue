@@ -31,7 +31,7 @@ onMounted(() => {
     />
     <TournamentBracket :tournament="tournament">
       <template #mappoolers>
-        <MappoolManager :tournament="tournament" />
+        <MappoolManager :tournament="tournament" :qualifier="tournament.qualifier" />
       </template>
     </TournamentBracket>
     <div h="100px"></div>
