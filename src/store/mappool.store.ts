@@ -25,10 +25,20 @@ const useMappoolStore = defineStore('mappool', () => {
       console.log(e);
     }
   }
+
   async function fetchQualifierMappool(qualifierId: number) {
     try {
       const data = await apiMappool.fetchQualifierMappool(qualifierId);
       qualifierMappool.value = data;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async function updateQualifierMappool(qualifierId: number, mappoolId: number, updateMappoolDto: UpdateMappoolDto) {
+    try {
+      const data = await apiMappool.updateQualifierMappool(qualifierId, mappoolId, updateMappoolDto);
+      tournamentMappools.value = data;
     } catch (e) {
       console.log(e);
     }
@@ -66,6 +76,7 @@ const useMappoolStore = defineStore('mappool', () => {
     qualifierMappool,
     fetchTournamentMappools,
     fetchQualifierMappool,
+    updateQualifierMappool,
     createTournamentMappool,
     updateTournamentMappool,
     deleteTournamentMappool,
