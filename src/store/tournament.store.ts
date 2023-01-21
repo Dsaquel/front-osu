@@ -4,8 +4,14 @@ import router from '~/router';
 import { ControlAccess, Tournament, UpdateTournamentDto } from '~/types';
 
 const useTournamentStore = defineStore('tournament', () => {
-  const access = ref({} as ControlAccess | object);
+  const access = ref(undefined as ControlAccess | undefined);
   const tournament = ref(undefined as Tournament | undefined);
+
+  const isAuthorized = computed(
+    () =>
+      access.value &&
+      (access.value.isHost || access.value.isMappooler || access.value.isOwner || access.value.isReferee),
+  );
 
   async function controlAccess(tournamentId: number) {
     try {
@@ -38,7 +44,7 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
-  return { access, controlAccess, tournament, fetchTournament, fetchCollection, updateTournament };
+  return { access, isAuthorized, controlAccess, tournament, fetchTournament, fetchCollection, updateTournament };
 });
 
 export default useTournamentStore;
