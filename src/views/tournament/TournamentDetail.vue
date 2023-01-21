@@ -34,7 +34,7 @@ const goBack = () => {
 <template>
   <div v-if="tournament">
     <el-empty v-if="!tournament.isPublic && !isAuthorized" v-loading="tournamentLoading">
-      <template #description>You dont have access to this tournament</template>
+      <template v-if="!tournamentLoading" #description>You dont have access to this tournament</template>
     </el-empty>
     <div v-else>
       <el-alert
@@ -45,12 +45,6 @@ const goBack = () => {
         pos="absolute inset-0"
         m="b-3"
       />
-      <TournamentBracket :tournament="tournament">
-        <template #mappoolers>
-          <MappoolManager :tournament="tournament" :qualifier="tournament.qualifier" />
-        </template>
-      </TournamentBracket>
-      <div h="100px"></div>
 
       <div class="container" display="grid" grid="row-start-2" v-bind="useAttrs()">
         <div>Tournament name: {{ tournament.name }}</div>

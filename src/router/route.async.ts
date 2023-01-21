@@ -40,7 +40,6 @@ const asyncRoutes: Array<RouteRecordRaw> = [
         path: ':tournamentId',
         name: 'tournament-id',
         component: () => import('~/views/tournament/TournamentDetail.vue'),
-        children: [],
       },
       {
         path: ':tournamentId/update',
@@ -49,8 +48,13 @@ const asyncRoutes: Array<RouteRecordRaw> = [
       },
       {
         path: ':tournamentId/mappools',
-        name: 'mappool-detail',
-        component: () => import('~/views/tournament/MappoolDetail.vue'),
+        name: 'mappool-manager',
+        component: () => import('~/views/tournament/MappoolManager.vue'),
+      },
+      {
+        path: ':tournamentId/bracket',
+        name: 'tournament-bracket',
+        component: () => import('~/views/tournament/TournamentBracket.vue'),
       },
       {
         path: ':tournamentId/qualifier',
