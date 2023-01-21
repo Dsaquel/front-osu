@@ -10,14 +10,18 @@ const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10
 const { fetchTournament, controlAccess } = tournamentStore();
 const { tournament, isAuthorized } = storeToRefs(tournamentStore());
 
+let tournamentLoading = $ref(false);
+
 async function init() {
   if (!tournamentId) return;
-  fetchTournament(tournamentId);
-  controlAccess(tournamentId);
+  await fetchTournament(tournamentId);
+  await controlAccess(tournamentId);
 }
 
-onMounted(() => {
-  init();
+onMounted(async () => {
+  tournamentLoading = true;
+  await init();
+  tournamentLoading = false;
 });
 
 const goBack = () => {
@@ -29,7 +33,7 @@ const goBack = () => {
 
 <template>
   <div v-if="tournament">
-    <el-empty v-if="!tournament.isPublic && !isAuthorized">
+    <el-empty v-if="!tournament.isPublic && !isAuthorized" v-loading="tournamentLoading">
       <template #description>You dont have access to this tournament</template>
     </el-empty>
     <div v-else>
