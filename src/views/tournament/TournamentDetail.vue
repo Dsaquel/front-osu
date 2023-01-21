@@ -29,6 +29,10 @@ const goBack = () => {
     name: 'home',
   });
 };
+
+function participate() {
+  // player participant
+}
 </script>
 
 <template>
@@ -80,6 +84,9 @@ const goBack = () => {
           <span display="inline-block">Description</span>
           <MarkdownRender :text="tournament.description" />
         </div>
+        <el-button v-if="isAuthorized" type="success" m="t-4" place="self-end" @click="participate">
+          participate
+        </el-button>
       </div>
     </div>
   </div>

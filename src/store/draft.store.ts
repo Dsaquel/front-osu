@@ -3,17 +3,16 @@ import { DraftDto, Draft } from '~/types';
 import apiDraft from '~/api/modules/api.draft';
 
 const useDraftStore = defineStore('draft', () => {
-  const { user } = userStore();
   const draft = ref(undefined as Draft | undefined);
   const drafts = ref<Draft[]>([]);
 
-  async function fetchCollection() {
-    const data = await apiDraft.fetchCollection({ userId: user?.id as number });
+  async function fetchDraftsCollection() {
+    const data = await apiDraft.fetchCollection();
     drafts.value = data;
   }
 
-  async function fetch(draftId: number) {
-    const data = await apiDraft.fetch({ userId: user?.id as number }, draftId);
+  async function fetchDraft(draftId: number) {
+    const data = await apiDraft.fetch(draftId);
     draft.value = data;
   }
 
@@ -28,7 +27,7 @@ const useDraftStore = defineStore('draft', () => {
     Object.assign(draft.value as Draft, data);
   }
 
-  return { draft, drafts, fetchCollection, fetch, create, update };
+  return { draft, drafts, fetchDraftsCollection, fetchDraft, create, update };
 });
 
 export default useDraftStore;

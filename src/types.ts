@@ -99,6 +99,7 @@ export interface DraftDto {
 }
 
 export interface Draft extends Node {
+  isPublic: boolean;
   name: string;
   details: string | null;
   rangePlayerMin: number | null;
@@ -106,9 +107,9 @@ export interface Draft extends Node {
   estimateStartDate: string | null;
   numbersPlayers: number | null;
   type: 'standard' | 'taiko';
-  tournamentId: number;
   owner: User;
   ownerId: number;
+  tournament: Tournament;
 }
 
 export interface CreateTournamentDto {

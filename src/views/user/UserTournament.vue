@@ -1,9 +1,8 @@
 <script setup lang="ts">
-const { fetchCollection } = draftStore();
+const { fetchDraftsCollection } = draftStore();
 const { drafts } = storeToRefs(draftStore());
-const { user } = userStore();
 
-onBeforeMount(() => fetchCollection());
+onBeforeMount(() => fetchDraftsCollection());
 </script>
 
 <template>

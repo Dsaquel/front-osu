@@ -6,8 +6,8 @@ const DraftApi = {
   // pass params for guard check
   update: (draftDto: Partial<DraftDto>, draftId: number, params?: { userId: number }) =>
     service.put<Draft>(`/draft/${draftId}`, draftDto),
-  fetch: (params: { userId: number }, draftId: number) => service.get<Draft>(`/draft/${draftId}`, { params }),
-  fetchCollection: (params: { userId: number }) => service.get<Draft[]>(`/draft`, { params }),
+  fetch: (draftId: number) => service.get<Draft>(`/draft/${draftId}`),
+  fetchCollection: () => service.get<Draft[]>(`/draft`),
 };
 
 export default DraftApi;
