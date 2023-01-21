@@ -17,6 +17,13 @@ interface Mappool extends Node {
   isVisible: boolean;
 }
 
+export type ControlAccess = {
+  isOwner: boolean;
+  isHost: boolean;
+  isMappooler: boolean;
+  isReferee: boolean;
+};
+
 export type MapType = 'noMod' | 'hidden' | 'hardRock' | 'doubleTime' | 'freeMod' | 'tieBreaker';
 
 interface TournamentDraft {

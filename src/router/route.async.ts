@@ -39,7 +39,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
       {
         path: ':tournamentId',
         name: 'tournament-id',
-        component: () => import('~/views/tournament/TournamentPrivateDetail.vue'),
+        component: () => import('~/views/tournament/TournamentDetail.vue'),
         children: [],
       },
       {

@@ -6,12 +6,13 @@ export default {
 
 <script setup lang="ts">
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
-const { fetchTournament } = tournamentStore();
+const { fetchTournament, controlAccess } = tournamentStore();
 const { tournament } = storeToRefs(tournamentStore());
 
 async function init() {
   if (!tournamentId) return;
   fetchTournament(tournamentId);
+  controlAccess(tournamentId);
 }
 
 onMounted(() => {
@@ -52,4 +53,5 @@ onMounted(() => {
       </router-link>
     </div>
   </div>
+  <el-empty v-else> </el-empty>
 </template>

@@ -1,10 +1,20 @@
 import { defineStore } from 'pinia';
 import apiTournament from '~/api/modules/api.tournament';
 import router from '~/router';
-import { Tournament, UpdateTournamentDto } from '~/types';
+import { ControlAccess, Tournament, UpdateTournamentDto } from '~/types';
 
 const useTournamentStore = defineStore('tournament', () => {
+  const access = ref({} as ControlAccess | object);
   const tournament = ref(undefined as Tournament | undefined);
+
+  async function controlAccess(tournamentId: number) {
+    try {
+      const data = await apiTournament.controlAccess(tournamentId);
+      access.value = data;
+    } catch (e) {
+      throw router.push({ name: '403' });
+    }
+  }
 
   async function fetchTournament(tournamentId: number) {
     try {
@@ -28,7 +38,7 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
-  return { tournament, fetchTournament, fetchCollection, updateTournament };
+  return { access, controlAccess, tournament, fetchTournament, fetchCollection, updateTournament };
 });
 
 export default useTournamentStore;

@@ -91,7 +91,6 @@ function resetSettings() {
           :column="2"
           border
         >
-          <!-- <img :src="beatmap.beatmapset.covers.list" /> -->
           <el-descriptions-item :span="2" label-class-name="hide-label" class-name="img-content">
             <el-image loading="lazy" :src="beatmap.beatmapset.covers['slimcover@2x']" />
           </el-descriptions-item>

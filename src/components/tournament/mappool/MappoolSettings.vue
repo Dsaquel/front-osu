@@ -51,10 +51,11 @@ async function updateDate(displayMappoolsSchedule: string, mappoolId: number) {
   <el-button v-bind="useAttrs()" type="primary" :icon="Setting" @click.stop="showDialog = true" />
 
   <el-dialog v-model="showDialog" append-to-body>
-    <template #title>
+    <template #header>
       <div v-if="'tournamentId' in mappool">
         {{ `Edit round ${mappool.round}` }}
       </div>
+      <div v-if="'qualifierId' in mappool">Edit qualifier</div>
     </template>
     <div display="grid" grid="cols-1 gap-2" justify="items-start">
       <el-switch
