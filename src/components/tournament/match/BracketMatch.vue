@@ -4,10 +4,12 @@ import { Match } from '~/types';
 defineProps<{
   match: Match;
 }>();
+
+const showMatch = ref(false);
 </script>
 
 <template>
-  <div class="match has-identifier reportable" v-bind="useAttrs()" tabindex="0">
+  <div class="match has-identifier reportable" v-bind="useAttrs()" tabindex="0" @click="showMatch = true">
     <div class="match-affix-wrapper">
       <div class="match-section match-section-top">
         <div class="matchSectionWrapper">
@@ -48,11 +50,13 @@ defineProps<{
       /></span>
     </div>
   </div>
+  <el-dialog v-model="showMatch"></el-dialog>
 </template>
 
 <style scoped lang="scss">
 .match {
   width: 100%;
+  cursor: pointer;
 }
 .match-affix-wrapper {
   position: relative;

@@ -8,9 +8,9 @@ withDefaults(
   },
 );
 </script>
-
+<!-- add pos relative and set overflow auto -->
 <template>
-  <main p="5" h="min-full" overflow="y-scroll">
+  <main pos="relative" p="5" h="min-full" overflow="auto">
     <router-view :class="{ 'sm:max-w-900px mx-auto': minWindow }" />
   </main>
 </template>

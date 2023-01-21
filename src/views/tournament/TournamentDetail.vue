@@ -37,29 +37,49 @@ const goBack = () => {
       <template v-if="!tournamentLoading" #description>You dont have access to this tournament</template>
     </el-empty>
     <div v-else>
-      <el-alert
-        v-if="!tournament.isPublic"
-        title="tournament not yet public"
-        type="info"
-        show-icon
-        pos="absolute inset-0"
-        m="b-3"
-      />
-
       <div class="container" display="grid" grid="row-start-2" v-bind="useAttrs()">
-        <div>Tournament name: {{ tournament.name }}</div>
+        <el-alert
+          v-if="!tournament.isPublic"
+          title="tournament not yet public"
+          type="info"
+          show-icon
+          pos="absolute inset-0"
+        />
+        <el-descriptions border direction="horizontal" :column="1" m="t-4">
+          <template #title>
+            <span text="xl">{{ tournament.name }}</span></template
+          >
+          <template #extra>
+            <router-link :to="{ name: 'mappool-manager', params: { tournamentId: tournament.id } }">
+              <el-button link>mappool</el-button>
+            </router-link>
+            <router-link m="l-2" :to="{ name: 'tournament-bracket', params: { tournamentId: tournament.id } }">
+              <el-button link>bracket</el-button>
+            </router-link>
+            <router-link
+              v-if="isAuthorized"
+              :to="{ name: 'tournament-update', params: { tournamentId: tournament.id } }"
+              m="l-2"
+            >
+              <el-button type="primary" plain round><i-material-symbols:edit /> </el-button>
+            </router-link>
+          </template>
+          <el-descriptions-item label="type">{{ `osu ${tournament.type}` }}</el-descriptions-item>
+          <el-descriptions-item label="accept rank">{{
+            (tournament.rangePlayerMin === 1 || !tournament.rangePlayerMin) && !tournament.rangePlayerMax
+              ? 'Open rank'
+              : `${tournament.rangePlayerMin} to ${tournament.rangePlayerMax || '+&#8734;'}`
+          }}</el-descriptions-item>
+          <el-descriptions-item label="end registration">{{ tournament.endRegistration }}</el-descriptions-item>
+          <el-descriptions-item label="start date">{{ tournament.startDate }}</el-descriptions-item>
+          <el-descriptions-item label="number player">{{ tournament.numbersPlayers }}</el-descriptions-item>
+          <el-descriptions-item label="has qualifier">{{ tournament.qualifier ? 'yes' : 'no' }}</el-descriptions-item>
+        </el-descriptions>
+
         <div>
           <span display="inline-block">Description</span>
           <MarkdownRender :text="tournament.description" />
         </div>
-        <div>End registration: {{ tournament.endRegistration || 'no set yet' }}</div>
-        <div>range: {{ tournament.rangePlayerMin || 1 }} to {{ tournament.rangePlayerMax || '+&#8734;' }}</div>
-        <div>type: {{ tournament.type }}</div>
-        <div>start date: {{ tournament.startDate || 'no set yet' }}</div>
-        <div>numbers player: {{ tournament.numbersPlayers }}</div>
-        <router-link v-if="isAuthorized" :to="{ name: 'tournament-update', params: { tournamentId: tournament.id } }">
-          <el-button>edit the tournament</el-button>
-        </router-link>
       </div>
     </div>
   </div>

@@ -1,6 +1,9 @@
+<script lang="ts">
+export default {
+  inheritAttrs: false,
+};
+</script>
 <script setup lang="ts">
-import { onBeforeMount } from 'vue';
-
 const { fetchMatches } = matchStore();
 const { matchesGrouped } = storeToRefs(matchStore());
 
