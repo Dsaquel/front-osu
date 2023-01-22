@@ -7,7 +7,7 @@ export default {
 <script setup lang="ts">
 const router = useRouter();
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
-const { fetchTournament, controlAccess } = tournamentStore();
+const { fetchTournament, fetchControlAccess } = tournamentStore();
 const { tournament, isAuthorized } = storeToRefs(tournamentStore());
 
 let tournamentLoading = $ref(false);
@@ -15,7 +15,7 @@ let tournamentLoading = $ref(false);
 async function init() {
   if (!tournamentId) return;
   await fetchTournament(tournamentId);
-  await controlAccess(tournamentId);
+  await fetchControlAccess(tournamentId);
 }
 
 onMounted(async () => {

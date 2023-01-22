@@ -6,7 +6,7 @@ export default {
 
 <script setup lang="ts">
 const { fetchTournamentMappools, fetchQualifierMappool } = mappoolStore();
-const { fetchTournament, controlAccess } = tournamentStore();
+const { fetchTournament, fetchControlAccess } = tournamentStore();
 const { qualifierMappool, tournamentMappools } = storeToRefs(mappoolStore());
 const { isAuthorized, access, tournament } = storeToRefs(tournamentStore());
 
@@ -17,7 +17,7 @@ const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10
 async function init() {
   if (!tournamentId) return;
   await fetchTournament(tournamentId);
-  await controlAccess(tournamentId);
+  await fetchControlAccess(tournamentId);
   await fetchTournamentMappools(tournamentId);
   if (tournament.value?.qualifier) await fetchQualifierMappool(tournament.value.qualifier.id);
 }

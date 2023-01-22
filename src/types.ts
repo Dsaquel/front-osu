@@ -24,6 +24,19 @@ export type ControlAccess = {
   isReferee: boolean;
 };
 
+export type ParticipationUser = {
+  participationAsMappooler: boolean;
+  participationAsReferee: boolean;
+  participationAsAdmin: boolean;
+};
+
+export type NotificationStaff = {
+  subject?: string;
+  message: string;
+};
+
+export type Role = 'referee' | 'mappooler' | 'admin';
+
 export type MapType = 'noMod' | 'hidden' | 'hardRock' | 'doubleTime' | 'freeMod' | 'tieBreaker';
 
 interface TournamentDraft {

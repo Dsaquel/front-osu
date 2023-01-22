@@ -5,24 +5,27 @@ export default {
 </script>
 
 <script setup lang="ts">
+import { ParticipationUser, Role } from '~/types';
+
 const router = useRouter();
 const draftId = $ref(parseInt(useRoute().params?.draftId as string, 10));
 const { fetchDraft } = draftStore();
-const { controlAccess, addStaff } = tournamentStore();
-const { isAuthorized } = storeToRefs(tournamentStore());
+const { fetchControlAccess, addStaff, fetchParticipationOfUser } = tournamentStore();
+const { isAuthorized, participationUser } = storeToRefs(tournamentStore());
 const { draft } = storeToRefs(draftStore());
 const { user } = storeToRefs(userStore());
 
 let draftLoading = $ref(false);
 const showDialog = ref(false);
 let loading = $ref(false);
-const role = ref<string>();
+const role = ref<Role>();
 const options = ['referee', 'mappooler', 'admin'];
 
 async function init() {
   if (!draftId) return;
   await fetchDraft(draftId);
-  await controlAccess(draft.value?.tournament.id as number);
+  await fetchControlAccess(draft.value?.tournament.id as number);
+  await fetchParticipationOfUser(draft.value?.tournament.id as number);
 }
 
 onMounted(async () => {
@@ -37,8 +40,9 @@ const goBack = () => {
   });
 };
 
-async function createStaff(tournamentId: number, role: 'referee' | 'mappooler' | 'admin') {
+async function createStaff(tournamentId: number, role?: Role) {
   try {
+    if (!role) return;
     loading = true;
     const data = await addStaff(tournamentId, role);
     ElNotification({ title: data.subject, message: data.message, type: 'success', zIndex: 10, duration: 0 });
@@ -47,6 +51,14 @@ async function createStaff(tournamentId: number, role: 'referee' | 'mappooler' |
   } finally {
     loading = false;
   }
+}
+
+function selectDisabled(item: Role): boolean {
+  if (participationUser.value === undefined) return true;
+  if (item === 'admin') return participationUser.value.participationAsAdmin;
+  if (item === 'mappooler') return participationUser.value.participationAsMappooler;
+  if (item === 'referee') return participationUser.value.participationAsReferee;
+  return true;
 }
 </script>
 
@@ -105,7 +117,7 @@ async function createStaff(tournamentId: number, role: 'referee' | 'mappooler' |
               <span v-if="!!role" display="block">I want to be</span>
             </transition>
             <el-select v-model="role" size="large" placeholder="I want to be">
-              <el-option v-for="(item, i) in options" :key="i" :value="item" />
+              <el-option v-for="(item, i) in options" :key="i" :value="item" :disabled="selectDisabled(item)" />
             </el-select>
 
             <el-descriptions :column="1" title="verify your data before participating" border>

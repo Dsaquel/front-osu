@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia';
 import apiTournament from '~/api/modules/api.tournament';
 import router from '~/router';
-import { ControlAccess, Tournament, UpdateTournamentDto } from '~/types';
+import { ControlAccess, ParticipationUser, Tournament, UpdateTournamentDton, Role } from '~/types';
 
 const useTournamentStore = defineStore('tournament', () => {
   const access = ref(undefined as ControlAccess | undefined);
+  const participationUser = ref(undefined as ParticipationUser | undefined);
   const tournament = ref(undefined as Tournament | undefined);
 
   const isAuthorized = computed(
@@ -13,10 +14,19 @@ const useTournamentStore = defineStore('tournament', () => {
       (access.value.isAdmin || access.value.isMappooler || access.value.isOwner || access.value.isReferee),
   );
 
-  async function controlAccess(tournamentId: number) {
+  async function fetchControlAccess(tournamentId: number) {
     try {
       const data = await apiTournament.controlAccess(tournamentId);
       access.value = data;
+    } catch (e) {
+      throw router.push({ name: '403' });
+    }
+  }
+
+  async function fetchParticipationOfUser(tournamentId: number) {
+    try {
+      const data = await apiTournament.participationOfUser(tournamentId);
+      participationUser.value = data;
     } catch (e) {
       throw router.push({ name: '403' });
     }
@@ -31,7 +41,7 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
-  async function addStaff(tournamentId: number, role: 'mappooler' | 'admin' | 'referee') {
+  async function addStaff(tournamentId: number, role: Role) {
     try {
       return await apiTournament.addStaff(tournamentId, role);
     } catch (e: any) {
@@ -48,7 +58,17 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
-  return { access, isAuthorized, controlAccess, tournament, addStaff, fetchTournament, updateTournament };
+  return {
+    access,
+    isAuthorized,
+    fetchControlAccess,
+    fetchParticipationOfUser,
+    tournament,
+    participationUser,
+    addStaff,
+    fetchTournament,
+    updateTournament,
+  };
 });
 
 export default useTournamentStore;

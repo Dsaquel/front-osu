@@ -37,5 +37,6 @@ module.exports = {
     'no-restricted-syntax': 'off',
     'no-new': 'off',
     'no-param-reassign': 'off',
+    'import/first': 'off',
   },
 };
