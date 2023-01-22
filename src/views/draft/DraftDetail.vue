@@ -5,7 +5,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { ParticipationUser, Role } from '~/types';
+import { Role } from '~/types';
 
 const router = useRouter();
 const draftId = $ref(parseInt(useRoute().params?.draftId as string, 10));
@@ -19,7 +19,7 @@ let draftLoading = $ref(false);
 const showDialog = ref(false);
 let loading = $ref(false);
 const role = ref<Role>();
-const options = ['referee', 'mappooler', 'admin'];
+const options: Role[] = ['referee', 'mappooler', 'admin'];
 
 async function init() {
   if (!draftId) return;
@@ -116,11 +116,12 @@ function selectDisabled(item: Role): boolean {
             <transition>
               <span v-if="!!role" display="block">I want to be</span>
             </transition>
+
             <el-select v-model="role" size="large" placeholder="I want to be">
               <el-option v-for="(item, i) in options" :key="i" :value="item" :disabled="selectDisabled(item)" />
             </el-select>
 
-            <el-descriptions :column="1" title="verify your data before participating" border>
+            <el-descriptions v-if="role" :column="1" title="verify your data before participating" border>
               <el-descriptions-item label="username">{{ user!.username }}</el-descriptions-item>
               <el-descriptions-item label="discord">{{ user!.discord }}</el-descriptions-item>
               <el-descriptions-item label="osu id">{{ user!.osuId }}</el-descriptions-item>
@@ -134,7 +135,8 @@ function selectDisabled(item: Role): boolean {
                 type="primary"
                 :disabled="!role"
                 @click="createStaff(draft!.tournament.id, role)"
-                >Confirm
+              >
+                Confirm
               </el-button>
             </span>
           </template>

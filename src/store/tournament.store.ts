@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import apiTournament from '~/api/modules/api.tournament';
 import router from '~/router';
-import { ControlAccess, ParticipationUser, Tournament, UpdateTournamentDton, Role } from '~/types';
+import { ControlAccess, ParticipationUser, Tournament, UpdateTournamentDto, Role } from '~/types';
 
 const useTournamentStore = defineStore('tournament', () => {
   const access = ref(undefined as ControlAccess | undefined);
