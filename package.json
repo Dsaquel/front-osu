@@ -19,6 +19,7 @@
     "nprogress": "^0.2.0",
     "pinia": "^2.0.27",
     "prism-theme-vars": "^0.2.4",
+    "tinymce": "^5.5.1",
     "vue": "^3.2.45",
     "vue-i18n": "^9.2.2",
     "vue-router": "^4.1.6"
