@@ -6,6 +6,8 @@ const TournamentApi = {
   fetch: (tournamentId: number) => service.get<Tournament>(`/tournament/${tournamentId}`),
   update: (updateTournamentDto: UpdateTournamentDto, tournamentId: number) =>
     service.put<Tournament>(`/tournament/${tournamentId}`, updateTournamentDto),
+  addStaff: (tournamentId: number, role: 'mappooler' | 'admin' | 'referee') =>
+    service.post(`/tournament/${tournamentId}/staff`, { role }),
 };
 
 export default TournamentApi;

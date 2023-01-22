@@ -10,7 +10,7 @@ const useTournamentStore = defineStore('tournament', () => {
   const isAuthorized = computed(
     () =>
       access.value &&
-      (access.value.isHost || access.value.isMappooler || access.value.isOwner || access.value.isReferee),
+      (access.value.isAdmin || access.value.isMappooler || access.value.isOwner || access.value.isReferee),
   );
 
   async function controlAccess(tournamentId: number) {
@@ -31,8 +31,12 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
-  async function fetchCollection() {
-    //
+  async function addStaff(tournamentId: number, role: 'mappooler' | 'admin' | 'referee') {
+    try {
+      return await apiTournament.addStaff(tournamentId, role);
+    } catch (e: any) {
+      throw e.message;
+    }
   }
 
   async function updateTournament(updateTournamentDto: UpdateTournamentDto) {
@@ -44,7 +48,7 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
-  return { access, isAuthorized, controlAccess, tournament, fetchTournament, fetchCollection, updateTournament };
+  return { access, isAuthorized, controlAccess, tournament, addStaff, fetchTournament, updateTournament };
 });
 
 export default useTournamentStore;

@@ -39,7 +39,7 @@ watch([tournamentMappools, qualifierMappool], () => {
     <div display="flex" align="items-center" justify="between" m="b-6">
       <h2 m="x-auto" text="xl">Tournament mappools</h2>
       <MappoolCreate
-        v-if="isAuthorized && (access?.isHost || access?.isOwner || access?.isMappooler)"
+        v-if="isAuthorized && (access?.isAdmin || access?.isOwner || access?.isMappooler)"
         align="self-end"
         :tournament="tournament"
       />
@@ -52,7 +52,7 @@ watch([tournamentMappools, qualifierMappool], () => {
               <span text="lg">{{ `Round ${tournamentMappool.round}` }}</span>
               <div>
                 <MappoolSettings
-                  v-if="isAuthorized && (access?.isHost || access?.isOwner || access?.isMappooler)"
+                  v-if="isAuthorized && (access?.isAdmin || access?.isOwner || access?.isMappooler)"
                   m="x-2"
                   :tournament="tournament"
                   :mappool="tournamentMappool"
@@ -63,7 +63,7 @@ watch([tournamentMappools, qualifierMappool], () => {
 
           <MappoolTable :mappool="tournamentMappool" />
           <MapCreate
-            v-if="isAuthorized && (access?.isHost || access?.isOwner || access?.isMappooler)"
+            v-if="isAuthorized && (access?.isAdmin || access?.isOwner || access?.isMappooler)"
             m="t-4"
             :tournament-mappool="tournamentMappool"
           />
@@ -74,7 +74,7 @@ watch([tournamentMappools, qualifierMappool], () => {
               <span text="lg">Qualifier</span>
               <div>
                 <MappoolSettings
-                  v-if="isAuthorized && (access?.isHost || access?.isOwner || access?.isMappooler)"
+                  v-if="isAuthorized && (access?.isAdmin || access?.isOwner || access?.isMappooler)"
                   m="x-2"
                   :qualifier="tournament.qualifier"
                   :mappool="qualifierMappool"
@@ -85,7 +85,7 @@ watch([tournamentMappools, qualifierMappool], () => {
 
           <MappoolTable :mappool="qualifierMappool" />
           <MapCreate
-            v-if="isAuthorized && (access?.isHost || access?.isOwner || access?.isMappooler)"
+            v-if="isAuthorized && (access?.isAdmin || access?.isOwner || access?.isMappooler)"
             m="t-4"
             :qualifier-mappool="qualifierMappool"
           />

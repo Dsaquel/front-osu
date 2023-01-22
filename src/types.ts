@@ -19,7 +19,7 @@ interface Mappool extends Node {
 
 export type ControlAccess = {
   isOwner: boolean;
-  isHost: boolean;
+  isAdmin: boolean;
   isMappooler: boolean;
   isReferee: boolean;
 };
