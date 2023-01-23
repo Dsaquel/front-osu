@@ -18,18 +18,12 @@ const bbcode = computed(() => props.text);
 
 <template>
   <Editor
+    :model-value="bbcode"
     :api-key="tinyApiKey"
     height="500"
     :init="{
-      // schema: 'html5',
-      // menubar: false,
-      // branding: false,
       plugins: 'preview bbcode code',
-      toolbar: 'preview undo redo | bold italic underline | code',
     }"
-    :disabled="false"
+    :disabled="true"
   />
-  <!-- <textarea id="bbcode" v-model="bbcode" resize="y" p="2" h="min-200px" w="full" border="1 red-200" /> -->
-
-  <!-- <div v-else h="min-200px" border="1 b-gray-400">Nothing to show</div> -->
 </template>

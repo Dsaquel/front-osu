@@ -1,4 +1,13 @@
 <script setup lang="ts">
+import 'tinymce/tinymce';
+import 'tinymce/themes/silver';
+import 'tinymce/icons/default';
+import 'tinymce/skins/ui/oxide/skin.css';
+// import 'tinymce/models/dom';
+import 'tinymce/plugins/bbcode';
+import 'tinymce/plugins/code';
+import Editor from '@tinymce/tinymce-vue';
+
 const props = withDefaults(
   defineProps<{
     text: string | null;
@@ -8,7 +17,9 @@ const props = withDefaults(
   },
 );
 
-const { textarea, input } = useTextareaAutosize();
+const tinyApiKey = import.meta.env.VITE_TINY_API_KEY;
+
+const { input } = useTextareaAutosize();
 
 const writing = ref(true);
 defineEmits(['update:description']);
@@ -17,21 +28,18 @@ input.value = props.text ?? '';
 
 <template>
   <div h="min-200px" grid="~ cols-2">
-    <button p="2" border="1 gray-500" @click="writing = true">Write</button>
-    <button p="2" border="1 gray-500" @click="writing = false">Preview</button>
     <div grid="col-span-2">
-      <textarea
+      <Editor
         v-if="writing"
-        ref="textarea"
+        key="1"
         v-model="input"
-        resize="y"
-        p="2"
-        h="min-200px"
-        w="full"
-        v-bind="useAttrs()"
+        :api-key="tinyApiKey"
+        height="500"
+        :init="{
+          plugins: 'preview bbcode code',
+          toolbar: 'preview undo redo | bold italic underline | code',
+        }"
       />
-
-      <MarkdownRender v-else :text="text" />
     </div>
   </div>
 </template>
