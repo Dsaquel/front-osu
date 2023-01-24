@@ -13,7 +13,7 @@ defineProps<{
     :initial-value="text"
     :api-key="tinyApiKey"
     :init="{
-      plugins: '',
+      plugins: 'autoresize ',
       toolbar: false,
       menubar: false,
       min_height: 500,
