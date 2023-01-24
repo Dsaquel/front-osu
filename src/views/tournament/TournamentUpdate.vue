@@ -90,7 +90,7 @@ watch(
         <span text="sm">Details</span>
         <MarkdownTextarea
           :text="tournament.description"
-          @input="(val: Event) => tournament!.description =  (val.target as HTMLTextAreaElement).value"
+          @update:description="(val: string) => tournament!.description = val"
         />
       </div>
       <CommonDatepicker

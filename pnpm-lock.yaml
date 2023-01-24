@@ -5,7 +5,6 @@ specifiers:
   '@commitlint/config-conventional': ^16.2.4
   '@iconify/json': ^2.1.148
   '@intlify/vite-plugin-vue-i18n': ^6.0.3
-  '@tinymce/tinymce-vue': ^5.0.0
   '@types/dompurify': ^2.4.0
   '@types/markdown-it-link-attributes': ^3.0.1
   '@types/marked': ^4.0.8
@@ -37,7 +36,6 @@ specifiers:
   prettier: ^2.8.0
   prism-theme-vars: ^0.2.4
   sass: ^1.56.1
-  tinymce: ^5.5.1
   typescript: ^4.9.3
   unplugin-auto-import: ^0.9.5
   unplugin-icons: ^0.14.14
@@ -53,14 +51,12 @@ specifiers:
   vue-tsc: ^0.38.9
 
 dependencies:
-  '@tinymce/tinymce-vue': 5.0.0_vue@3.2.45
   '@vueuse/core': 8.9.4_vue@3.2.45
   axios: 0.25.0
   element-plus: 2.2.26_vue@3.2.45
   nprogress: 0.2.0
   pinia: 2.0.27_mgnvym7yiazkylwwogi5r767ue
   prism-theme-vars: 0.2.4
-  tinymce: 5.10.7
   vue: 3.2.45
   vue-i18n: 9.2.2_vue@3.2.45
   vue-router: 4.1.6_vue@3.2.45
@@ -877,15 +873,6 @@ packages:
 
   /@sxzz/popperjs-es/2.11.7:
     resolution: {integrity: sha512-Ccy0NlLkzr0Ex2FKvh2X+OyERHXJ88XJ1MXtsI9y9fGexlaXaVTPzBCRBwIxFkORuOb+uBqeu+RqnpgYTEZRUQ==}
-    dev: false
-
-  /@tinymce/tinymce-vue/5.0.0_vue@3.2.45:
-    resolution: {integrity: sha512-1HRCNa2eGdztOKShYAiHIry50LTU6YJG//qSP9AJElrXhb3BIBN0Bef6E56nZObVgwCgSmI4cnX35VU9D49aow==}
-    peerDependencies:
-      vue: ^3.0.0
-    dependencies:
-      tinymce: 5.10.7
-      vue: 3.2.45
     dev: false
 
   /@tootallnate/once/2.0.0:
@@ -4548,10 +4535,6 @@ packages:
     dependencies:
       readable-stream: 3.6.0
     dev: true
-
-  /tinymce/5.10.7:
-    resolution: {integrity: sha512-9UUjaO0R7FxcFo0oxnd1lMs7H+D0Eh+dDVo5hKbVe1a+VB0nit97vOqlinj+YwgoBDt6/DSCUoWqAYlLI8BLYA==}
-    dev: false
 
   /to-fast-properties/2.0.0:
     resolution: {integrity: sha512-/OaKK0xYrs3DmxRYqL/yDc+FxFUVYhDlXMhRmv3z915w2HF1tnN1omB354j8VUGO/hbRzyD6Y3sA7v7GS/ceog==}

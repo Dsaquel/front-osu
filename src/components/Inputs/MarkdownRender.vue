@@ -1,29 +1,30 @@
 <script setup lang="ts">
-import 'tinymce/tinymce';
-import 'tinymce/themes/silver';
-import 'tinymce/icons/default';
-import 'tinymce/skins/ui/oxide/skin.css';
-// import 'tinymce/models/dom';
-import 'tinymce/plugins/bbcode';
-import 'tinymce/plugins/code';
 import Editor from '@tinymce/tinymce-vue';
+import { isDark } from '~/utils/dark';
 
 const tinyApiKey = import.meta.env.VITE_TINY_API_KEY;
-const props = defineProps<{
+defineProps<{
   text: string | null;
 }>();
-
-const bbcode = computed(() => props.text);
 </script>
 
 <template>
   <Editor
-    :model-value="bbcode"
+    :initial-value="text"
     :api-key="tinyApiKey"
-    height="500"
     :init="{
-      plugins: 'preview bbcode code',
+      plugins: '',
+      toolbar: false,
+      menubar: false,
+      min_height: 500,
+      readonly: true,
+      statusbar: false,
+      skin: isDark ? 'oxide-dark' : 'oxide',
+      content_css: isDark ? 'dark' : 'default',
+      content_style: isDark ? 'html { color-scheme: dark; }' : '',
     }"
     :disabled="true"
   />
 </template>
+
+<style scoped></style>

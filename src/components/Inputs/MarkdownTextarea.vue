@@ -1,12 +1,6 @@
 <script setup lang="ts">
-import 'tinymce/tinymce';
-import 'tinymce/themes/silver';
-import 'tinymce/icons/default';
-import 'tinymce/skins/ui/oxide/skin.css';
-// import 'tinymce/models/dom';
-import 'tinymce/plugins/bbcode';
-import 'tinymce/plugins/code';
 import Editor from '@tinymce/tinymce-vue';
+import { isDark } from '~/utils/dark';
 
 const props = withDefaults(
   defineProps<{
@@ -22,22 +16,31 @@ const tinyApiKey = import.meta.env.VITE_TINY_API_KEY;
 const { input } = useTextareaAutosize();
 
 const writing = ref(true);
-defineEmits(['update:description']);
+
+const emits = defineEmits(['update:description']);
 input.value = props.text ?? '';
+
+watch(input, () => {
+  emits('update:description', input.value);
+});
 </script>
 
 <template>
-  <div h="min-200px" grid="~ cols-2">
+  <div grid="~ cols-2">
     <div grid="col-span-2">
       <Editor
         v-if="writing"
-        key="1"
         v-model="input"
         :api-key="tinyApiKey"
-        height="500"
+        plugins="preview importcss searchreplace autolink directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons"
+        toolbar="undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview print | insertfile image media template link anchor codesample | ltr rtl"
         :init="{
-          plugins: 'preview bbcode code',
-          toolbar: 'preview undo redo | bold italic underline | code',
+          min_height: 500,
+          skin: isDark ? 'oxide-dark' : 'oxide',
+          content_css: isDark ? 'dark' : 'default',
+          menubar: 'file edit view insert format tools table help',
+          toolbar_sticky: true,
+          contextmenu: 'link image table',
         }"
       />
     </div>

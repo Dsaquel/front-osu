@@ -2,7 +2,7 @@
 
 //global
 body {
-  @apply text-gray-700 dark: bg-dark-900 dark:text-gray-200 transition-colors .dark:transition-colors;
+  @apply text-gray-700 dark: bg-dark-900 dark:text-light-50 transition-colors .dark:transition-colors;
 
   input,
   select,
