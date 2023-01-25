@@ -29,7 +29,7 @@ async function init() {
   await fetchParticipationOfUser(draft.value?.tournament.id as number);
 }
 
-onMounted(async () => {
+onBeforeMount(async () => {
   draftLoading = true;
   await init();
   draftLoading = false;
@@ -144,6 +144,7 @@ function selectDisabled(item: Role): boolean {
         </el-dialog>
       </div>
     </div>
+    <TournamentStaff :tournament-id="draft.tournament.id" />
   </div>
   <el-empty v-else>
     <template #description>

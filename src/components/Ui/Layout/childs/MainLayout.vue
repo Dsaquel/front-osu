@@ -1,7 +1,7 @@
 <script setup lang="ts">
 withDefaults(
   defineProps<{
-    minWindow: boolean;
+    minWindow?: boolean;
   }>(),
   {
     minWindow: false,

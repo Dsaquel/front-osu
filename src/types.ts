@@ -46,6 +46,30 @@ interface TournamentDraft {
   estimateStartDate: string;
 }
 
+export type Staff = {
+  admins: Admin[];
+  referees: Referee[];
+  mappoolers: Mappooler[];
+};
+
+export interface Mappooler extends Node {
+  validate: boolean;
+  userId: number;
+  tournamentId: number;
+}
+
+export interface Referee extends Node {
+  validate: boolean;
+  userId: number;
+  tournamentId: number;
+}
+
+export interface Admin extends Node {
+  validate: boolean;
+  userId: number;
+  tournamentId: number;
+}
+
 export interface Map extends Node {
   type: MapType;
   beatmapsetId: number;

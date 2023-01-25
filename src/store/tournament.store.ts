@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia';
 import apiTournament from '~/api/modules/api.tournament';
 import router from '~/router';
-import { ControlAccess, ParticipationUser, Tournament, UpdateTournamentDto, Role } from '~/types';
+import { ControlAccess, ParticipationUser, Tournament, UpdateTournamentDto, Role, Staff } from '~/types';
 
 const useTournamentStore = defineStore('tournament', () => {
   const access = ref(undefined as ControlAccess | undefined);
   const participationUser = ref(undefined as ParticipationUser | undefined);
   const tournament = ref(undefined as Tournament | undefined);
+  const staff = ref(undefined as Staff | undefined);
 
   const isAuthorized = computed(
     () =>
@@ -41,6 +42,15 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
+  async function fetchStaff(tournamentId: number) {
+    try {
+      const data = await apiTournament.fetchStaff(tournamentId);
+      staff.value = data;
+    } catch (e) {
+      router.push({ name: '403' });
+    }
+  }
+
   async function addStaff(tournamentId: number, role: Role) {
     try {
       return await apiTournament.addStaff(tournamentId, role);
@@ -66,6 +76,7 @@ const useTournamentStore = defineStore('tournament', () => {
     tournament,
     participationUser,
     addStaff,
+    fetchStaff,
     fetchTournament,
     updateTournament,
   };

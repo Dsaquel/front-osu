@@ -29,7 +29,6 @@ const asyncRoutes: Array<RouteRecordRaw> = [
   {
     path: '/tournaments',
     component: () => import('~/components/Ui/Layout/childs/MainLayout.vue'),
-    props: { minWindow: true },
     children: [
       {
         path: '',
@@ -65,6 +64,11 @@ const asyncRoutes: Array<RouteRecordRaw> = [
         path: ':tournamentId/qualifier/lobbies',
         name: 'qualifier-lobbies',
         component: () => import('~/views/qualifier/QualifierLobbies.vue'),
+      },
+      {
+        path: ':tournamentId/requests',
+        name: 'tournament-requests',
+        component: () => import('~/views/tournament/TournamentRequests.vue'),
       },
       {
         path: 'drafts',

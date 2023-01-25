@@ -6,9 +6,10 @@ export default {
 
 <script setup lang="ts">
 const router = useRouter();
-const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
 const { fetchTournament, fetchControlAccess } = tournamentStore();
 const { tournament, isAuthorized } = storeToRefs(tournamentStore());
+
+const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
 
 let tournamentLoading = $ref(false);
 
