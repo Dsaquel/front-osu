@@ -48,6 +48,12 @@ interface TournamentDraft {
 
 export type Staff = Admin | Mappooler | Referee;
 
+export type Staffs = {
+  admins: Admin[];
+  mappoolers: Mappooler[];
+  referees: Referee[];
+};
+
 export interface Mappooler extends Node {
   validate: boolean;
   userId: number;

@@ -27,7 +27,9 @@ const goBack = () => {
     <template #description>Only admins have access to this page</template>
   </el-empty>
   <div v-else-if="tournament" grid="~ cols-5">
-    <div grid="col-span-4" place="self-center"></div>
+    <div grid="col-span-4" place="self-center">
+      {{ staffRequests }}
+    </div>
     <TournamentStaff :tournament-id="tournament.id" />
   </div>
   <el-empty v-else>

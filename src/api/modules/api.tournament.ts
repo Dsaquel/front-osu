@@ -6,7 +6,7 @@ import {
   ParticipationUser,
   NotificationStaff,
   Role,
-  Staff,
+  Staffs,
 } from '~/types';
 
 const TournamentApi = {
@@ -14,7 +14,7 @@ const TournamentApi = {
   participationOfUser: (tournamentId: number) =>
     service.get<ParticipationUser>(`/tournament/${tournamentId}/own-participation`),
   fetch: (tournamentId: number) => service.get<Tournament>(`/tournament/${tournamentId}`),
-  fetchStaffs: (tournamentId: number) => service.get<Staff[]>(`/tournament/${tournamentId}/staff`),
+  fetchStaffs: (tournamentId: number) => service.get<Staffs>(`/tournament/${tournamentId}/staff`),
   update: (updateTournamentDto: UpdateTournamentDto, tournamentId: number) =>
     service.put<Tournament>(`/tournament/${tournamentId}`, updateTournamentDto),
   addStaff: (tournamentId: number, role: Role) =>

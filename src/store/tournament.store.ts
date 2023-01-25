@@ -1,18 +1,25 @@
 import { defineStore } from 'pinia';
 import apiTournament from '~/api/modules/api.tournament';
 import router from '~/router';
-import { ControlAccess, ParticipationUser, Tournament, UpdateTournamentDto, Role, Staff } from '~/types';
+import { ControlAccess, ParticipationUser, Tournament, UpdateTournamentDto, Role, Staffs } from '~/types';
 
 const useTournamentStore = defineStore('tournament', () => {
   const access = ref(undefined as ControlAccess | undefined);
   const participationUser = ref(undefined as ParticipationUser | undefined);
   const tournament = ref(undefined as Tournament | undefined);
-  const staffs = ref(undefined as Staff[] | undefined);
+  const staffs = ref(undefined as Staffs | undefined);
 
-  const { staffsAccepted, staffRequests } = $computed(() => ({
-    staffsAccepted: staffs.value?.filter((staff) => staff.validate),
-    staffRequests: staffs.value?.filter((staff) => !staff.validate),
-  }));
+  const staffsAccepted = computed(() =>
+    Object.values(staffs.value ?? {})
+      .flatMap((arr) => arr)
+      .filter((obj) => obj.validate),
+  );
+
+  const staffRequests = computed(() =>
+    Object.values(staffs.value ?? {})
+      .flatMap((arr) => arr)
+      .filter((obj) => !obj.validate),
+  );
 
   const isAuthorized = computed(
     () =>
