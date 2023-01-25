@@ -55,7 +55,7 @@ const rankRang = computed(() =>
       </div>
       <div grid="col-span-2">
         <span text="sm">Details</span>
-        <MarkdownTextarea :text="details" @input="(val) => $emit('update:details', val.target.value)" />
+        <MarkdownTextarea :text="details" @update:description="(val: string) =>  $emit('update:details', val)" />
       </div>
       <CommonDatepicker
         :model-value="estimateStartDate"

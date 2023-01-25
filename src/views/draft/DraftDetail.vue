@@ -64,11 +64,11 @@ function selectDisabled(item: Role): boolean {
 </script>
 
 <template>
-  <div v-if="draft">
+  <div v-if="draft" grid="~ cols-5">
     <el-empty v-if="!draft.isPublic && !isAuthorized" v-loading="draftLoading">
       <template v-if="!draftLoading" #description>You dont have access to this draft</template>
     </el-empty>
-    <div v-else>
+    <div v-else grid="col-span-4">
       <div class="container" display="grid" grid="row-start-2" v-bind="useAttrs()">
         <el-alert
           v-if="!draft.isPublic"

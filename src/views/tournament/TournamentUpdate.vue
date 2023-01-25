@@ -44,7 +44,7 @@ const timeout = useTimeoutFn(
     loading = false;
     timeout.stop();
   },
-  3000,
+  2000,
   { immediate: false },
 );
 

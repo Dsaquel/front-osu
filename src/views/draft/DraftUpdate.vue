@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { isEqual } from 'lodash';
+
 const { update, fetchDraft } = draftStore();
 const { draft } = storeToRefs(draftStore());
 
@@ -22,7 +24,7 @@ watch(
 
 const timeout = useTimeoutFn(
   async () => {
-    loading = true;
+    if (!draft.value) loading = true;
     await update(
       {
         name: draft.value?.name,
@@ -50,10 +52,9 @@ function timeoutManaging() {
   }
 }
 watch(
-  draft,
+  () => draft.value,
   (newVal, oldVal) => {
-    if (oldVal === undefined && newVal !== undefined) return;
-    console.log('change ?');
+    if ((oldVal === undefined && newVal !== undefined) || !isEqual(newVal, oldVal)) return;
     timeoutManaging();
   },
   { deep: true },
