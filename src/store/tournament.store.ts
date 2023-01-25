@@ -7,7 +7,12 @@ const useTournamentStore = defineStore('tournament', () => {
   const access = ref(undefined as ControlAccess | undefined);
   const participationUser = ref(undefined as ParticipationUser | undefined);
   const tournament = ref(undefined as Tournament | undefined);
-  const staff = ref(undefined as Staff | undefined);
+  const staffs = ref(undefined as Staff[] | undefined);
+
+  const { staffsAccepted, staffRequests } = $computed(() => ({
+    staffsAccepted: staffs.value?.filter((staff) => staff.validate),
+    staffRequests: staffs.value?.filter((staff) => !staff.validate),
+  }));
 
   const isAuthorized = computed(
     () =>
@@ -42,10 +47,10 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
-  async function fetchStaff(tournamentId: number) {
+  async function fetchStaffs(tournamentId: number) {
     try {
-      const data = await apiTournament.fetchStaff(tournamentId);
-      staff.value = data;
+      const data = await apiTournament.fetchStaffs(tournamentId);
+      staffs.value = data;
     } catch (e) {
       router.push({ name: '403' });
     }
@@ -76,7 +81,9 @@ const useTournamentStore = defineStore('tournament', () => {
     tournament,
     participationUser,
     addStaff,
-    fetchStaff,
+    staffsAccepted,
+    staffRequests,
+    fetchStaffs,
     fetchTournament,
     updateTournament,
   };

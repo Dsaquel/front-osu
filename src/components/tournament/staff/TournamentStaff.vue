@@ -2,14 +2,14 @@
 import { onBeforeMount } from 'vue';
 
 const router = useRouter();
-const { fetchStaff } = tournamentStore();
+const { fetchStaffs } = tournamentStore();
 
 const props = defineProps<{
   tournamentId: number;
 }>();
 
 async function init() {
-  fetchStaff(props.tournamentId);
+  fetchStaffs(props.tournamentId);
 }
 
 onBeforeMount(async () => {
@@ -25,7 +25,7 @@ const goRequests = () => {
 </script>
 
 <template>
-  <div >
+  <div>
     <div>tournament staff desu</div>
     <el-button @click="goRequests">see requestes</el-button>
   </div>

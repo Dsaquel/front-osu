@@ -46,11 +46,7 @@ interface TournamentDraft {
   estimateStartDate: string;
 }
 
-export type Staff = {
-  admins: Admin[];
-  referees: Referee[];
-  mappoolers: Mappooler[];
-};
+export type Staff = Admin | Mappooler | Referee;
 
 export interface Mappooler extends Node {
   validate: boolean;
