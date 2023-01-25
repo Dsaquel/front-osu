@@ -36,11 +36,11 @@ function participate() {
 </script>
 
 <template>
-  <div v-if="tournament">
+  <div v-if="tournament" grid="~ cols-5">
     <el-empty v-if="!tournament.isPublic && !isAuthorized" v-loading="tournamentLoading">
       <template v-if="!tournamentLoading" #description>You dont have access to this tournament</template>
     </el-empty>
-    <div v-else>
+    <div v-else grid="col-span-4">
       <div class="container" display="grid" grid="row-start-2" v-bind="useAttrs()">
         <el-alert
           v-if="!tournament.isPublic"

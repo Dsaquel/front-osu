@@ -5,6 +5,7 @@ export default {
 </script>
 
 <script setup lang="ts">
+import { ElNotification } from 'element-plus';
 import { Role } from '~/types';
 
 const router = useRouter();
@@ -46,8 +47,8 @@ async function createStaff(tournamentId: number, role?: Role) {
     loading = true;
     const data = await addStaff(tournamentId, role);
     ElNotification({ title: data.subject, message: data.message, type: 'success', zIndex: 10, duration: 0 });
-  } catch (e: any) {
-    ElNotification({ message: e, type: 'error', zIndex: 10, duration: 0 });
+  } catch (e: unknown) {
+    ElNotification({ message: e as string, type: 'error', zIndex: 10, duration: 0 });
   } finally {
     loading = false;
   }

@@ -24,8 +24,10 @@ onBeforeMount(() => fetchDraftsCollection());
               <el-button type="primary" size="small" plain round m="l-1"><i-material-symbols:edit /> </el-button>
             </router-link>
           </el-tooltip>
-          <el-tooltip content="Go prod" placement="right">
-            <el-button type="success" size="small" plain round m="l-1"><i-material-symbols:send-rounded /> </el-button>
+          <el-tooltip content="see" placement="right">
+            <router-link :to="`/tournaments/drafts/${scope.row.id}`">
+              <el-button type="primary" size="small" plain round m="l-1"><i-mdi:eye /> </el-button>
+            </router-link>
           </el-tooltip>
         </template>
       </el-table-column>

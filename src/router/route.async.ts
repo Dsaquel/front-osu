@@ -80,14 +80,9 @@ const asyncRoutes: Array<RouteRecordRaw> = [
             component: () => import('~/views/draft/DraftCreate.vue'),
           },
           {
-            path: ':draftId',
-            children: [
-              {
-                path: 'update',
-                name: 'draft-update',
-                component: () => import('~/views/draft/DraftUpdate.vue'),
-              },
-            ],
+            path: ':draftId/update',
+            name: 'draft-update',
+            component: () => import('~/views/draft/DraftUpdate.vue'),
           },
         ],
       },
