@@ -102,6 +102,7 @@ declare module '@vue/runtime-core' {
     TournamentMatch: typeof import('./components/tournament/TournamentMatch.vue')['default']
     TournamentPreview: typeof import('./components/tournament/TournamentPreview.vue')['default']
     TournamentStaff: typeof import('./components/tournament/staff/TournamentStaff.vue')['default']
+    TournamentStaffTable: typeof import('./components/tournament/staff/TournamentStaffTable.vue')['default']
     UpperBracket: typeof import('./components/tournament/bracket/UpperBracket.vue')['default']
     UserAvatar: typeof import('./components/Common/UserAvatar.vue')['default']
     ZhProcess: typeof import('./components/ZhProcess.md')['default']

@@ -12,7 +12,7 @@ const TournamentApi = {
   addStaff: (tournamentId: number, role: Role) =>
     service.post<Notification>(`/tournament/${tournamentId}/staff`, { role }),
   acceptCandidate: (tournamentId: number, staffId: number, role: Role) =>
-    service.put<Notification>(`/tournament/${tournamentId}/staff${staffId}`, { role }),
+    service.put<Notification>(`/tournament/${tournamentId}/staff/${staffId}`, { role }),
   removeStaff: (tournamentId: number, staffId: number, role: Role) =>
     service.delete<Notification>(`/tournament/${tournamentId}/staff/${staffId}`, { role }),
 };

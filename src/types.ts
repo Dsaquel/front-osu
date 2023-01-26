@@ -61,6 +61,10 @@ export interface Mappooler extends Node {
   user: User;
 }
 
+export interface StaffSource extends Mappooler {
+  source: string;
+}
+
 export interface Referee extends Node {
   validate: boolean;
   userId: number;
