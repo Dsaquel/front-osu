@@ -61,6 +61,13 @@ function selectDisabled(item: Role): boolean {
   if (item === 'referee') return participationUser.value.participationAsReferee;
   return true;
 }
+
+const goRequests = () => {
+  router.push({
+    name: 'tournament-requests',
+    params: { tournamentId: draft.value?.tournament.id },
+  });
+};
 </script>
 
 <template>
@@ -144,7 +151,9 @@ function selectDisabled(item: Role): boolean {
         </el-dialog>
       </div>
     </div>
-    <TournamentStaff :tournament-id="draft.tournament.id" />
+    <TournamentStaff :tournament-id="draft.tournament.id">
+      <el-button @click="goRequests">see requestes</el-button>
+    </TournamentStaff>
   </div>
   <el-empty v-else>
     <template #description>

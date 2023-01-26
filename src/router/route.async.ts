@@ -20,6 +20,11 @@ const asyncRoutes: Array<RouteRecordRaw> = [
     props: { minWindow: true },
     children: [
       {
+        path: '',
+        name: 'user-profile',
+        component: () => import('~/views/user/UserProfile.vue'),
+      },
+      {
         path: 'tournaments',
         name: 'user-tournament',
         component: () => import('~/views/user/UserTournament.vue'),

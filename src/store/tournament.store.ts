@@ -10,15 +10,15 @@ const useTournamentStore = defineStore('tournament', () => {
   const staffs = ref(undefined as Staffs | undefined);
 
   const staffsAccepted = computed(() =>
-    Object.values(staffs.value ?? {})
-      .flatMap((arr) => arr)
-      .filter((obj) => obj.validate),
+    Object.entries(staffs.value ?? {}).flatMap(([key, array]) =>
+      array.filter((obj) => obj.validate).map((validObj) => ({ ...validObj, source: key.slice(0, -1) })),
+    ),
   );
 
   const staffRequests = computed(() =>
-    Object.values(staffs.value ?? {})
-      .flatMap((arr) => arr)
-      .filter((obj) => !obj.validate),
+    Object.entries(staffs.value ?? {}).flatMap(([key, array]) =>
+      array.filter((obj) => !obj.validate).map((validObj) => ({ ...validObj, source: key.slice(0, -1) })),
+    ),
   );
 
   const isAuthorized = computed(

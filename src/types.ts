@@ -58,18 +58,21 @@ export interface Mappooler extends Node {
   validate: boolean;
   userId: number;
   tournamentId: number;
+  user: User;
 }
 
 export interface Referee extends Node {
   validate: boolean;
   userId: number;
   tournamentId: number;
+  user: User;
 }
 
 export interface Admin extends Node {
   validate: boolean;
   userId: number;
   tournamentId: number;
+  user: User;
 }
 
 export interface Map extends Node {

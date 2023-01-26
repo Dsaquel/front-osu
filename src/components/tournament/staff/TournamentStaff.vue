@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { onBeforeMount } from 'vue';
 
-const router = useRouter();
 const { fetchStaffs } = tournamentStore();
 
 const props = defineProps<{
@@ -15,18 +14,11 @@ async function init() {
 onBeforeMount(async () => {
   init();
 });
-
-const goRequests = () => {
-  router.push({
-    name: 'tournament-requests',
-    params: { tournamentId: props.tournamentId },
-  });
-};
 </script>
 
 <template>
   <div>
     <div>tournament staff desu</div>
-    <el-button @click="goRequests">see requestes</el-button>
+    <slot name="goRequests" />
   </div>
 </template>
