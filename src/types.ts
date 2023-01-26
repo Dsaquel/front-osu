@@ -30,7 +30,7 @@ export type ParticipationUser = {
   participationAsAdmin: boolean;
 };
 
-export type NotificationStaff = {
+export type Notification = {
   subject?: string;
   message: string;
 };

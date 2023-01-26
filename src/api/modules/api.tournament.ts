@@ -1,13 +1,5 @@
 import service from '~/api/http';
-import {
-  UpdateTournamentDto,
-  Tournament,
-  ControlAccess,
-  ParticipationUser,
-  NotificationStaff,
-  Role,
-  Staffs,
-} from '~/types';
+import { UpdateTournamentDto, Tournament, ControlAccess, ParticipationUser, Notification, Role, Staffs } from '~/types';
 
 const TournamentApi = {
   controlAccess: (tournamentId: number) => service.get<ControlAccess>(`/tournament/${tournamentId}/control-access`),
@@ -18,7 +10,11 @@ const TournamentApi = {
   update: (updateTournamentDto: UpdateTournamentDto, tournamentId: number) =>
     service.put<Tournament>(`/tournament/${tournamentId}`, updateTournamentDto),
   addStaff: (tournamentId: number, role: Role) =>
-    service.post<NotificationStaff>(`/tournament/${tournamentId}/staff`, { role }),
+    service.post<Notification>(`/tournament/${tournamentId}/staff`, { role }),
+  acceptCandidate: (tournamentId: number, staffId: number, role: Role) =>
+    service.put<Notification>(`/tournament/${tournamentId}/staff${staffId}`, { role }),
+  removeStaff: (tournamentId: number, staffId: number, role: Role) =>
+    service.delete<Notification>(`/tournament/${tournamentId}/staff/${staffId}`, { role }),
 };
 
 export default TournamentApi;

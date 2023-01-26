@@ -66,8 +66,40 @@ const useTournamentStore = defineStore('tournament', () => {
   async function addStaff(tournamentId: number, role: Role) {
     try {
       return await apiTournament.addStaff(tournamentId, role);
-    } catch (e: any) {
-      throw e.message;
+    } catch (e) {
+      if (e instanceof Error) {
+        throw e.message;
+      }
+      console.log(e);
+      throw e;
+    }
+  }
+
+  async function acceptCandidate(tournamentId: number, staffId: number, role: Role) {
+    try {
+      const notification = await apiTournament.acceptCandidate(tournamentId, staffId, role);
+      fetchStaffs(tournamentId);
+      return notification;
+    } catch (e) {
+      if (e instanceof Error) {
+        throw e.message;
+      }
+      console.log(e);
+      throw e;
+    }
+  }
+
+  async function removeStaff(tournamentId: number, staffId: number, role: Role) {
+    try {
+      const notification = await apiTournament.removeStaff(tournamentId, staffId, role);
+      fetchStaffs(tournamentId);
+      return notification;
+    } catch (e) {
+      if (e instanceof Error) {
+        throw e.message;
+      }
+      console.log(e);
+      throw e;
     }
   }
 
@@ -75,8 +107,8 @@ const useTournamentStore = defineStore('tournament', () => {
     try {
       const data = await apiTournament.update(updateTournamentDto, tournament.value?.id as number);
       tournament.value = data;
-    } catch (e: any) {
-      console.log(e.message);
+    } catch (e) {
+      console.log(e);
     }
   }
 
@@ -88,6 +120,8 @@ const useTournamentStore = defineStore('tournament', () => {
     tournament,
     participationUser,
     addStaff,
+    acceptCandidate,
+    removeStaff,
     staffsAccepted,
     staffRequests,
     fetchStaffs,

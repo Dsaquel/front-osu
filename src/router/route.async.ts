@@ -34,6 +34,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
   {
     path: '/tournaments',
     component: () => import('~/components/Ui/Layout/childs/MainLayout.vue'),
+    props: { minWindow: false },
     children: [
       {
         path: '',
