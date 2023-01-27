@@ -34,6 +34,13 @@ const goBack = () => {
 function participate() {
   // player participant
 }
+
+const goRequests = () => {
+  router.push({
+    name: 'tournament-requests',
+    params: { tournamentId },
+  });
+};
 </script>
 
 <template>
@@ -90,6 +97,11 @@ function participate() {
         </el-button>
       </div>
     </div>
+    <TournamentStaff :tournament-id="tournament.id">
+      <template #goRequests>
+        <el-button @click="goRequests">see requestes</el-button>
+      </template>
+    </TournamentStaff>
   </div>
   <el-empty v-else>
     <template #description>
