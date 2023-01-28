@@ -1,9 +1,11 @@
 <script lang="ts" setup>
+import { Avatar, DeleteFilled, Plus } from '@element-plus/icons-vue';
 import { onBeforeMount } from 'vue';
 import { Role, TemplateNotification } from '~/types';
 
 const { fetchStaffs, removeStaff } = tournamentStore();
 const { staffsAccepted } = storeToRefs(tournamentStore());
+const { isAuthorized, access } = storeToRefs(tournamentStore());
 
 const props = defineProps<{
   tournamentId: number;
@@ -41,10 +43,10 @@ async function remove(staffId: number, role: Role) {
 </script>
 
 <template>
-  <div>
+  <div v-bind="useAttrs()">
     <slot name="goRequests" />
     <el-table ref="tableStaff" :data="staffsAccepted" row-key="id" height="max-content" w="full">
-      <el-table-column label="Candidate">
+      <el-table-column label="User">
         <template #default="scope">
           <div display="flex" align="items-center">
             <el-avatar :src="scope.row.user.avatarUrl"></el-avatar>
@@ -53,20 +55,26 @@ async function remove(staffId: number, role: Role) {
         </template>
       </el-table-column>
 
-      <el-table-column label="Role" column-key="role" align="right">
+      <el-table-column label="Role" column-key="role" align="center">
         <template #default="scope">
           <el-tag>{{ scope.row.source }}</el-tag>
-          <el-tooltip content="remove" placement="right">
-            <el-button
-              :loading="removeLoading"
-              type="danger"
-              size="small"
-              round
-              m="l-1"
-              @click="remove(scope.row.id, scope.row.source)"
-              ><i-akar-icons:cross />
-            </el-button>
-          </el-tooltip>
+        </template>
+      </el-table-column>
+
+      <el-table-column v-if="isAuthorized && (access!.isAdmin || access!.isOwner)" label="actions" align="right">
+        <template #default="scope">
+          <el-dropdown trigger="click">
+            <i-mdi:dots-vertical v-if="'mappooler' || 'referee' in scope.row" m="r-4" text="xl" />
+            <template #dropdown>
+              <el-dropdown-item :icon="Avatar">Up to admin </el-dropdown-item>
+              <el-dropdown-item :icon="Plus">
+                {{ scope.row === 'mappooler' ? 'add to mappoolers' : 'add to referees' }}
+              </el-dropdown-item>
+              <el-dropdown-item :icon="DeleteFilled" @click="remove(scope.row.id, scope.row.source)"
+                >remove
+              </el-dropdown-item>
+            </template>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>

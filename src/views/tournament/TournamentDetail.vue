@@ -44,11 +44,11 @@ const goRequests = () => {
 </script>
 
 <template>
-  <div v-if="tournament" grid="~ cols-5">
+  <div v-if="tournament" grid="~ cols-7 gap-4">
     <el-empty v-if="!tournament.isPublic && !isAuthorized" v-loading="tournamentLoading">
       <template v-if="!tournamentLoading" #description>You dont have access to this tournament</template>
     </el-empty>
-    <div v-else grid="col-span-4">
+    <div v-else grid="col-span-5">
       <div class="container" display="grid" grid="row-start-2" v-bind="useAttrs()">
         <el-alert
           v-if="!tournament.isPublic"
@@ -97,7 +97,7 @@ const goRequests = () => {
         </el-button>
       </div>
     </div>
-    <TournamentStaff :tournament-id="tournament.id">
+    <TournamentStaff grid="col-span-2" :tournament-id="tournament.id">
       <template #goRequests>
         <el-button @click="goRequests">see requestes</el-button>
       </template>

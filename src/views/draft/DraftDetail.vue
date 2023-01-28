@@ -12,7 +12,7 @@ const router = useRouter();
 const draftId = $ref(parseInt(useRoute().params?.draftId as string, 10));
 const { fetchDraft } = draftStore();
 const { fetchControlAccess, addStaff, fetchParticipationOfUser } = tournamentStore();
-const { isAuthorized, participationUser } = storeToRefs(tournamentStore());
+const { isAuthorized, participationUser, access } = storeToRefs(tournamentStore());
 const { draft } = storeToRefs(draftStore());
 const { user } = storeToRefs(userStore());
 
@@ -72,12 +72,12 @@ const goRequests = () => {
 </script>
 
 <template>
-  <div v-if="draft" grid="~ cols-5">
+  <div v-if="draft" grid="~ cols-7 gap-4">
     <el-empty v-if="!draft.isPublic && !isAuthorized" v-loading="draftLoading">
       <template v-if="!draftLoading" #description>You dont have access to this draft</template>
     </el-empty>
-    <div v-else grid="col-span-4">
-      <div class="container" display="grid" grid="row-start-2" v-bind="useAttrs()">
+    <div v-else grid="col-span-5">
+      <div display="grid" grid="gap-4" v-bind="useAttrs()">
         <el-alert
           v-if="!draft.isPublic"
           title="tournament not yet public"
@@ -117,9 +117,20 @@ const goRequests = () => {
           <span display="inline-block">Details</span>
           <MarkdownRender :text="draft.details" />
         </div>
-        <el-button v-if="isAuthorized && user" type="success" m="t-4" place="self-end" @click="showDialog = true">
-          participate
-        </el-button>
+        <el-popover
+          v-if="isAuthorized"
+          placement="top-start"
+          trigger="hover"
+          width="250"
+          :content="access!.isAdmin || access!.isOwner ? 'You have already all permissions' : 'Ask your admin to upgrade your status'"
+        >
+          <template #reference>
+            <div m="t-4" place="self-end">
+              <el-button v-if="user" :disabled="isAuthorized" type="success"> participate </el-button>
+            </div>
+          </template>
+        </el-popover>
+        <el-button v-else-if="user" type="success" @click="showDialog = true"> participate </el-button>
         <el-dialog v-model="showDialog" title="Entry form" w="5/10 min-[600px]" class="<sm:min-w-full">
           <div display="grid" grid="cols-1 gap-2" justify="items-center">
             <transition>
@@ -152,8 +163,10 @@ const goRequests = () => {
         </el-dialog>
       </div>
     </div>
-    <TournamentStaff :tournament-id="draft.tournament.id">
-      <el-button @click="goRequests">see requestes</el-button>
+    <TournamentStaff grid="col-span-2" :tournament-id="draft.tournament.id">
+      <template #goRequests>
+        <el-button @click="goRequests">see requestes</el-button>
+      </template>
     </TournamentStaff>
   </div>
   <el-empty v-else>
