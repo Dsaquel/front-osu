@@ -42,7 +42,19 @@ async function upToAdmin(staffId: number, role: Role) {
   ElNotification({
     title: (<TemplateNotification>data).subject,
     message: (<TemplateNotification>data).message,
-    type: 'error',
+    type: 'success',
+    zIndex: 10,
+    duration: 0,
+  });
+  await init();
+}
+
+async function addToAnotherRole(role: Exclude<Role, 'admin'>) {
+  const data = await addStaff(props.tournamentId, role === 'referee' ? 'mappooler' : 'referee', true);
+  ElNotification({
+    title: (<TemplateNotification>data).subject,
+    message: (<TemplateNotification>data).message,
+    type: 'success',
     zIndex: 10,
     duration: 0,
   });
@@ -73,14 +85,21 @@ async function upToAdmin(staffId: number, role: Role) {
 
       <el-table-column v-if="isAuthorized && (access!.isAdmin || access!.isOwner)" width="40" align="right">
         <template #default="scope">
-          <el-dropdown v-if="scope.row.source === 'mappooler' || scope.row.source === 'referee'" trigger="click">
+          <el-dropdown
+            v-if="scope.row.sources.includes('mappooler') || scope.row.sources.includes('referee')"
+            trigger="click"
+          >
             <i-mdi:dots-vertical m="r-4" text="xl" />
             <template #dropdown>
               <el-dropdown-item :icon="Avatar" @click="upToAdmin(scope.row.id, scope.row.source)"
                 >Up to admin
               </el-dropdown-item>
-              <el-dropdown-item :icon="Plus">
-                {{ scope.row.source === 'mappooler' ? 'add to referees' : 'add to mappoolers' }}
+              <el-dropdown-item
+                v-if="!(scope.row.sources.includes('mappooler') && scope.row.sources.includes('referee'))"
+                :icon="Plus"
+                @click="addToAnotherRole(scope.row.sources[0])"
+              >
+                {{ scope.row.sources[0] === 'mappooler' ? 'add to referees' : 'add to mappoolers' }}
               </el-dropdown-item>
               <el-dropdown-item :icon="DeleteFilled" @click="remove(scope.row.id, scope.row.source)"
                 >remove
