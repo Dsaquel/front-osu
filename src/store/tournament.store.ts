@@ -16,7 +16,10 @@ const useTournamentStore = defineStore('tournament', () => {
   );
 
   const staffsAccepted = computed(() => {
-    const accepted: (Omit<(typeof staffRequests.value)[number], 'source'> & { sources: string[] })[] = [];
+    const accepted: (Omit<(typeof staffRequests.value)[number], 'source'> & {
+      sources: string[];
+      secondStaffId?: number;
+    })[] = [];
     Object.entries(staffs.value ?? {}).forEach(([key, array]) => {
       array
         .filter((obj) => obj.validate)
@@ -24,6 +27,7 @@ const useTournamentStore = defineStore('tournament', () => {
           const existingStaff = accepted.find((sr) => sr.userId === staff.userId);
           if (existingStaff) {
             existingStaff.sources.push(key.slice(0, -1));
+            existingStaff.secondStaffId = staff.id;
           } else {
             accepted.push({ ...staff, sources: [key.slice(0, -1)] });
           }

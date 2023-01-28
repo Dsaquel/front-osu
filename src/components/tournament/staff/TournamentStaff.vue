@@ -17,10 +17,20 @@ onBeforeMount(async () => {
   init();
 });
 
-async function remove(staffId: number, role: Role) {
+async function remove(staffId: number, roles: Exclude<Role, 'admin'>[], secondStaffId?: number | undefined) {
   try {
-    const data = await removeStaff(props.tournamentId, staffId, role);
+    const data = await removeStaff(props.tournamentId, staffId, roles[0]);
     ElNotification({ title: data.subject, message: data.message, type: 'success', zIndex: 10, duration: 0 });
+    if (secondStaffId) {
+      const secondData = await removeStaff(props.tournamentId, secondStaffId, roles[1]);
+      ElNotification({
+        title: secondData.subject,
+        message: secondData.message,
+        type: 'success',
+        zIndex: 10,
+        duration: 0,
+      });
+    }
   } catch (e) {
     if (e instanceof Error) {
       console.log(e, 'error');
@@ -36,8 +46,11 @@ async function remove(staffId: number, role: Role) {
   }
 }
 
-async function upToAdmin(staffId: number, role: Role) {
-  await removeStaff(props.tournamentId, staffId, role);
+async function upToAdmin(staffId: number, roles: Exclude<Role, 'admin'>[], secondStaffId?: number | undefined) {
+  await removeStaff(props.tournamentId, staffId, roles[0]);
+  if (secondStaffId) {
+    await removeStaff(props.tournamentId, secondStaffId, roles[1]);
+  }
   const data = await addStaff(props.tournamentId, 'admin', true);
   ElNotification({
     title: (<TemplateNotification>data).subject,
@@ -91,7 +104,9 @@ async function addToAnotherRole(role: Exclude<Role, 'admin'>) {
           >
             <i-mdi:dots-vertical m="r-4" text="xl" />
             <template #dropdown>
-              <el-dropdown-item :icon="Avatar" @click="upToAdmin(scope.row.id, scope.row.source)"
+              <el-dropdown-item
+                :icon="Avatar"
+                @click="upToAdmin(scope.row.id, scope.row.sources, scope.row.secondStaffId)"
                 >Up to admin
               </el-dropdown-item>
               <el-dropdown-item
@@ -101,7 +116,9 @@ async function addToAnotherRole(role: Exclude<Role, 'admin'>) {
               >
                 {{ scope.row.sources[0] === 'mappooler' ? 'add to referees' : 'add to mappoolers' }}
               </el-dropdown-item>
-              <el-dropdown-item :icon="DeleteFilled" @click="remove(scope.row.id, scope.row.source)"
+              <el-dropdown-item
+                :icon="DeleteFilled"
+                @click="remove(scope.row.id, scope.row.sources, scope.row.secondStaffId)"
                 >remove
               </el-dropdown-item>
             </template>
