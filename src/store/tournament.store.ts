@@ -9,17 +9,26 @@ const useTournamentStore = defineStore('tournament', () => {
   const tournament = ref(undefined as Tournament | undefined);
   const staffs = ref(undefined as Staffs | undefined);
 
-  const staffsAccepted = computed(() =>
-    Object.entries(staffs.value ?? {}).flatMap(([key, array]) =>
-      array.filter((obj) => obj.validate).map((validObj) => ({ ...validObj, source: key.slice(0, -1) })),
-    ),
-  );
-
   const staffRequests = computed(() =>
     Object.entries(staffs.value ?? {}).flatMap(([key, array]) =>
       array.filter((obj) => !obj.validate).map((validObj) => ({ ...validObj, source: key.slice(0, -1) })),
     ),
   );
+
+  const staffsAccepted = computed(() => {
+    const accepted: (Omit<(typeof staffRequests.value)[number], 'source'> & { sources: string[] })[] = [];
+    Object.entries(staffs.value ?? {}).forEach(([key, array]) => {
+      array.forEach((staff) => {
+        const existingStaff = accepted.find((sr) => sr.userId === staff.userId);
+        if (existingStaff) {
+          existingStaff.sources.push(key.slice(0, -1));
+        } else {
+          accepted.push({ ...staff, sources: [key.slice(0, -1)] });
+        }
+      });
+    });
+    return accepted;
+  });
 
   const isAuthorized = computed(
     () =>
@@ -63,9 +72,9 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
-  async function addStaff(tournamentId: number, role: Role) {
+  async function addStaff(tournamentId: number, role: Role, validate?: boolean) {
     try {
-      return await apiTournament.addStaff(tournamentId, role);
+      return await apiTournament.addStaff(tournamentId, role, validate);
     } catch (e) {
       if (e instanceof Error) {
         throw e.message;

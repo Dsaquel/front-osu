@@ -17,8 +17,8 @@ const TournamentApi = {
   fetchStaffs: (tournamentId: number) => service.get<Staffs>(`/tournament/${tournamentId}/staff`),
   update: (updateTournamentDto: UpdateTournamentDto, tournamentId: number) =>
     service.put<Tournament>(`/tournament/${tournamentId}`, updateTournamentDto),
-  addStaff: (tournamentId: number, role: Role) =>
-    service.post<TemplateNotification>(`/tournament/${tournamentId}/staff`, { role }),
+  addStaff: (tournamentId: number, role: Role, validate?: boolean) =>
+    service.post<TemplateNotification>(`/tournament/${tournamentId}/staff`, { role, validate }),
   acceptCandidate: (tournamentId: number, staffId: number, role: Role) =>
     service.put<TemplateNotification>(`/tournament/${tournamentId}/staff/${staffId}`, { role }),
   removeStaff: (tournamentId: number, staffId: number, role: Role) =>
