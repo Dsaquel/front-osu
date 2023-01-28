@@ -18,14 +18,16 @@ const useTournamentStore = defineStore('tournament', () => {
   const staffsAccepted = computed(() => {
     const accepted: (Omit<(typeof staffRequests.value)[number], 'source'> & { sources: string[] })[] = [];
     Object.entries(staffs.value ?? {}).forEach(([key, array]) => {
-      array.forEach((staff) => {
-        const existingStaff = accepted.find((sr) => sr.userId === staff.userId);
-        if (existingStaff) {
-          existingStaff.sources.push(key.slice(0, -1));
-        } else {
-          accepted.push({ ...staff, sources: [key.slice(0, -1)] });
-        }
-      });
+      array
+        .filter((obj) => obj.validate)
+        .forEach((staff) => {
+          const existingStaff = accepted.find((sr) => sr.userId === staff.userId);
+          if (existingStaff) {
+            existingStaff.sources.push(key.slice(0, -1));
+          } else {
+            accepted.push({ ...staff, sources: [key.slice(0, -1)] });
+          }
+        });
     });
     return accepted;
   });
