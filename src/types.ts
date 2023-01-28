@@ -24,15 +24,14 @@ export type ControlAccess = {
   isReferee: boolean;
 };
 
+export interface TemplateNotification {
+  subject?: string;
+  message: string;
+}
 export type ParticipationUser = {
   participationAsMappooler: boolean;
   participationAsReferee: boolean;
   participationAsAdmin: boolean;
-};
-
-export type Notification = {
-  subject?: string;
-  message: string;
 };
 
 export type Role = 'referee' | 'mappooler' | 'admin';

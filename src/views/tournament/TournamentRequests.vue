@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Role, Staff } from '~/types';
+import { Role, TemplateNotification, Staff } from '~/types';
 
 const { fetchTournament, fetchControlAccess, acceptCandidate, removeStaff } = tournamentStore();
 const { tournament, isAuthorized, access, staffRequests } = storeToRefs(tournamentStore());
@@ -29,10 +29,19 @@ async function accept(staffId: number, role: Role) {
   try {
     acceptLoading = true;
     const data = await acceptCandidate(tournamentId, staffId, role);
-    console.log(data);
     ElNotification({ title: data.subject, message: data.message, type: 'success', zIndex: 10, duration: 0 });
-  } catch (e: unknown) {
-    ElNotification({ message: e as string, type: 'error', zIndex: 10, duration: 0 });
+  } catch (e) {
+    if (e instanceof Error) {
+      console.log(e, 'error');
+    } else {
+      ElNotification({
+        title: (<TemplateNotification>e).subject,
+        message: (<TemplateNotification>e).message,
+        type: 'error',
+        zIndex: 10,
+        duration: 0,
+      });
+    }
   } finally {
     acceptLoading = false;
   }
@@ -53,8 +62,18 @@ async function remove(staffId: number, role: Role) {
     removeLoading = true;
     const data = await removeStaff(tournamentId, staffId, role);
     ElNotification({ title: data.subject, message: data.message, type: 'success', zIndex: 10, duration: 0 });
-  } catch (e: unknown) {
-    ElNotification({ message: e as string, type: 'error', zIndex: 10, duration: 0 });
+  } catch (e) {
+    if (e instanceof Error) {
+      console.log(e, 'error');
+    } else {
+      ElNotification({
+        title: (<TemplateNotification>e).subject,
+        message: (<TemplateNotification>e).message,
+        type: 'error',
+        zIndex: 10,
+        duration: 0,
+      });
+    }
   } finally {
     removeLoading = false;
   }
@@ -120,7 +139,7 @@ async function remove(staffId: number, role: Role) {
                 size="small"
                 round
                 m="l"
-                @click="accept(scope.id, scope.source)"
+                @click="accept(scope.row.id, scope.row.source)"
               >
                 <i-ic:round-check />
               </el-button>

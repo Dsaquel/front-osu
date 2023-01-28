@@ -51,6 +51,7 @@ async function createStaff(tournamentId: number, role?: Role) {
     ElNotification({ message: e as string, type: 'error', zIndex: 10, duration: 0 });
   } finally {
     loading = false;
+    showDialog.value = false;
   }
 }
 
