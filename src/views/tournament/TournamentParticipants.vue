@@ -1,5 +1,8 @@
 <script setup lang="ts">
-const { fetchTournament, fetchControlAccess, fetchParticipants } = tournamentStore();
+import router from '~/router';
+import { TemplateNotification } from '~/types';
+
+const { fetchTournament, fetchControlAccess, fetchParticipants, removeParticipant } = tournamentStore();
 const { tournament, isAuthorized, access, participants } = storeToRefs(tournamentStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
@@ -19,20 +22,38 @@ onBeforeMount(async () => {
   initLoading = false;
 });
 
-async function remove() {
-  removeLoading = true;
-  //
-  removeLoading = false;
+async function remove(participantId: number) {
+  try {
+    removeLoading = true;
+    const data = await removeParticipant(participantId, tournamentId);
+    ElNotification({
+      title: (<TemplateNotification>data).subject,
+      message: (<TemplateNotification>data).message,
+      type: 'success',
+      zIndex: 10,
+      duration: 0,
+    });
+  } catch (e) {
+    console.log(e);
+  } finally {
+    removeLoading = false;
+  }
 }
+
+const goBack = () => {
+  router.push({
+    name: 'home',
+  });
+};
 </script>
 
 <template>
-  <div v-if="!initLoading">
+  <div v-if="!initLoading" class="sm:max-w-900px mx-auto">
     <el-empty v-if="!isAuthorized || (!access?.isAdmin && !access?.isOwner)">
       <template #description>Only admins have access to this page</template>
     </el-empty>
-    <div v-else-if="tournament" grid="~ cols-7 gap-4">
-      <div grid="col-span-5" class="<lg:col-span-7">
+    <div v-else-if="tournament">
+      <div>
         <el-table
           ref="tableParticipant"
           :data="participants"
@@ -42,12 +63,24 @@ async function remove() {
           w="full"
           :highlight-current-row="true"
         >
-          <el-table-column label="Candidate">
+          <el-table-column label="Participant">
             <template #default="scope">
               <div display="flex" align="items-center">
                 <el-avatar :src="scope.row.user.avatarUrl"></el-avatar>
                 <span m="l-2">{{ scope.row.user.username }}</span>
               </div>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="Rank">
+            <template #default="scope">
+              {{ scope.row.user.rank }}
+            </template>
+          </el-table-column>
+
+          <el-table-column label="Discord">
+            <template #default="scope">
+              {{ scope.row.user.discord }}
             </template>
           </el-table-column>
 
@@ -60,7 +93,7 @@ async function remove() {
                   size="small"
                   round
                   m="l-1"
-                  @click="remove(scope.row.id, scope.row.source)"
+                  @click="remove(scope.row.id)"
                   ><i-akar-icons:cross />
                 </el-button>
               </el-tooltip>

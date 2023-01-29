@@ -27,6 +27,8 @@ const TournamentApi = {
   addParticipant: (tournamentId: number) =>
     service.post<TemplateNotification>(`/tournament/${tournamentId}/participant`),
   fetchParticipants: (tournamentId: number) => service.get<Participant[]>(`/tournament/${tournamentId}/participant`),
+  removeParticipant: (tournamentId: number, participantId: number) =>
+    service.delete<TemplateNotification>(`/tournament/${tournamentId}/participant/${participantId}`),
 };
 
 export default TournamentApi;

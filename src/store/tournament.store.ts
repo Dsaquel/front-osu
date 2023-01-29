@@ -160,6 +160,17 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
+  async function removeParticipant(participantId: number, tournamentId: number) {
+    try {
+      const data = await apiTournament.removeParticipant(tournamentId, participantId);
+      fetchParticipants(tournamentId);
+      return data;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+
   return {
     access,
     isAuthorized,
@@ -177,6 +188,8 @@ const useTournamentStore = defineStore('tournament', () => {
     updateTournament,
     addParticipant,
     fetchParticipants,
+    participants,
+    removeParticipant,
   };
 });
 

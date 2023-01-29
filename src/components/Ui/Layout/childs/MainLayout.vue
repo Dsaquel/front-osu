@@ -1,5 +1,5 @@
 <script setup lang="ts">
-withDefaults(
+const prosp = withDefaults(
   defineProps<{
     minWindow?: boolean;
   }>(),
@@ -7,6 +7,7 @@ withDefaults(
     minWindow: false,
   },
 );
+console.log(prosp.minWindow);
 </script>
 <!-- add pos relative and set overflow auto -->
 <template>
