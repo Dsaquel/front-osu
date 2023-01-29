@@ -10,6 +10,7 @@ const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10
 let acceptLoading = $ref(false);
 let removeLoading = $ref(false);
 let initLoading = $ref(false);
+const tableStaff = ref();
 
 async function init() {
   await fetchControlAccess(tournamentId);
@@ -50,7 +51,6 @@ async function accept(staffId: number, role: Role) {
   }
 }
 
-const tableStaff = ref();
 function filterRequests(value: Role, row: Staff & { source: Role }) {
   return value === row.source;
 }

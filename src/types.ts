@@ -133,6 +133,14 @@ export interface User extends Node {
   tournamentDraft: TournamentDraft;
 }
 
+export interface Participant extends Node {
+  validate: boolean;
+  seed: number | null;
+  tournamentId: number;
+  userId: number;
+  user: User;
+}
+
 export interface DraftDto {
   name: string;
   details?: string | null;

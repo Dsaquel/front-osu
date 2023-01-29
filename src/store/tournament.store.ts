@@ -1,7 +1,16 @@
 import { defineStore } from 'pinia';
 import apiTournament from '~/api/modules/api.tournament';
 import router from '~/router';
-import { ControlAccess, ParticipationUser, Tournament, UpdateTournamentDto, Role, Staffs, User } from '~/types';
+import {
+  ControlAccess,
+  ParticipationUser,
+  Tournament,
+  UpdateTournamentDto,
+  Role,
+  Staffs,
+  User,
+  Participant,
+} from '~/types';
 
 const useTournamentStore = defineStore('tournament', () => {
   const sourcesOrder = ['owner', 'admin', 'mappooler', 'referee'];
@@ -9,6 +18,7 @@ const useTournamentStore = defineStore('tournament', () => {
   const participationUser = ref(undefined as ParticipationUser | undefined);
   const tournament = ref(undefined as Tournament | undefined);
   const staffs = ref(undefined as Staffs | undefined);
+  const participants = ref(undefined as Participant[] | undefined);
 
   const staffRequests = computed(() =>
     Object.entries(staffs.value ?? {}).flatMap(([key, array]) =>
@@ -141,6 +151,15 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
+  async function fetchParticipants(tournamentId: number) {
+    try {
+      const data = await apiTournament.fetchParticipants(tournamentId);
+      participants.value = data;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return {
     access,
     isAuthorized,
@@ -157,6 +176,7 @@ const useTournamentStore = defineStore('tournament', () => {
     fetchTournament,
     updateTournament,
     addParticipant,
+    fetchParticipants,
   };
 });
 

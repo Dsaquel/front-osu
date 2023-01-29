@@ -7,6 +7,7 @@ import {
   TemplateNotification,
   Role,
   Staffs,
+  Participant,
 } from '~/types';
 
 const TournamentApi = {
@@ -25,6 +26,7 @@ const TournamentApi = {
     service.delete<TemplateNotification>(`/tournament/${tournamentId}/staff/${staffId}`, { role }),
   addParticipant: (tournamentId: number) =>
     service.post<TemplateNotification>(`/tournament/${tournamentId}/participant`),
+  fetchParticipants: (tournamentId: number) => service.get<Participant[]>(`/tournament/${tournamentId}/participant`),
 };
 
 export default TournamentApi;
