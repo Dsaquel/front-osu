@@ -9,12 +9,12 @@ import { TemplateNotification } from '~/types';
 
 const router = useRouter();
 const { fetchTournament, fetchControlAccess, addParticipant } = tournamentStore();
-const { tournament, isAuthorized, access } = storeToRefs(tournamentStore());
+const { tournament, isAuthorized } = storeToRefs(tournamentStore());
 const { user } = storeToRefs(userStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
 
-let tournamentLoading = $ref(false);
+let initLoading = $ref(false);
 let showDialog = $ref(false);
 let participantLoading = $ref(false);
 
@@ -25,9 +25,9 @@ async function init() {
 }
 
 onBeforeMount(async () => {
-  tournamentLoading = true;
+  initLoading = true;
   await init();
-  tournamentLoading = false;
+  initLoading = false;
 });
 
 const goBack = () => {
@@ -65,13 +65,20 @@ const goRequests = () => {
 </script>
 
 <template>
-  <div v-if="!tournamentLoading">
+  <div v-if="!initLoading">
     <div v-if="tournament" grid="~ cols-7 gap-4">
-      <el-empty v-if="!tournament.isPublic && !isAuthorized">
-        <template v-if="!tournamentLoading" #description>You dont have access to this tournament</template>
+      <el-empty
+        v-if="!tournament.isPublic && !isAuthorized"
+        place="self-center"
+        justify="self-center"
+        grid="col-span-7"
+      >
+        <template #description>
+          <div text="xl">You dont have access to this tournament</div>
+        </template>
       </el-empty>
 
-      <div v-else grid="col-span-5">
+      <div v-else grid="col-span-5" class="<lg:col-span-7">
         <div class="container" display="grid" grid="row-start-2" v-bind="useAttrs()">
           <el-alert
             v-if="!tournament.isPublic"
@@ -158,7 +165,12 @@ const goRequests = () => {
           </el-dialog>
         </div>
       </div>
-      <TournamentStaff grid="col-span-2" :tournament-id="tournament.id">
+      <TournamentStaff
+        v-if="!(!tournament.isPublic && !isAuthorized)"
+        grid="col-span-2"
+        class="<lg:col-span-7"
+        :tournament-id="tournament.id"
+      >
         <template #goRequests>
           <el-button @click="goRequests">see requestes</el-button>
         </template>
@@ -171,5 +183,5 @@ const goRequests = () => {
       </template>
     </el-empty>
   </div>
-  <div v-else v-loading.fullscreen.lock="tournamentLoading" />
+  <div v-else v-loading.fullscreen.lock="initLoading" />
 </template>

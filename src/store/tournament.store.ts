@@ -70,7 +70,7 @@ const useTournamentStore = defineStore('tournament', () => {
       const data = await apiTournament.fetch(tournamentId);
       tournament.value = data;
     } catch (e) {
-      router.push({ name: '403' });
+      //
     }
   }
 
