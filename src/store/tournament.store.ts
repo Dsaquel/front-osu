@@ -26,6 +26,10 @@ const useTournamentStore = defineStore('tournament', () => {
     ),
   );
 
+  const participantsAccepted = computed(() =>
+    participants.value?.filter((elem) => elem.validate).sort((a, b) => a.user.rank - b.user.rank),
+  );
+
   const staffsAccepted = computed(() => {
     const accepted: (
       | (Omit<(typeof staffRequests.value)[number], 'source'> & {
@@ -188,7 +192,7 @@ const useTournamentStore = defineStore('tournament', () => {
     updateTournament,
     addParticipant,
     fetchParticipants,
-    participants,
+    participantsAccepted,
     removeParticipant,
   };
 });

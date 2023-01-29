@@ -3,7 +3,7 @@ import router from '~/router';
 import { TemplateNotification } from '~/types';
 
 const { fetchTournament, fetchControlAccess, fetchParticipants, removeParticipant } = tournamentStore();
-const { tournament, isAuthorized, access, participants } = storeToRefs(tournamentStore());
+const { tournament, isAuthorized, access, participantsAccepted } = storeToRefs(tournamentStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
 let removeLoading = $ref(false);
@@ -56,7 +56,7 @@ const goBack = () => {
       <div>
         <el-table
           ref="tableParticipant"
-          :data="participants"
+          :data="participantsAccepted"
           row-key="id"
           stripe
           height="max-content"
