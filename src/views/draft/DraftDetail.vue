@@ -121,7 +121,7 @@ const goRequests = () => {
           v-if="isAuthorized"
           placement="top-start"
           trigger="hover"
-          width="250"
+          width="auto"
           :content="access!.isAdmin || access!.isOwner ? 'You have already all permissions' : 'Ask your admin to upgrade your status'"
         >
           <template #reference>
