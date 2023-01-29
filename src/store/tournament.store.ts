@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
 import apiTournament from '~/api/modules/api.tournament';
 import router from '~/router';
-import { ControlAccess, ParticipationUser, Tournament, UpdateTournamentDto, Role, Staffs } from '~/types';
+import { ControlAccess, ParticipationUser, Tournament, UpdateTournamentDto, Role, Staffs, User } from '~/types';
 
 const useTournamentStore = defineStore('tournament', () => {
+  const sourcesOrder = ['owner', 'admin', 'mappooler', 'referee'];
   const access = ref(undefined as ControlAccess | undefined);
   const participationUser = ref(undefined as ParticipationUser | undefined);
   const tournament = ref(undefined as Tournament | undefined);
@@ -16,10 +17,13 @@ const useTournamentStore = defineStore('tournament', () => {
   );
 
   const staffsAccepted = computed(() => {
-    const accepted: (Omit<(typeof staffRequests.value)[number], 'source'> & {
-      sources: string[];
-      secondStaffId?: number;
-    })[] = [];
+    const accepted: (
+      | (Omit<(typeof staffRequests.value)[number], 'source'> & {
+          sources: string[];
+          secondStaffId?: number;
+        })
+      | { user: User; sources: string[]; userId?: undefined; secondStaffId?: undefined }
+    )[] = [];
     Object.entries(staffs.value ?? {}).forEach(([key, array]) => {
       array
         .filter((obj) => obj.validate)
@@ -33,7 +37,8 @@ const useTournamentStore = defineStore('tournament', () => {
           }
         });
     });
-    return accepted;
+    accepted.push({ sources: ['owner'], user: tournament.value?.owner as User });
+    return accepted.sort((a, b) => sourcesOrder.indexOf(a.sources[0]) - sourcesOrder.indexOf(b.sources[0]));
   });
 
   const isAuthorized = computed(

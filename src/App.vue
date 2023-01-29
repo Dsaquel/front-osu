@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import en from 'element-plus/lib/locale/lang/en';
 
-onMounted(() => {
-  if (userStore().user) return;
+onBeforeMount(() => {
   userStore().fetch();
 });
 const locale = en;

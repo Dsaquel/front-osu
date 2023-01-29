@@ -195,6 +195,8 @@ export interface Tournament extends Node {
   commonSchedule: string | null;
   hasQualifier: boolean;
   qualifier: Qualifier | null;
+  ownerId: number;
+  owner: User;
 }
 
 export interface Match extends Node {

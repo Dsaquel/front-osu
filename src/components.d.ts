@@ -18,6 +18,7 @@ declare module '@vue/runtime-core' {
     ElAutocomplete: typeof import('element-plus/es')['ElAutocomplete']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElCard: typeof import('element-plus/es')['ElCard']
     ElCol: typeof import('element-plus/es')['ElCol']
     ElCollapaseItem: typeof import('element-plus/es')['ElCollapaseItem']
     ElCollapse: typeof import('element-plus/es')['ElCollapse']

@@ -35,26 +35,12 @@ onClickOutside(wrapper, () => {
     </el-tooltip>
 
     <div v-if="user" ref="wrapper" pos="relative">
-      <div
-        flex="~"
-        align="items-center"
-        p="5"
-        class="<sm:hidden hover:hovered"
-        :class="{ hovered: open }"
-        @click="open = !open"
-      >
-        <UserAvatar class="hover:avatar-hovered" :src="user.avatarUrl" w="15" h="15" />
-        <div class="<sm:hidden" m="l-2">{{ user.username }}</div>
-      </div>
-
-      <UserAvatar
-        class="sm:hidden hover:avatar-border"
-        :class="{ 'avatar-border': open }"
-        :src="user.avatarUrl"
-        w="15"
-        h="15"
-        @click="open = !open"
-      />
+      <el-card shadow="hover" cursor="pointer" @click="open = !open">
+        <div flex="~" align="items-center">
+          <el-avatar :src="user.avatarUrl" w="15" h="15" />
+          <div class="<sm:hidden" m="l-2">{{ user.username }}</div>
+        </div>
+      </el-card>
 
       <div
         v-if="open"
@@ -70,7 +56,7 @@ onClickOutside(wrapper, () => {
       </div>
     </div>
 
-    <button v-else class="osu-background" p="2" rounded="rounded-2xl" @click="signIn">Se connecter avec osu!</button>
+    <button v-else class="osu-background" p="2" rounded="rounded-2xl" @click="signIn">Sigin with osu!</button>
   </header>
 </template>
 
