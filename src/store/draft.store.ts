@@ -1,8 +1,11 @@
 import { defineStore } from 'pinia';
 import { DraftDto, Draft } from '~/types';
 import apiDraft from '~/api/modules/api.draft';
+import useTournamentStore from './tournament.store';
 
 const useDraftStore = defineStore('draft', () => {
+  const tournamentStore = useTournamentStore();
+
   const draft = ref(undefined as Draft | undefined);
   const drafts = ref<Draft[]>([]);
 
@@ -13,6 +16,7 @@ const useDraftStore = defineStore('draft', () => {
 
   async function fetchDraft(draftId: number) {
     const data = await apiDraft.fetch(draftId);
+    tournamentStore.tournament = data.tournament;
     draft.value = data;
   }
 

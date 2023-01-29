@@ -117,7 +117,7 @@ const goRequests = () => {
           <span display="inline-block">Details</span>
           <MarkdownRender :text="draft.details" />
         </div>
-        <!-- <el-popover
+        <el-popover
           v-if="isAuthorized"
           placement="top-start"
           trigger="hover"
@@ -129,8 +129,8 @@ const goRequests = () => {
               <el-button v-if="user" :disabled="isAuthorized" type="success"> participate </el-button>
             </div>
           </template>
-        </el-popover> -->
-        <el-button v-if="user" type="success" @click="showDialog = true"> participate </el-button>
+        </el-popover>
+        <el-button v-else-if="user" type="success" @click="showDialog = true"> participate </el-button>
         <el-dialog v-model="showDialog" title="Entry form" w="5/10 min-[600px]" class="<sm:min-w-full">
           <div display="grid" grid="cols-1 gap-2" justify="items-center">
             <transition>

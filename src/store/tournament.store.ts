@@ -132,6 +132,15 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
+  async function addParticipant(tournamentId: number) {
+    try {
+      return await apiTournament.addParticipant(tournamentId);
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+
   return {
     access,
     isAuthorized,
@@ -147,6 +156,7 @@ const useTournamentStore = defineStore('tournament', () => {
     fetchStaffs,
     fetchTournament,
     updateTournament,
+    addParticipant,
   };
 });
 

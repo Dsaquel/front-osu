@@ -23,6 +23,8 @@ const TournamentApi = {
     service.put<TemplateNotification>(`/tournament/${tournamentId}/staff/${staffId}`, { role }),
   removeStaff: (tournamentId: number, staffId: number, role: Role) =>
     service.delete<TemplateNotification>(`/tournament/${tournamentId}/staff/${staffId}`, { role }),
+  addParticipant: (tournamentId: number) =>
+    service.post<TemplateNotification>(`/tournament/${tournamentId}/participant`),
 };
 
 export default TournamentApi;

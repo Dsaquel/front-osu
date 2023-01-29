@@ -77,12 +77,15 @@ async function addToAnotherRole(role: Exclude<Role, 'admin'>) {
 
 <template>
   <div v-bind="useAttrs()">
-    <slot name="goRequests" />
+    <div display="flex" align="content-center" justify="between" m="b-6" w="full">
+      <h2 m="x-auto" text="xl">Staffs</h2>
+      <slot name="goRequests" />
+    </div>
     <el-table ref="tableStaff" :data="staffsAccepted" row-key="id" height="max-content" w="full">
       <el-table-column label="User">
         <template #default="scope">
           <div display="flex" align="items-center">
-            <el-avatar :src="scope.row.user.avatarUrl"></el-avatar>
+            <el-avatar :src="scope.row.user.avatarUrl" />
             <span m="l-2" text="overflow-ellipsis space-nowrap" overflow="hidden">{{ scope.row.user.username }}</span>
           </div>
         </template>

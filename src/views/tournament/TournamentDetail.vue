@@ -5,13 +5,17 @@ export default {
 </script>
 
 <script setup lang="ts">
+import { TemplateNotification } from '~/types';
+
 const router = useRouter();
-const { fetchTournament, fetchControlAccess } = tournamentStore();
+const { fetchTournament, fetchControlAccess, addParticipant } = tournamentStore();
 const { tournament, isAuthorized } = storeToRefs(tournamentStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
 
 let tournamentLoading = $ref(false);
+let showDialog = $ref(false);
+let participantLoading = $ref(false);
 
 async function init() {
   if (!tournamentId) return;
@@ -31,8 +35,18 @@ const goBack = () => {
   });
 };
 
-function participate() {
-  // player participant
+async function participate() {
+  participantLoading = true;
+  showDialog = false;
+  const notification = await addParticipant(tournamentId);
+  ElNotification({
+    title: (<TemplateNotification>notification).subject,
+    message: (<TemplateNotification>notification).message,
+    type: 'success',
+    zIndex: 10,
+    duration: 0,
+  });
+  participantLoading = false;
 }
 
 const goRequests = () => {
@@ -92,9 +106,25 @@ const goRequests = () => {
           <span display="inline-block">Description</span>
           <MarkdownRender :text="tournament.description" />
         </div>
-        <el-button v-if="isAuthorized" type="success" m="t-4" place="self-end" @click="participate">
+        <el-button
+          v-if="isAuthorized"
+          :loading="participantLoading"
+          type="success"
+          m="t-4"
+          place="self-end"
+          @click="showDialog = true"
+        >
           participate
         </el-button>
+        <el-dialog v-model="showDialog" title="Confirmation" width="20%" align-center>
+          <div text="lg center">Are you sure to participate ?</div>
+          <template #footer>
+            <span class="dialog-footer">
+              <el-button @click="showDialog = false">Cancel</el-button>
+              <el-button type="primary" @click="participate"> Confirm </el-button>
+            </span>
+          </template>
+        </el-dialog>
       </div>
     </div>
     <TournamentStaff grid="col-span-2" :tournament-id="tournament.id">
