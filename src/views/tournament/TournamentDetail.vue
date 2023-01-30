@@ -92,7 +92,13 @@ const goRequests = () => {
               <span text="xl">{{ tournament.name }}</span></template
             >
             <template #extra>
-              <router-link :to="{ name: 'mappool-manager', params: { tournamentId: tournament.id } }">
+              <router-link :to="{ name: 'qualifier-detail', params: { tournamentId: tournament.id } }">
+                <el-button link>qualifier</el-button>
+              </router-link>
+              <router-link m="l-2" :to="{ name: 'tournament-participants', params: { tournamentId: tournament.id } }">
+                <el-button link>participants</el-button>
+              </router-link>
+              <router-link m="l-2" :to="{ name: 'mappool-manager', params: { tournamentId: tournament.id } }">
                 <el-button link>mappool</el-button>
               </router-link>
               <router-link m="l-2" :to="{ name: 'tournament-bracket', params: { tournamentId: tournament.id } }">

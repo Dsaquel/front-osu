@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import apiQualifier from '~/api/modules/api.qualifier';
-import router from '~/router';
-import { Qualifier, UpdateQualifierDto } from '~/types';
+import { Qualifier } from '~/types';
 
 const useQualifierStore = defineStore('qualifier', () => {
   const qualifier = ref(undefined as Qualifier | undefined);
@@ -11,7 +10,7 @@ const useQualifierStore = defineStore('qualifier', () => {
       const data = await apiQualifier.fetchByTournamentId(tournamentId);
       qualifier.value = data;
     } catch (e) {
-      router.push({ name: '403' });
+      console.log(e);
     }
   }
 
@@ -19,16 +18,7 @@ const useQualifierStore = defineStore('qualifier', () => {
     //
   }
 
-  async function update(updateQualifierDto: UpdateQualifierDto) {
-    try {
-      const data = await apiQualifier.update(updateQualifierDto, qualifier.value?.id as number);
-      qualifier.value = data;
-    } catch (e) {
-      console.log(e.message);
-    }
-  }
-
-  return { qualifier, fetchQualifier, fetchCollection, update };
+  return { qualifier, fetchQualifier, fetchCollection };
 });
 
 export default useQualifierStore;
