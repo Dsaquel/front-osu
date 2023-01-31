@@ -1,6 +1,12 @@
+<script lang="ts">
+export default {
+  inheritAttrs: false,
+};
+</script>
+
 <script setup lang="ts">
 const { fetchQualifier } = qualifierStore();
-const { fetchTournament, fetchControlAccess } = tournamentStore();
+const { fetchTournament, fetchControlAccess, updatePublication } = tournamentStore();
 const { qualifier } = storeToRefs(qualifierStore());
 const { tournament, isAuthorized } = storeToRefs(tournamentStore());
 
@@ -19,10 +25,9 @@ onBeforeMount(async () => {
   initLoading = false;
 });
 
-watch(
-  () => tournamentId,
-  () => init(),
-);
+function passTournamentPublic() {
+  updatePublication(tournamentId);
+}
 </script>
 
 <template>
@@ -41,8 +46,8 @@ watch(
         pos="absolute inset-0"
         m="b-3"
       />
+      <el-button v-if="!tournament.isPublic" type="success" @click="passTournamentPublic">pass to public</el-button>
     </div>
-    <el-empty v-else />
   </div>
   <div v-else v-loading.fullscreen.lock="initLoading" />
 </template>

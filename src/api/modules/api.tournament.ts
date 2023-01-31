@@ -29,6 +29,7 @@ const TournamentApi = {
   fetchParticipants: (tournamentId: number) => service.get<Participant[]>(`/tournament/${tournamentId}/participant`),
   removeParticipant: (tournamentId: number, participantId: number) =>
     service.put<TemplateNotification>(`/tournament/${tournamentId}/participant/${participantId}`),
+  updatePublication: (tournamentId: number) => service.post<void>(`/tournament/${tournamentId}/start`),
 };
 
 export default TournamentApi;

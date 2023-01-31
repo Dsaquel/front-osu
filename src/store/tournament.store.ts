@@ -175,6 +175,15 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
+  async function updatePublication(tournamentId: number) {
+    try {
+      await apiTournament.updatePublication(tournamentId);
+      await fetchTournament(tournamentId);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return {
     access,
     isAuthorized,
@@ -194,6 +203,7 @@ const useTournamentStore = defineStore('tournament', () => {
     fetchParticipants,
     participantsAccepted,
     removeParticipant,
+    updatePublication,
   };
 });
 
