@@ -5,6 +5,8 @@ export default {
 </script>
 
 <script setup lang="ts">
+import router from '~/router';
+
 const { fetchQualifier } = qualifierStore();
 const { fetchTournament, fetchControlAccess, updatePublication } = tournamentStore();
 const { qualifier } = storeToRefs(qualifierStore());
@@ -28,6 +30,10 @@ onBeforeMount(async () => {
 function passTournamentPublic() {
   updatePublication(tournamentId);
 }
+
+const goLobbies = () => {
+  router.push({ name: 'qualifier-lobbies', params: { tournamentId } });
+};
 </script>
 
 <template>
@@ -47,6 +53,9 @@ function passTournamentPublic() {
         m="b-3"
       />
       <el-button v-if="!tournament.isPublic" type="success" @click="passTournamentPublic">pass to public</el-button>
+      <el-button link @click="goLobbies">
+        <router-link :to="{}">see lobbies</router-link>
+      </el-button>
     </div>
   </div>
   <div v-else v-loading.fullscreen.lock="initLoading" />
