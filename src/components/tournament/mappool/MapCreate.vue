@@ -4,7 +4,6 @@ import { QualifierMappool, TournamentMappool } from '~/types';
 
 const { fetchBeatmap, createMap } = mapStore();
 const { beatmap } = storeToRefs(mapStore());
-const { addStaff } = tournamentStore();
 
 const props = defineProps<{
   qualifierMappool?: QualifierMappool;

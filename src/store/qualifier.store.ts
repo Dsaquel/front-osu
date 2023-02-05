@@ -30,7 +30,7 @@ const useQualifierStore = defineStore('qualifier', () => {
     return notification;
   }
 
-  return { qualifier, fetchQualifier, createLobby, fetchQualifierLobbies };
+  return { qualifier, lobbies, fetchQualifier, createLobby, fetchQualifierLobbies };
 });
 
 export default useQualifierStore;
