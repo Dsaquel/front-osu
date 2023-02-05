@@ -31,7 +31,11 @@ function getLobby(row: Lobby) {
 </script>
 
 <template>
-  <div v-if="!initLoading && lobbies">
+  <el-card v-if="!initLoading && lobbies" shadow="never">
+    <div display="flex" align="items-center" justify="between" m="b-6 t-2">
+      <h2 m="x-auto" text="xl">Qualifier Lobbies</h2>
+      <QualifierCreateLobby />
+    </div>
     <el-table :data="lobbies">
       <el-table-column label="referee host">
         <template #default="scope">
@@ -64,7 +68,7 @@ function getLobby(row: Lobby) {
             trigger="hover"
             width="auto"
             placement="bottom"
-            :content="dayjs(getLobby(scope.row).schedule).format('MM/DD/YYYY')"
+            :content="dayjs(getLobby(scope.row).schedule).format('MMMM - dddd - YYYY')"
           >
             <template #reference>
               <span>{{ useTimeAgo(getLobby(scope.row).schedule).value }}</span>
@@ -73,7 +77,6 @@ function getLobby(row: Lobby) {
         </template>
       </el-table-column>
     </el-table>
-    <QualifierCreateLobby />
-  </div>
+  </el-card>
   <div v-else v-loading.fullscreen.lock="initLoading" />
 </template>

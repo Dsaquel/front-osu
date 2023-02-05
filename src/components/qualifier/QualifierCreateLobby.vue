@@ -21,7 +21,7 @@ onBeforeMount(async () => {
 
 <template>
   <div v-if="user && (access?.isAdmin || access?.isReferee || access?.isOwner)">
-    <el-button type="success" plain @click.stop="showCreate = true">add new lobby</el-button>
+    <el-button type="success" @click.stop="showCreate = true">create new lobby</el-button>
 
     <el-dialog v-model="showCreate">
       <el-input v-model="user.username" :disabled="true">{{ user.username }}</el-input>
@@ -31,7 +31,7 @@ onBeforeMount(async () => {
         title="date of lobby start"
         @update:model-value="(val) => (schedule = dayjs(val).utc().format())"
       />
-      <el-button type="success" @click="createLobby(qualifier?.id as number, schedule)">créer un lobby</el-button>
+      <el-button type="success" @click="createLobby(qualifier?.id as number, schedule)">create lobby</el-button>
     </el-dialog>
   </div>
 </template>
