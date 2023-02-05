@@ -97,6 +97,7 @@ declare module '@vue/runtime-core' {
     MarkdownRender: typeof import('./components/Inputs/MarkdownRender.vue')['default']
     MarkdownTextarea: typeof import('./components/Inputs/MarkdownTextarea.vue')['default']
     NavigationDrawer: typeof import('./components/Ui/Layout/childs/NavigationDrawer.vue')['default']
+    QualifierCreateLobby: typeof import('./components/qualifier/QualifierCreateLobby.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TemplateDraft: typeof import('./components/draft/TemplateDraft.vue')['default']

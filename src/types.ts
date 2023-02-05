@@ -181,7 +181,25 @@ export interface CreateTournamentDto {
 export interface Qualifier extends Node {
   tournamentId: number;
   mappool: MappoolQualifier;
-  lobbies: any;
+}
+
+export interface Lobby extends Node {
+  status: 'pending' | 'started' | 'finished';
+  schedule: string;
+  superReferee: SuperReferee;
+  superRefereeId: number;
+  qualifierId: number;
+}
+
+export interface SuperReferee extends Node {
+  type: 'admin' | 'referee' | 'owner';
+  admin: Admin | null;
+  referee: Referee | null;
+  owner: Tournament['owner'] | null;
+  adminId: number | null;
+  refereeId: number | null;
+  ownerId: number | null;
+  lobbies: Lobby[];
 }
 
 export interface MappoolQualifier extends Mappool {

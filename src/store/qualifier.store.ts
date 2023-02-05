@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
 import apiQualifier from '~/api/modules/api.qualifier';
-import { Qualifier } from '~/types';
+import { Qualifier, Lobby } from '~/types';
 
 const useQualifierStore = defineStore('qualifier', () => {
   const qualifier = ref(undefined as Qualifier | undefined);
+  const lobbies = ref(undefined as Lobby[] | undefined);
 
   async function fetchQualifier(tournamentId: number) {
     try {
@@ -14,12 +15,22 @@ const useQualifierStore = defineStore('qualifier', () => {
     }
   }
 
-  async function createLobby(qualifierId: number, schedule: string) {
-    const data = await apiQualifier.createLobby(qualifierId, schedule);
-    console.log(data);
+  async function fetchQualifierLobbies(qualifierId: number) {
+    try {
+      const data = await apiQualifier.fetchQualifierLobbies(qualifierId);
+      lobbies.value = data;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
-  return { qualifier, fetchQualifier, createLobby };
+  async function createLobby(qualifierId: number, schedule: string) {
+    const notification = await apiQualifier.createLobby(qualifierId, schedule);
+    fetchQualifierLobbies(qualifierId);
+    return notification;
+  }
+
+  return { qualifier, fetchQualifier, createLobby, fetchQualifierLobbies };
 });
 
 export default useQualifierStore;
