@@ -5,7 +5,9 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
 const { fetchControlAccess } = tournamentStore();
-const { access, isAuthorized } = storeToRefs(tournamentStore());
+const { fetchQualifier, createLobby } = qualifierStore();
+const { qualifier } = storeToRefs(qualifierStore());
+const { access } = storeToRefs(tournamentStore());
 const { user } = storeToRefs(userStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
@@ -13,6 +15,7 @@ let initLoading = $ref(false);
 const schedule = ref();
 async function init() {
   await fetchControlAccess(tournamentId);
+  await fetchQualifier(tournamentId);
 }
 
 onBeforeMount(async () => {
@@ -31,9 +34,10 @@ onBeforeMount(async () => {
         :model-value="schedule"
         type="datetime"
         title="date of lobby start"
-        @update="(val) => (schedule = dayjs(val).utc().format())"
+        @update:model-value="(val) => (schedule = dayjs(val).utc().format())"
       />
     </div>
+    <el-button type="success" @click="createLobby(qualifier?.id as number, schedule)">créer un lobby</el-button>
   </div>
   <div v-else v-loading.fullscreen.lock="initLoading" />
 </template>

@@ -14,11 +14,12 @@ const useQualifierStore = defineStore('qualifier', () => {
     }
   }
 
-  async function fetchCollection() {
-    //
+  async function createLobby(qualifierId: number, schedule: string) {
+    const data = await apiQualifier.createLobby(qualifierId, schedule);
+    console.log(data);
   }
 
-  return { qualifier, fetchQualifier, fetchCollection };
+  return { qualifier, fetchQualifier, createLobby };
 });
 
 export default useQualifierStore;
