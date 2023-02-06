@@ -2,7 +2,6 @@
 import { Setting } from '@element-plus/icons-vue';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { Lobby } from '~/types';
 
 dayjs.extend(utc);
 
@@ -15,21 +14,26 @@ const { user } = storeToRefs(userStore());
 
 const showUpdate = ref(false);
 let globalLoading = $ref(false);
+const statusOptions = ['pending', 'started', 'finished'];
 
 const props = defineProps<{
+  lobbyId: number;
   schedule?: string;
   status?: LobbyStatus;
 }>();
 
-const { schedule, status } = toRefs(props);
+const { lobbyId, schedule, status } = toRefs(props);
 
-async function updateLobbyTemplate(lobbyId: number) {
+async function updateLobbyTemplate() {
   try {
     if (!qualifier.value) return;
     if (schedule?.value === null || schedule?.value === '') return;
 
     globalLoading = true;
-    await updateLobby(lobbyId, qualifier.value.id as number, { schedule: schedule?.value, status: status?.value });
+    await updateLobby(lobbyId.value, qualifier.value.id as number, {
+      schedule: schedule?.value,
+      status: status?.value,
+    });
     ElMessage.success({ message: 'lobby deleted !', duration: 1000 });
   } catch (e) {
     ElMessage.error({ message: 'error ! try again', duration: 1000 });
@@ -39,10 +43,10 @@ async function updateLobbyTemplate(lobbyId: number) {
   }
 }
 
-async function deleteLobbyTemplate(lobbyId: number) {
+async function deleteLobbyTemplate() {
   try {
     globalLoading = true;
-    await deleteLobby(qualifier.value?.id as number, lobbyId);
+    await deleteLobby(qualifier.value?.id as number, lobbyId.value);
     ElMessage.success({ message: 'lobby deleted !', duration: 1000 });
   } catch (e) {
     ElMessage.error({ message: 'error ! try again', duration: 1000 });
@@ -50,10 +54,6 @@ async function deleteLobbyTemplate(lobbyId: number) {
     globalLoading = false;
     showUpdate.value = false;
   }
-}
-
-function getLobby(row: Lobby) {
-  return row;
 }
 </script>
 
@@ -63,25 +63,25 @@ function getLobby(row: Lobby) {
 
     <el-dialog v-model="showUpdate">
       <div display="grid" grid="cols-4" justify="items-center">
-        <div grid="col-span-2">
-          <span display="block" text="sm">referee</span>
-          <el-input v-model="user.username" size="large" disabled />
-        </div>
+        <el-select grid="col-span-2" :model-value="status" @change="updateLobbyTemplate">
+          <el-option v-for="(item, v) in statusOptions" :key="v" :value="item" />
+        </el-select>
+
         <CommonDatepicker
           grid="col-span-2"
-          :model-value="2"
+          :model-value="schedule"
           type="datetime"
           title="date of lobby start"
           @update:model-value="(val) => (schedule = dayjs(val).utc().format())"
-          @change="(val: string) => updateDate(dayjs(val).utc().format(), mappool.id)"
+          @change="updateLobbyTemplate"
         />
         <el-button
-          v-if="isAuthorized && (access?.isAdmin || access?.isOwner || access?.isReferee)"
+          v-if="access?.isAdmin || access?.isOwner || access?.isReferee"
           type="danger"
           size="small"
           text
           :loading="globalLoading"
-          @click="deleteLobbyTemplate(getLobby(scope.row).id)"
+          @click="deleteLobbyTemplate"
         >
           delete
         </el-button>

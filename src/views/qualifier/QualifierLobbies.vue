@@ -104,7 +104,11 @@ function getLobby(row: Lobby) {
           >
             join
           </el-button>
-          <LobbySettings />
+          <LobbySettings
+            :lobby-id="getLobby(scope.row).id"
+            :status="getLobby(scope.row).status"
+            :schedule="getLobby(scope.row).schedule"
+          />
         </template>
       </el-table-column>
     </el-table>
