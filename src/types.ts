@@ -252,6 +252,11 @@ export interface Match extends Node {
   player2Id: number;
 }
 
+export interface UpdateLobbyDto {
+  schedule?: string;
+  status?: 'pending' | 'started' | 'finished';
+}
+
 export interface UpdateTournamentDto {
   isPublicable?: boolean;
   name?: string;

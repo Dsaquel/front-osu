@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import apiQualifier from '~/api/modules/api.qualifier';
-import { Qualifier, Lobby } from '~/types';
+import { Qualifier, Lobby, UpdateLobbyDto } from '~/types';
 
 const useQualifierStore = defineStore('qualifier', () => {
   const qualifier = ref(undefined as Qualifier | undefined);
@@ -30,17 +30,31 @@ const useQualifierStore = defineStore('qualifier', () => {
     return notification;
   }
 
+  async function updateLobby(lobbyId: number, qualifierId: number, updateLobbyDto: UpdateLobbyDto) {
+    const data = await apiQualifier.updateLobby(qualifierId, lobbyId, updateLobbyDto);
+    lobbies.value = data;
+  }
+
+  async function deleteLobby(qualifierId: number, lobbyId: number) {
+    const data = await apiQualifier.deleteLobby(qualifierId, lobbyId);
+    lobbies.value = data;
+  }
+
   async function addParticipantToLobby(lobbyId: number, qualifierId: number) {
     const data = await apiQualifier.addParticipantToLobby(lobbyId, qualifierId);
     lobbies.value = data;
   }
 
-  async function deleteLobby(lobbyId: number, qualifierId: number) {
-    const data = await apiQualifier.deleteLobby(lobbyId, qualifierId);
-    lobbies.value = data;
-  }
-
-  return { qualifier, lobbies, fetchQualifier, createLobby, fetchQualifierLobbies, addParticipantToLobby, deleteLobby };
+  return {
+    qualifier,
+    lobbies,
+    fetchQualifier,
+    createLobby,
+    fetchQualifierLobbies,
+    addParticipantToLobby,
+    updateLobby,
+    deleteLobby,
+  };
 });
 
 export default useQualifierStore;

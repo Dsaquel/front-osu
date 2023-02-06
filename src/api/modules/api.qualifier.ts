@@ -1,5 +1,5 @@
 import service from '~/api/http';
-import { Lobby, Qualifier, TemplateNotification } from '~/types';
+import { Lobby, Qualifier, TemplateNotification, UpdateLobbyDto } from '~/types';
 
 const QualifierApi = {
   fetchByTournamentId: (tournamentId: number) => service.get<Qualifier>(`/qualifier`, { tournamentId }),
@@ -8,7 +8,9 @@ const QualifierApi = {
     service.post<TemplateNotification>(`/qualifier/${qualifierId}/lobby`, { schedule }),
   addParticipantToLobby: (lobbyId: number, qualifierId: number) =>
     service.post<Lobby[]>(`/qualifier/${qualifierId}/lobby/${lobbyId}/participant`),
-  deleteLobby: (lobbyId: number, qualifierId: number) =>
+  updateLobby: (qualifierId: number, lobbyId: number, updateLobbyDto: UpdateLobbyDto) =>
+    service.put<Lobby[]>(`/qualifier/${qualifierId}/lobby/${lobbyId}`, updateLobbyDto),
+  deleteLobby: (qualifierId: number, lobbyId: number) =>
     service.delete<Lobby[]>(`/qualifier/${qualifierId}/lobby/${lobbyId}`),
 };
 

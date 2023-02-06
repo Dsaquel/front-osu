@@ -5,15 +5,13 @@ import { Lobby } from '~/types';
 
 dayjs.extend(LocalizedFormat);
 
-const { fetchQualifier, fetchQualifierLobbies, addParticipantToLobby, deleteLobby } = qualifierStore();
+const { fetchQualifier, fetchQualifierLobbies, addParticipantToLobby } = qualifierStore();
 const { fetchTournament } = tournamentStore();
-const { isAuthorized, access, tournament } = storeToRefs(tournamentStore());
+const { tournament } = storeToRefs(tournamentStore());
 const { qualifier, lobbies } = storeToRefs(qualifierStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
 let initLoading = $ref(false);
-let deleteLobbyLoading = $ref(false);
-
 async function init() {
   await fetchQualifier(tournamentId);
   await fetchTournament(tournamentId);
@@ -28,18 +26,6 @@ onBeforeMount(async () => {
 
 function getLobby(row: Lobby) {
   return row;
-}
-
-async function deleteLobbyTemplate(lobbyId: number) {
-  try {
-    deleteLobbyLoading = true;
-    await deleteLobby(lobbyId, qualifier.value?.id as number);
-    ElMessage.success({ message: 'lobby deleted !', duration: 1000 });
-  } catch (e) {
-    ElMessage.error({ message: 'error ! try again', duration: 1000 });
-  } finally {
-    deleteLobbyLoading = false;
-  }
 }
 </script>
 
@@ -107,18 +93,8 @@ async function deleteLobbyTemplate(lobbyId: number) {
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column label="actions" align="center" >
+      <el-table-column label="actions" align="center">
         <template #default="scope">
-          <el-button
-            v-if="isAuthorized && (access?.isAdmin || access?.isOwner || access?.isReferee)"
-            type="danger"
-            size="small"
-            text
-            :loading="deleteLobbyLoading"
-            @click="deleteLobbyTemplate(getLobby(scope.row).id)"
-          >
-            delete
-          </el-button>
           <!-- TODO: verify if user is a participant and he playe already in a lobby -->
           <el-button
             type="success"
@@ -126,7 +102,7 @@ async function deleteLobbyTemplate(lobbyId: number) {
             m="l-1"
             @click="addParticipantToLobby(getLobby(scope.row).id, qualifier?.id as number)"
           >
-            go here
+            join
           </el-button>
           <LobbySettings />
         </template>
