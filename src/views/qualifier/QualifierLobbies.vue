@@ -47,7 +47,7 @@ async function deleteLobbyTemplate(lobbyId: number) {
   <el-card v-if="!initLoading && lobbies" shadow="never">
     <div display="flex" align="items-center" justify="between" m="b-6 t-2">
       <h2 m="x-auto" text="xl">Qualifier Lobbies</h2>
-      <QualifierCreateLobby />
+      <LobbyCreate />
     </div>
     <el-table :data="lobbies">
       <el-table-column label="referee host">
@@ -77,8 +77,9 @@ async function deleteLobbyTemplate(lobbyId: number) {
               trigger="hover"
               width="auto"
               placement="bottom"
+              :hide-after="50"
               :title="participant.user.username"
-              :content="`rank: ${participant.user.rank}\ndiscord: ${participant.user.discord} ${i}`"
+              :content="`rank: ${participant.user.rank}\ndiscord: ${participant.user.discord}`"
             >
               <template #reference>
                 <el-avatar class="float-left ml-[-10px]" :src="participant.user.avatarUrl" />
@@ -87,12 +88,12 @@ async function deleteLobbyTemplate(lobbyId: number) {
           </template>
         </template>
       </el-table-column>
-      <el-table-column label="status" :width="200">
+      <el-table-column label="status" :width="100">
         <template #default="scope">
           {{ getLobby(scope.row).status }}
         </template>
       </el-table-column>
-      <el-table-column label="scheduled" :width="200">
+      <el-table-column label="scheduled" :width="100">
         <template #default="scope">
           <el-popover
             trigger="hover"
@@ -106,7 +107,7 @@ async function deleteLobbyTemplate(lobbyId: number) {
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column label="actions" align="center" :width="200">
+      <el-table-column label="actions" align="center" >
         <template #default="scope">
           <el-button
             v-if="isAuthorized && (access?.isAdmin || access?.isOwner || access?.isReferee)"
@@ -122,12 +123,12 @@ async function deleteLobbyTemplate(lobbyId: number) {
           <el-button
             type="success"
             size="small"
-            text
             m="l-1"
             @click="addParticipantToLobby(getLobby(scope.row).id, qualifier?.id as number)"
           >
             go here
           </el-button>
+          <LobbySettings />
         </template>
       </el-table-column>
     </el-table>
