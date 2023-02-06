@@ -6,6 +6,7 @@ import Components from 'unplugin-vue-components/vite';
 import Icons from 'unplugin-icons/vite';
 import IconsResolver from 'unplugin-icons/resolver';
 import { ElementPlusResolver, VueUseComponentsResolver } from 'unplugin-vue-components/resolvers';
+import VueMacros from 'unplugin-vue-macros/vite';
 import WindiCSS from 'vite-plugin-windicss';
 import Markdown from 'vite-plugin-vue-markdown';
 import Prism from 'markdown-it-prism';
@@ -19,9 +20,13 @@ const defaultClasses = 'prose prose-sm m-auto text-left';
 
 export default (env: ConfigEnv) => {
   return [
-    vue({
-      include: [/\.vue$/, /\.md$/],
-      reactivityTransform: true,
+    VueMacros({
+      plugins: {
+        vue: vue({
+          include: [/\.vue$/, /\.md$/],
+          reactivityTransform: true,
+        }),
+      },
     }),
     vueJsx(),
     svgLoader(),

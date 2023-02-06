@@ -16,20 +16,19 @@ const showUpdate = ref(false);
 let globalLoading = $ref(false);
 const statusOptions = ['pending', 'started', 'finished'];
 
-const props = defineProps<{
+const { lobbyId, schedule, status, updateAt } = definePropsRefs<{
   lobbyId: number;
   schedule?: string;
   status?: LobbyStatus;
   updateAt: string;
 }>();
 
-const { lobbyId, schedule, status, updateAt } = toRefs(props);
-
 async function updateLobbyTemplate() {
   try {
     if (!qualifier.value) return;
     if (schedule?.value === null || schedule?.value === '') return;
 
+    console.log(status.value);
     globalLoading = true;
     await updateLobby(lobbyId.value, qualifier.value.id as number, {
       schedule: schedule?.value,
@@ -40,7 +39,7 @@ async function updateLobbyTemplate() {
     ElMessage.error({ message: 'error ! try again', duration: 1000 });
   } finally {
     globalLoading = false;
-    showUpdate.value = false;
+    // showUpdate.value = false;
   }
 }
 
@@ -66,7 +65,7 @@ async function deleteLobbyTemplate() {
       <div display="grid" grid="cols-2 gap-2">
         <div>
           <span display="block">Status</span>
-          <el-select :model-value="status" @change="updateLobbyTemplate">
+          <el-select v-model="status">
             <el-option v-for="(item, v) in statusOptions" :key="v" :value="item" />
           </el-select>
         </div>

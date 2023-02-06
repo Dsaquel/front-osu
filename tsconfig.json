@@ -15,11 +15,14 @@
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
     "strictFunctionTypes": false,
-    "types": ["@intlify/vite-plugin-vue-i18n/client", "node"],
+    "types": ["@intlify/vite-plugin-vue-i18n/client", "node", "unplugin-vue-macros/macros-global"],
     "paths": {
       "~/*": ["src/*"],
       "#root/*": ["./*"]
     }
+  },
+  "vueCompilerOptions": {
+    "plugins": ["@vue-macros/volar/define-props-refs"]
   },
   // "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "presets/**/*.ts"],
   // 编译器默认排除的编译文件
