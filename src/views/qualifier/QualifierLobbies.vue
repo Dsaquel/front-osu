@@ -5,9 +5,9 @@ import { Lobby } from '~/types';
 
 dayjs.extend(utc);
 
-const { fetchQualifier, fetchQualifierLobbies } = qualifierStore();
+const { fetchQualifier, fetchQualifierLobbies, addParticipantToLobby } = qualifierStore();
 const { fetchTournament } = tournamentStore();
-const { tournament } = storeToRefs(tournamentStore());
+const { isAuthorized, access, tournament } = storeToRefs(tournamentStore());
 const { qualifier, lobbies } = storeToRefs(qualifierStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
@@ -74,6 +74,28 @@ function getLobby(row: Lobby) {
               <span>{{ useTimeAgo(getLobby(scope.row).schedule).value }}</span>
             </template>
           </el-popover>
+        </template>
+      </el-table-column>
+      <el-table-column label="actions" align="center" :width="200">
+        <template #default="scope">
+          <el-button
+            v-if="isAuthorized && (access?.isAdmin || access?.isOwner || access?.isReferee)"
+            type="danger"
+            size="small"
+            text
+          >
+            delete
+          </el-button>
+          <!-- TODO: verify if user is a participant-->
+          <el-button
+            type="success"
+            size="small"
+            text
+            m="l-1"
+            @click="addParticipantToLobby(getLobby(scope.row).id, qualifier?.id as number)"
+          >
+            go here
+          </el-button>
         </template>
       </el-table-column>
     </el-table>

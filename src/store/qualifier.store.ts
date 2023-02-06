@@ -30,7 +30,12 @@ const useQualifierStore = defineStore('qualifier', () => {
     return notification;
   }
 
-  return { qualifier, lobbies, fetchQualifier, createLobby, fetchQualifierLobbies };
+  async function addParticipantToLobby(lobbyId: number, qualifierId: number) {
+    const data = await apiQualifier.addParticipantToLobby(lobbyId, qualifierId);
+    lobbies.value = data;
+  }
+
+  return { qualifier, lobbies, fetchQualifier, createLobby, fetchQualifierLobbies, addParticipantToLobby };
 });
 
 export default useQualifierStore;

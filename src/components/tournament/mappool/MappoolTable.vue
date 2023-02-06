@@ -2,6 +2,8 @@
 import dayjs from 'dayjs';
 import { MapType, TournamentMappool, QualifierMappool } from '~/types';
 
+const { isAuthorized, access } = storeToRefs(tournamentStore());
+
 defineProps<{
   mappool: TournamentMappool | QualifierMappool;
 }>();
@@ -68,6 +70,7 @@ const formattedType = {
           <el-button type="primary" size="small" link>osu page</el-button>
         </a>
         <el-button
+          v-if="isAuthorized && (access?.isAdmin || access?.isOwner || access?.isMappooler)"
           type="danger"
           size="small"
           text
@@ -80,9 +83,14 @@ const formattedType = {
               'tournamentId' in mappool ? mappool.tournamentId : mappool.qualifierId,
             )
           "
-          >delete</el-button
         >
-        <el-tooltip content="Refresh the beatmap data" placement="right">
+          delete
+        </el-button>
+        <el-tooltip
+          v-if="isAuthorized && (access?.isAdmin || access?.isOwner || access?.isMappooler)"
+          content="Refresh the beatmap data"
+          placement="right"
+        >
           <el-button
             size="small"
             plain

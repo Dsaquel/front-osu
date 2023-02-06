@@ -189,6 +189,14 @@ export interface Lobby extends Node {
   superReferee: SuperReferee;
   superRefereeId: number;
   qualifierId: number;
+  participantsLobby: QualifierParticipant[];
+}
+
+export interface QualifierParticipant extends Participant {
+  totalRank: number;
+  totalScore: number;
+  lobbyId: number | null;
+  qualifierId: number;
 }
 
 export interface SuperReferee extends Node {
