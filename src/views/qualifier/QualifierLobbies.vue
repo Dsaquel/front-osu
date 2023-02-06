@@ -108,6 +108,13 @@ function getLobby(row: Lobby) {
             :lobby-id="getLobby(scope.row).id"
             :status="getLobby(scope.row).status"
             :schedule="getLobby(scope.row).schedule"
+            :update-at="getLobby(scope.row).updateAt"
+            :title="
+              'host by ' +
+              (getLobby(scope.row).superReferee.admin?.user.username ||
+                getLobby(scope.row).superReferee.referee?.user.username ||
+                tournament?.owner.username)
+            "
           />
         </template>
       </el-table-column>
@@ -119,5 +126,9 @@ function getLobby(row: Lobby) {
 <style scoped lang="scss">
 :global(.el-popper) {
   white-space: pre-wrap;
+}
+
+:deep(.el-table__inner-wrapper::before) {
+  z-index: 1;
 }
 </style>

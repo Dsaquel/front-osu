@@ -20,9 +20,10 @@ const props = defineProps<{
   lobbyId: number;
   schedule?: string;
   status?: LobbyStatus;
+  updateAt: string;
 }>();
 
-const { lobbyId, schedule, status } = toRefs(props);
+const { lobbyId, schedule, status, updateAt } = toRefs(props);
 
 async function updateLobbyTemplate() {
   try {
@@ -34,7 +35,7 @@ async function updateLobbyTemplate() {
       schedule: schedule?.value,
       status: status?.value,
     });
-    ElMessage.success({ message: 'lobby deleted !', duration: 1000 });
+    ElMessage.success({ message: 'lobby updated !', duration: 1000 });
   } catch (e) {
     ElMessage.error({ message: 'error ! try again', duration: 1000 });
   } finally {
@@ -61,31 +62,39 @@ async function deleteLobbyTemplate() {
   <div v-if="qualifier && user && (access?.isAdmin || access?.isReferee || access?.isOwner)">
     <el-button m="l-1" type="primary" :icon="Setting" @click="showUpdate = true" />
 
-    <el-dialog v-model="showUpdate">
-      <div display="grid" grid="cols-4" justify="items-center">
-        <el-select grid="col-span-2" :model-value="status" @change="updateLobbyTemplate">
-          <el-option v-for="(item, v) in statusOptions" :key="v" :value="item" />
-        </el-select>
+    <el-dialog v-model="showUpdate" v-bind="useAttrs()">
+      <div display="grid" grid="cols-2 gap-2">
+        <div>
+          <span display="block">Status</span>
+          <el-select :model-value="status" @change="updateLobbyTemplate">
+            <el-option v-for="(item, v) in statusOptions" :key="v" :value="item" />
+          </el-select>
+        </div>
 
         <CommonDatepicker
-          grid="col-span-2"
           :model-value="schedule"
           type="datetime"
-          title="date of lobby start"
+          title="Date of lobby start"
           @update:model-value="(val) => (schedule = dayjs(val).utc().format())"
           @change="updateLobbyTemplate"
         />
         <el-button
           v-if="access?.isAdmin || access?.isOwner || access?.isReferee"
           type="danger"
-          size="small"
-          text
-          :loading="globalLoading"
+          place="self-center"
+          plain
           @click="deleteLobbyTemplate"
         >
-          delete
+          delete lobby
         </el-button>
       </div>
+      <template #footer>
+        <div>
+          last update:
+          <span v-if="!globalLoading">{{ useTimeAgo(updateAt).value }} </span>
+          <span v-loading="globalLoading" />
+        </div>
+      </template>
     </el-dialog>
   </div>
 </template>
