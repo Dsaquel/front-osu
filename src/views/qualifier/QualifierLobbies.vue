@@ -57,6 +57,23 @@ function getLobby(row: Lobby) {
           </div>
         </template>
       </el-table-column>
+      <el-table-column label="participants">
+        <template #default="scope">
+          <template v-for="(participant, i) in getLobby(scope.row).participantsLobby" :key="i">
+            <el-popover
+              trigger="hover"
+              width="auto"
+              placement="bottom"
+              :title="participant.user.username"
+              :content="`rank: ${participant.user.rank}\ndiscord: ${participant.user.discord}`"
+            >
+              <template #reference>
+                <el-avatar :class="{ 'transform translate-x-[-10px]': !!i }" :src="participant.user.avatarUrl" />
+              </template>
+            </el-popover>
+          </template>
+        </template>
+      </el-table-column>
       <el-table-column label="status" :width="200">
         <template #default="scope">
           {{ getLobby(scope.row).status }}
@@ -102,3 +119,9 @@ function getLobby(row: Lobby) {
   </el-card>
   <div v-else v-loading.fullscreen.lock="initLoading" />
 </template>
+
+<style scoped lang="scss">
+:global(.el-popper) {
+  white-space: pre-wrap;
+}
+</style>
