@@ -1,17 +1,18 @@
 <script lang="ts" setup>
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
+import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import { Lobby } from '~/types';
 
-dayjs.extend(utc);
+dayjs.extend(LocalizedFormat);
 
-const { fetchQualifier, fetchQualifierLobbies, addParticipantToLobby } = qualifierStore();
+const { fetchQualifier, fetchQualifierLobbies, addParticipantToLobby, deleteLobby } = qualifierStore();
 const { fetchTournament } = tournamentStore();
 const { isAuthorized, access, tournament } = storeToRefs(tournamentStore());
 const { qualifier, lobbies } = storeToRefs(qualifierStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
 let initLoading = $ref(false);
+let deleteLobbyLoading = $ref(false);
 
 async function init() {
   await fetchQualifier(tournamentId);
@@ -27,6 +28,18 @@ onBeforeMount(async () => {
 
 function getLobby(row: Lobby) {
   return row;
+}
+
+async function deleteLobbyTemplate(lobbyId: number) {
+  try {
+    deleteLobbyLoading = true;
+    await deleteLobby(lobbyId, qualifier.value?.id as number);
+    ElMessage.success({ message: 'lobby deleted !', duration: 1000 });
+  } catch (e) {
+    ElMessage.error({ message: 'error ! try again', duration: 1000 });
+  } finally {
+    deleteLobbyLoading = false;
+  }
 }
 </script>
 
@@ -65,10 +78,10 @@ function getLobby(row: Lobby) {
               width="auto"
               placement="bottom"
               :title="participant.user.username"
-              :content="`rank: ${participant.user.rank}\ndiscord: ${participant.user.discord}`"
+              :content="`rank: ${participant.user.rank}\ndiscord: ${participant.user.discord} ${i}`"
             >
               <template #reference>
-                <el-avatar :class="{ 'transform translate-x-[-10px]': !!i }" :src="participant.user.avatarUrl" />
+                <el-avatar class="float-left ml-[-10px]" :src="participant.user.avatarUrl" />
               </template>
             </el-popover>
           </template>
@@ -85,7 +98,7 @@ function getLobby(row: Lobby) {
             trigger="hover"
             width="auto"
             placement="bottom"
-            :content="dayjs(getLobby(scope.row).schedule).format('MMMM - dddd - YYYY')"
+            :content="dayjs(getLobby(scope.row).schedule).format('LLLL')"
           >
             <template #reference>
               <span>{{ useTimeAgo(getLobby(scope.row).schedule).value }}</span>
@@ -100,10 +113,12 @@ function getLobby(row: Lobby) {
             type="danger"
             size="small"
             text
+            :loading="deleteLobbyLoading"
+            @click="deleteLobbyTemplate(getLobby(scope.row).id)"
           >
             delete
           </el-button>
-          <!-- TODO: verify if user is a participant-->
+          <!-- TODO: verify if user is a participant and he playe already in a lobby -->
           <el-button
             type="success"
             size="small"

@@ -8,6 +8,8 @@ const QualifierApi = {
     service.post<TemplateNotification>(`/qualifier/${qualifierId}/lobby`, { schedule }),
   addParticipantToLobby: (lobbyId: number, qualifierId: number) =>
     service.post<Lobby[]>(`/qualifier/${qualifierId}/lobby/${lobbyId}/participant`),
+  deleteLobby: (lobbyId: number, qualifierId: number) =>
+    service.delete<Lobby[]>(`/qualifier/${qualifierId}/lobby/${lobbyId}`),
 };
 
 export default QualifierApi;

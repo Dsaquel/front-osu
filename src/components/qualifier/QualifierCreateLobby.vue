@@ -11,19 +11,38 @@ const { access } = storeToRefs(tournamentStore());
 const { user } = storeToRefs(userStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
-const schedule = ref();
+const schedule = ref<string | undefined>(undefined);
 const showCreate = ref(false);
+let createLobbyLoading = $ref(false);
 
 onBeforeMount(async () => {
   await fetchControlAccess(tournamentId);
 });
+
+function resetSettings() {
+  schedule.value = undefined;
+  showCreate.value = false;
+}
+
+async function createLobbyTemplate(qualifierId: number) {
+  try {
+    createLobbyLoading = true;
+    await createLobby(qualifierId, schedule.value as string);
+    ElMessage.success({ message: 'lobby created !', duration: 1000 });
+  } catch (e) {
+    ElMessage.error({ message: 'error ! try again', duration: 1000 });
+  } finally {
+    createLobbyLoading = false;
+    resetSettings();
+  }
+}
 </script>
 
 <template>
-  <div v-if="user && (access?.isAdmin || access?.isReferee || access?.isOwner)">
+  <div v-if="qualifier && user && (access?.isAdmin || access?.isReferee || access?.isOwner)">
     <el-button type="success" @click.stop="showCreate = true">create new lobby</el-button>
 
-    <el-dialog v-model="showCreate">
+    <el-dialog v-model="showCreate" @close="resetSettings">
       <div display="grid" grid="cols-4" justify="items-center">
         <div grid="col-span-2">
           <span display="block" text="sm">referee</span>
@@ -39,8 +58,9 @@ onBeforeMount(async () => {
         <el-button
           grid="col-span-full"
           :disabled="!schedule"
+          :loading="createLobbyLoading"
           type="success"
-          @click="createLobby(qualifier?.id as number, schedule)"
+          @click="createLobbyTemplate(qualifier?.id as number)"
         >
           create lobby
         </el-button>
