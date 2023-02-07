@@ -12,6 +12,8 @@ const QualifierApi = {
     service.put<Lobby[]>(`/qualifier/${qualifierId}/lobby/${lobbyId}`, updateLobbyDto),
   deleteLobby: (qualifierId: number, lobbyId: number) =>
     service.delete<Lobby[]>(`/qualifier/${qualifierId}/lobby/${lobbyId}`),
+  fetchLobby: (qualifierId: number, matchId: number) =>
+    service.post<void>(`/qualifier/score`, { qualifierId, matchId }),
 };
 
 export default QualifierApi;
