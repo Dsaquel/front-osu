@@ -88,6 +88,7 @@ declare module '@vue/runtime-core' {
     IPhSunHorizonBold: typeof import('~icons/ph/sun-horizon-bold')['default']
     IRiArticleLine: typeof import('~icons/ri/article-line')['default']
     LobbyCreate: typeof import('./components/qualifier/LobbyCreate.vue')['default']
+    LobbySetScores: typeof import('./components/qualifier/LobbySetScores.vue')['default']
     LobbySettings: typeof import('./components/qualifier/LobbySettings.vue')['default']
     LowerBracket: typeof import('./components/tournament/bracket/LowerBracket.vue')['default']
     MainLayout: typeof import('./components/Ui/Layout/childs/MainLayout.vue')['default']

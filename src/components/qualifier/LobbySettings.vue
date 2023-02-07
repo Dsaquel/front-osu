@@ -63,7 +63,7 @@ async function deleteLobbyTemplate() {
   <div v-if="qualifier && user && (access?.isAdmin || access?.isReferee || access?.isOwner)">
     <el-button m="l-1" type="primary" :icon="Setting" @click="showUpdate = true" />
 
-    <el-dialog v-model="showUpdate" v-bind="useAttrs()">
+    <el-dialog v-model="showUpdate" v-bind="useAttrs()" align-center>
       <div display="grid" grid="cols-2 gap-2">
         <div>
           <span display="block">Status</span>

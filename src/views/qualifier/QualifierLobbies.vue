@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import dayjs from 'dayjs';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
-import { Lobby } from '~/types';
+import { Lobby, SuperReferee } from '~/types';
 
 dayjs.extend(LocalizedFormat);
 
@@ -26,6 +26,12 @@ onBeforeMount(async () => {
 
 function getLobby(row: Lobby) {
   return row;
+}
+
+function getHost(superReferee: SuperReferee) {
+  return `host by ${
+    superReferee.admin?.user.username || superReferee.referee?.user.username || tournament.value?.owner.username
+  }`;
 }
 </script>
 
@@ -109,13 +115,9 @@ function getLobby(row: Lobby) {
             :status="getLobby(scope.row).status"
             :schedule="getLobby(scope.row).schedule"
             :update-at="getLobby(scope.row).updateAt"
-            :title="
-              'host by ' +
-              (getLobby(scope.row).superReferee.admin?.user.username ||
-                getLobby(scope.row).superReferee.referee?.user.username ||
-                tournament?.owner.username)
-            "
+            :title="getHost(getLobby(scope.row).superReferee)"
           />
+          <LobbySetScores :title="getHost(getLobby(scope.row).superReferee)" />
         </template>
       </el-table-column>
     </el-table>
