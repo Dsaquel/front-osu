@@ -16,37 +16,39 @@ const showUpdate = ref(false);
 let globalLoading = $ref(false);
 const statusOptions = ['pending', 'started', 'finished'];
 
-const { lobbyId, schedule, status, updateAt } = definePropsRefs<{
+const props = defineProps<{
   lobbyId: number;
-  schedule?: string;
   status?: LobbyStatus;
+  schedule?: string;
   updateAt: string;
 }>();
+
+const statusTemplate = ref(props.status);
+const scheduleTemplate = ref(props.schedule);
 
 async function updateLobbyTemplate() {
   try {
     if (!qualifier.value) return;
-    if (schedule?.value === null || schedule?.value === '') return;
+    if (scheduleTemplate.value === null || scheduleTemplate.value === '') return;
 
-    console.log(status.value);
     globalLoading = true;
-    await updateLobby(lobbyId.value, qualifier.value.id as number, {
-      schedule: schedule?.value,
-      status: status?.value,
+    await updateLobby(props.lobbyId, qualifier.value.id as number, {
+      schedule: scheduleTemplate.value,
+      status: statusTemplate.value,
     });
     ElMessage.success({ message: 'lobby updated !', duration: 1000 });
   } catch (e) {
     ElMessage.error({ message: 'error ! try again', duration: 1000 });
   } finally {
     globalLoading = false;
-    // showUpdate.value = false;
+    showUpdate.value = false;
   }
 }
 
 async function deleteLobbyTemplate() {
   try {
     globalLoading = true;
-    await deleteLobby(qualifier.value?.id as number, lobbyId.value);
+    await deleteLobby(qualifier.value?.id as number, props.lobbyId);
     ElMessage.success({ message: 'lobby deleted !', duration: 1000 });
   } catch (e) {
     ElMessage.error({ message: 'error ! try again', duration: 1000 });
@@ -65,16 +67,16 @@ async function deleteLobbyTemplate() {
       <div display="grid" grid="cols-2 gap-2">
         <div>
           <span display="block">Status</span>
-          <el-select v-model="status">
+          <el-select v-model="statusTemplate" @change="updateLobbyTemplate">
             <el-option v-for="(item, v) in statusOptions" :key="v" :value="item" />
           </el-select>
         </div>
 
         <CommonDatepicker
-          :model-value="schedule"
+          :model-value="scheduleTemplate"
           type="datetime"
           title="Date of lobby start"
-          @update:model-value="(val) => (schedule = dayjs(val).utc().format())"
+          @update:model-value="(val) => (scheduleTemplate = dayjs(val).utc().format())"
           @change="updateLobbyTemplate"
         />
         <el-button

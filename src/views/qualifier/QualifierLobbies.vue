@@ -35,7 +35,7 @@ function getLobby(row: Lobby) {
       <h2 m="x-auto" text="xl">Qualifier Lobbies</h2>
       <LobbyCreate />
     </div>
-    <el-table :data="lobbies">
+    <el-table :data="lobbies" cell-class-name="cell-padding">
       <el-table-column label="referee host">
         <template #default="scope">
           <div display="flex" align="items-center">
@@ -130,5 +130,9 @@ function getLobby(row: Lobby) {
 
 :deep(.el-table__inner-wrapper::before) {
   z-index: 1;
+}
+
+:deep(.cell:first-child) {
+  padding-left: 10px;
 }
 </style>
