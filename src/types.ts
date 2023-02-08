@@ -204,8 +204,8 @@ export interface Lobby extends Node {
 }
 
 export interface QualifierParticipant extends Participant {
-  totalRank: number;
-  totalScore: number;
+  totalRank: number | null;
+  totalScore: number | null;
   lobbyId: number | null;
   qualifierId: number;
 }

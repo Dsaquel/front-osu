@@ -6,6 +6,7 @@ export default {
 
 <script setup lang="ts">
 import router from '~/router';
+import { QualifierParticipant } from '~/types';
 
 const { fetchQualifier, fetchMapsScore, fetchParticipantsRanking } = qualifierStore();
 const { fetchTournament, fetchControlAccess, updatePublication } = tournamentStore();
@@ -36,6 +37,10 @@ function passTournamentPublic() {
 const goLobbies = () => {
   router.push({ name: 'qualifier-lobbies', params: { tournamentId } });
 };
+
+function getQualifierParticipant(row: QualifierParticipant) {
+  return row;
+}
 </script>
 
 <template>
@@ -58,11 +63,40 @@ const goLobbies = () => {
       <el-button v-if="!tournament.isPublic" type="success" @click="passTournamentPublic">pass to public</el-button>
       <el-button link @click="goLobbies"> see lobbies </el-button>
       <div flex="~ wrap" grid="gap-5" justify="center">
-        <el-table class="lg:basis-2/5 md:basis-3/5"> </el-table>
-        <MapScoreTable class="lg:basis-1/4 md:basis-2/5" />
-        <MapScoreTable class="lg:basis-1/4 md:basis-2/5" />
-        <MapScoreTable class="lg:basis-1/4 md:basis-2/5" />
-        <MapScoreTable class="lg:basis-1/4 md:basis-2/5" />
+        <el-table class="lg:basis-2/5 md:basis-3/5" :data="participantsRanking">
+          <el-table-column label="player">
+            <template #default="scope">
+              <div display="flex" align="items-center">
+                <el-avatar :src="getQualifierParticipant(scope.row).user.avatarUrl" />
+                <span m="l-2" text="overflow-ellipsis space-nowrap" overflow="hidden">
+                  {{ getQualifierParticipant(scope.row).user.username }}
+                </span>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="total score">
+            <template #default="scope">
+              {{
+                getQualifierParticipant(scope.row)
+                  .totalScore?.toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ' ') || 0
+              }}
+            </template>
+          </el-table-column>
+          <el-table-column label="points">
+            <template #default="scope">
+              {{ getQualifierParticipant(scope.row).totalRank }}
+            </template>
+          </el-table-column>
+          <el-table-column label="seed">
+            <template #default="scope">
+              {{ getQualifierParticipant(scope.row).seed }}
+            </template>
+          </el-table-column>
+        </el-table>
+        <template v-for="mapScore in mapsScore" :key="mapScore.id">
+          <MapScoreTable class="lg:basis-1/4 md:basis-2/5" />
+        </template>
       </div>
     </div>
   </div>
