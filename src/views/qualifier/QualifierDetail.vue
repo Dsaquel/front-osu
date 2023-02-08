@@ -7,7 +7,7 @@ export default {
 <script setup lang="ts">
 import router from '~/router';
 
-const { fetchQualifier } = qualifierStore();
+const { fetchQualifier, fetchMapsScore } = qualifierStore();
 const { fetchTournament, fetchControlAccess, updatePublication } = tournamentStore();
 const { qualifier } = storeToRefs(qualifierStore());
 const { tournament, isAuthorized } = storeToRefs(tournamentStore());
@@ -19,6 +19,7 @@ async function init() {
   await fetchQualifier(tournamentId);
   await fetchControlAccess(tournamentId);
   await fetchTournament(tournamentId);
+  await fetchMapsScore(qualifier.value?.id as number);
 }
 
 onBeforeMount(async () => {

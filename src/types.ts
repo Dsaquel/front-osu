@@ -93,6 +93,17 @@ export interface MapParams {
 
 export interface QualifierMap extends Map {
   qualifierId: number;
+  participantsMapPlayed: ParticipantMapScore[];
+}
+
+export interface ParticipantMapScore extends Node {
+  rank: number;
+  score: number;
+  qualifierMapPlayed: QualifierMap;
+  participant: QualifierParticipant;
+  participantId: number;
+  qualifierMapPlayedId: number;
+  qualifierId: number;
 }
 
 export interface TournamentMap extends Map {
