@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia';
 import apiQualifier from '~/api/modules/api.qualifier';
-import { Qualifier, Lobby, UpdateLobbyDto, QualifierMap } from '~/types';
+import { Qualifier, Lobby, UpdateLobbyDto, QualifierMap, QualifierParticipant } from '~/types';
 
 const useQualifierStore = defineStore('qualifier', () => {
   const qualifier = ref(undefined as Qualifier | undefined);
   const lobbies = ref(undefined as Lobby[] | undefined);
   const mapsScore = ref(undefined as QualifierMap[] | undefined);
+  const participantsRanking = ref(undefined as QualifierParticipant[] | undefined);
 
   async function fetchQualifier(tournamentId: number) {
     try {
@@ -55,9 +56,16 @@ const useQualifierStore = defineStore('qualifier', () => {
     mapsScore.value = data;
   }
 
+  async function fetchParticipantsRanking(qualifierId: number) {
+    const data = await apiQualifier.fetchParticipantsRanking(qualifierId);
+    participantsRanking.value = data;
+  }
+
   return {
     qualifier,
     lobbies,
+    mapsScore,
+    participantsRanking,
     fetchQualifier,
     createLobby,
     fetchQualifierLobbies,
@@ -66,6 +74,7 @@ const useQualifierStore = defineStore('qualifier', () => {
     deleteLobby,
     updateScoresLobby,
     fetchMapsScore,
+    fetchParticipantsRanking,
   };
 });
 

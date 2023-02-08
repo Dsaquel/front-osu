@@ -7,9 +7,9 @@ export default {
 <script setup lang="ts">
 import router from '~/router';
 
-const { fetchQualifier, fetchMapsScore } = qualifierStore();
+const { fetchQualifier, fetchMapsScore, fetchParticipantsRanking } = qualifierStore();
 const { fetchTournament, fetchControlAccess, updatePublication } = tournamentStore();
-const { qualifier } = storeToRefs(qualifierStore());
+const { qualifier, mapsScore, participantsRanking } = storeToRefs(qualifierStore());
 const { tournament, isAuthorized } = storeToRefs(tournamentStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
@@ -20,6 +20,7 @@ async function init() {
   await fetchControlAccess(tournamentId);
   await fetchTournament(tournamentId);
   await fetchMapsScore(qualifier.value?.id as number);
+  await fetchParticipantsRanking(qualifier.value?.id as number);
 }
 
 onBeforeMount(async () => {
@@ -56,8 +57,8 @@ const goLobbies = () => {
       <div></div>
       <el-button v-if="!tournament.isPublic" type="success" @click="passTournamentPublic">pass to public</el-button>
       <el-button link @click="goLobbies"> see lobbies </el-button>
-      <div flex="~ wrap" grid="gap-5" justify="center" w="full">
-        <el-table class="lg:basis-2/5 md:basis-3/5"></el-table>
+      <div flex="~ wrap" grid="gap-5" justify="center">
+        <el-table class="lg:basis-2/5 md:basis-3/5"> </el-table>
         <MapScoreTable class="lg:basis-1/4 md:basis-2/5" />
         <MapScoreTable class="lg:basis-1/4 md:basis-2/5" />
         <MapScoreTable class="lg:basis-1/4 md:basis-2/5" />

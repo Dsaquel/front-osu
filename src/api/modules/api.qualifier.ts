@@ -1,5 +1,5 @@
 import service from '~/api/http';
-import { Lobby, Qualifier, QualifierMap, TemplateNotification, UpdateLobbyDto } from '~/types';
+import { Lobby, Qualifier, QualifierMap, QualifierParticipant, TemplateNotification, UpdateLobbyDto } from '~/types';
 
 const QualifierApi = {
   fetchByTournamentId: (tournamentId: number) => service.get<Qualifier>(`/qualifier`, { tournamentId }),
@@ -15,6 +15,8 @@ const QualifierApi = {
   updateScoresLobby: (qualifierId: number, matchId: number) =>
     service.put<string>(`/qualifier/${qualifierId}/score`, { matchId }),
   fetchMapsScore: (qualifierId: number) => service.get<QualifierMap[]>(`/qualifier/${qualifierId}/map`),
+  fetchParticipantsRanking: (qualifierId: number) =>
+    service.get<QualifierParticipant[]>(`/qualifier/${qualifierId}/participant/ranking`),
 };
 
 export default QualifierApi;
