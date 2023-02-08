@@ -16,7 +16,6 @@ const { copy, copied } = useClipboard();
   <div>
     <div flex="~" justify="between" align="content-center">
       <el-tag size="large">{{ mapScore.type }}</el-tag>
-
       <div
         flex="~"
         align="content-center"
@@ -29,6 +28,14 @@ const { copy, copied } = useClipboard();
       </div>
     </div>
     <el-image loading="lazy" :src="mapScore.osuBeatmap.beatmapset.covers['slimcover@2x']" />
+    <el-descriptions border>
+      <el-descriptions-item label="average score">
+        {{
+          mapScore.participantsMapPlayed.map((map) => map.score).reduce((p, c) => p + c, 0) /
+          mapScore.participantsMapPlayed.length
+        }}
+      </el-descriptions-item>
+    </el-descriptions>
     <el-table :data="mapScore.participantsMapPlayed">
       <el-table-column label="player">
         <template #default="scope">

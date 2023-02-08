@@ -113,11 +113,10 @@ const formattedType = {
 </template>
 
 <style lang="scss" scoped>
-:deep(.el-table_1_column_1) {
-  padding: 0;
-}
-:deep(.el-table_1_column_1 div) {
-  padding: 0;
+:deep(tr) {
+  td {
+    padding: 0 !important;
+  }
 }
 
 .el-image {

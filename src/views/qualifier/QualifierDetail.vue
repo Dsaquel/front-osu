@@ -62,38 +62,56 @@ function getQualifierParticipant(row: QualifierParticipant) {
       <div></div>
       <el-button v-if="!tournament.isPublic" type="success" @click="passTournamentPublic">pass to public</el-button>
       <el-button link @click="goLobbies"> see lobbies </el-button>
-      <div flex="~ wrap" grid="gap-5" justify="center">
-        <el-table class="lg:basis-4/5 md:basis-full" :data="participantsRanking">
-          <el-table-column label="player">
-            <template #default="scope">
-              <div display="flex" align="items-center">
-                <el-avatar :src="getQualifierParticipant(scope.row).user.avatarUrl" />
-                <span m="l-2" text="overflow-ellipsis space-nowrap" overflow="hidden">
-                  {{ getQualifierParticipant(scope.row).user.username }}
-                </span>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column label="total score">
-            <template #default="scope">
+
+      <div v-if="participantsRanking" flex="~ wrap" grid="gap-5" justify="center">
+        <div class="lg:basis-4/5 md:basis-full">
+          <el-descriptions w="min" align="self-end" border direction="vertical">
+            <el-descriptions-item label="average total score">
               {{
-                getQualifierParticipant(scope.row)
-                  .totalScore?.toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ' ') || 0
+                participantsRanking.map((participant) => participant.totalScore || 0).reduce((p, c) => p + c, 0) /
+                participantsRanking.length
               }}
-            </template>
-          </el-table-column>
-          <el-table-column label="points">
-            <template #default="scope">
-              {{ getQualifierParticipant(scope.row)?.totalRank || 0 }}
-            </template>
-          </el-table-column>
-          <el-table-column label="seed">
-            <template #default="scope">
-              {{ getQualifierParticipant(scope.row).seed }}
-            </template>
-          </el-table-column>
-        </el-table>
+            </el-descriptions-item>
+            <el-descriptions-item label="average total points">
+              {{
+                participantsRanking.map((participant) => participant.totalRank || 0).reduce((p, c) => p + c, 0) /
+                participantsRanking.length
+              }}
+            </el-descriptions-item>
+          </el-descriptions>
+
+          <el-table :data="participantsRanking">
+            <el-table-column label="player">
+              <template #default="scope">
+                <div display="flex" align="items-center">
+                  <el-avatar :src="getQualifierParticipant(scope.row).user.avatarUrl" />
+                  <span m="l-2" text="overflow-ellipsis space-nowrap" overflow="hidden">
+                    {{ getQualifierParticipant(scope.row).user.username }}
+                  </span>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column label="total score">
+              <template #default="scope">
+                {{
+                  getQualifierParticipant(scope.row)
+                    .totalScore?.toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ') || 0
+                }}
+              </template>
+            </el-table-column>
+            <el-table-column label="points">
+              <template #default="scope">
+                {{ getQualifierParticipant(scope.row)?.totalRank || 0 }}
+              </template>
+            </el-table-column>
+            <el-table-column label="seed">
+              <template #default="scope">
+                {{ getQualifierParticipant(scope.row).seed }}
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
         <template v-for="mapScore in mapsScore" :key="mapScore.id">
           <MapScoreTable :map-score="mapScore" class="lg:basis-2/7 md:basis-4/5" />
         </template>
