@@ -53,8 +53,16 @@ const goLobbies = () => {
         pos="absolute inset-0"
         m="b-3"
       />
+      <div></div>
       <el-button v-if="!tournament.isPublic" type="success" @click="passTournamentPublic">pass to public</el-button>
       <el-button link @click="goLobbies"> see lobbies </el-button>
+      <div flex="~ wrap" grid="gap-5" justify="center" w="full">
+        <el-table class="lg:basis-2/5 md:basis-3/5"></el-table>
+        <MapScoreTable class="lg:basis-1/4 md:basis-2/5" />
+        <MapScoreTable class="lg:basis-1/4 md:basis-2/5" />
+        <MapScoreTable class="lg:basis-1/4 md:basis-2/5" />
+        <MapScoreTable class="lg:basis-1/4 md:basis-2/5" />
+      </div>
     </div>
   </div>
   <div v-else v-loading.fullscreen.lock="initLoading" />

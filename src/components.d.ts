@@ -97,6 +97,7 @@ declare module '@vue/runtime-core' {
     MappoolManager: typeof import('./views/tournament/MappoolManager.vue')['default']
     MappoolSettings: typeof import('./components/tournament/mappool/MappoolSettings.vue')['default']
     MappoolTable: typeof import('./components/tournament/mappool/MappoolTable.vue')['default']
+    MapScoreTable: typeof import('./components/qualifier/MapScoreTable.vue')['default']
     MarkdownRender: typeof import('./components/Inputs/MarkdownRender.vue')['default']
     MarkdownTextarea: typeof import('./components/Inputs/MarkdownTextarea.vue')['default']
     NavigationDrawer: typeof import('./components/Ui/Layout/childs/NavigationDrawer.vue')['default']
