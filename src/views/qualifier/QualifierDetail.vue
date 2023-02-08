@@ -53,9 +53,7 @@ const goLobbies = () => {
         m="b-3"
       />
       <el-button v-if="!tournament.isPublic" type="success" @click="passTournamentPublic">pass to public</el-button>
-      <el-button link @click="goLobbies">
-        <router-link :to="{}">see lobbies</router-link>
-      </el-button>
+      <el-button link @click="goLobbies"> see lobbies </el-button>
     </div>
   </div>
   <div v-else v-loading.fullscreen.lock="initLoading" />

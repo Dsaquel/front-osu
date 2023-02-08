@@ -45,8 +45,8 @@ const useQualifierStore = defineStore('qualifier', () => {
     lobbies.value = data;
   }
 
-  async function fetchLobby(matchId: number, qualifierId: number) {
-    await apiQualifier.fetchLobby(qualifierId, matchId);
+  async function updateScoresLobby(matchId: number, qualifierId: number) {
+    await apiQualifier.updateScoresLobby(qualifierId, matchId);
   }
 
   return {
@@ -58,7 +58,7 @@ const useQualifierStore = defineStore('qualifier', () => {
     addParticipantToLobby,
     updateLobby,
     deleteLobby,
-    fetchLobby,
+    updateScoresLobby,
   };
 });
 

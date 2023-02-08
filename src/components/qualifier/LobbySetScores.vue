@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { qualifier } = storeToRefs(qualifierStore());
-const { fetchLobby } = qualifierStore();
+const { updateScoresLobby } = qualifierStore();
 const { access } = storeToRefs(tournamentStore());
 const { user } = storeToRefs(userStore());
 
@@ -14,8 +14,10 @@ async function searchLobby() {
     new URL(lobbyInput.value);
     if (new URL(lobbyInput.value).origin !== 'https://osu.ppy.sh') return;
     const matchId = lobbyInput.value.split('/')[lobbyInput.value.split('/').length - 1];
-    await fetchLobby(+matchId, qualifier.value?.id as number);
+    await updateScoresLobby(+matchId, qualifier.value?.id as number);
+    ElMessage.success({ message: 'scores updated !', duration: 1000 });
   } catch (e) {
+    ElMessage.error({ message: 'i need an osu url !', duration: 2000 });
     console.log(e);
   } finally {
     setScoresLoading = false;
