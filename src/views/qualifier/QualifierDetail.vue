@@ -63,7 +63,7 @@ function getQualifierParticipant(row: QualifierParticipant) {
       <el-button v-if="!tournament.isPublic" type="success" @click="passTournamentPublic">pass to public</el-button>
       <el-button link @click="goLobbies"> see lobbies </el-button>
       <div flex="~ wrap" grid="gap-5" justify="center">
-        <el-table class="lg:basis-2/5 md:basis-3/5" :data="participantsRanking">
+        <el-table class="lg:basis-4/5 md:basis-full" :data="participantsRanking">
           <el-table-column label="player">
             <template #default="scope">
               <div display="flex" align="items-center">
@@ -95,7 +95,7 @@ function getQualifierParticipant(row: QualifierParticipant) {
           </el-table-column>
         </el-table>
         <template v-for="mapScore in mapsScore" :key="mapScore.id">
-          <MapScoreTable :map-score="mapScore" class="lg:basis-1/4 md:basis-2/5" />
+          <MapScoreTable :map-score="mapScore" class="lg:basis-2/7 md:basis-4/5" />
         </template>
       </div>
     </div>

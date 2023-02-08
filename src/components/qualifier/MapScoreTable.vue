@@ -8,12 +8,27 @@ defineProps<{
 function getQualifierParticipantMapPlayed(row: ParticipantMapScore) {
   return row;
 }
+
+const { copy, copied } = useClipboard();
 </script>
 
 <template>
   <div>
-    <el-image loading="lazy" :src="mapScore.osuBeatmap.beatmapset.covers['slimcover@2x']" />
+    <div flex="~" justify="between" align="content-center">
+      <el-tag size="large">{{ mapScore.type }}</el-tag>
 
+      <div
+        flex="~"
+        align="content-center"
+        :class="{ 'cursor-pointer': !copied }"
+        @click="copy(mapScore.beatmapId.toString())"
+      >
+        {{ mapScore.beatmapId }}
+        <i-material-symbols:content-copy-outline v-if="!copied" />
+        <i-material-symbols:check-small v-else />
+      </div>
+    </div>
+    <el-image loading="lazy" :src="mapScore.osuBeatmap.beatmapset.covers['slimcover@2x']" />
     <el-table :data="mapScore.participantsMapPlayed">
       <el-table-column label="player">
         <template #default="scope">
@@ -42,3 +57,15 @@ function getQualifierParticipantMapPlayed(row: ParticipantMapScore) {
     </el-table>
   </div>
 </template>
+
+<style>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+</style>
