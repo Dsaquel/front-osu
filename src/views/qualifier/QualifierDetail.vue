@@ -85,7 +85,7 @@ function getQualifierParticipant(row: QualifierParticipant) {
           </el-table-column>
           <el-table-column label="points">
             <template #default="scope">
-              {{ getQualifierParticipant(scope.row).totalRank }}
+              {{ getQualifierParticipant(scope.row)?.totalRank || 0 }}
             </template>
           </el-table-column>
           <el-table-column label="seed">
@@ -95,7 +95,7 @@ function getQualifierParticipant(row: QualifierParticipant) {
           </el-table-column>
         </el-table>
         <template v-for="mapScore in mapsScore" :key="mapScore.id">
-          <MapScoreTable class="lg:basis-1/4 md:basis-2/5" />
+          <MapScoreTable :map-score="mapScore" class="lg:basis-1/4 md:basis-2/5" />
         </template>
       </div>
     </div>
