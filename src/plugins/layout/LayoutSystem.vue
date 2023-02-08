@@ -5,7 +5,7 @@ const layout = ref();
 const route = useRoute();
 watch(
   () => route.meta,
-  async (meta) => {
+  (meta) => {
     layout.value = meta.layout || params.defaultLayout;
   },
 );
