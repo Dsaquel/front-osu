@@ -402,7 +402,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
                     to: { name: 'tournaments' },
                   },
                   {
-                    text: `draft-${draftId}`,
+                    text: draftId,
                     to: { name: 'draft-detail', params: { draftId } },
                   },
                   {

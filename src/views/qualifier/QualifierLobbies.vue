@@ -71,7 +71,7 @@ function getHost(superReferee: SuperReferee) {
               placement="bottom"
               :hide-after="50"
               :title="participant.user.username"
-              :content="`rank: ${participant.user.rank}\ndiscord: ${participant.user.discord}`"
+              :content="`rank: ${participant.user.rank}\ndiscord: ${participant.user.discord || 'no discord'}`"
             >
               <template #reference>
                 <el-avatar class="float-left ml-[-10px]" :src="participant.user.avatarUrl" />

@@ -82,6 +82,7 @@ watch(
           @change="(val) => (tournament!.numbersPlayers = val)"
         >
           <el-option :value="4" />
+          <el-option :value="8" />
           <el-option :value="16" />
           <el-option :value="32" />
         </el-select>
