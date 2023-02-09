@@ -116,8 +116,11 @@ const formattedType = {
 
 <style lang="scss" scoped>
 :deep(tr) {
-  td {
-    padding: 0 !important;
+  td:first-child {
+    padding: 0px !important;
+  }
+  td:nth-child(2) {
+    padding: 6px !important;
   }
 }
 
