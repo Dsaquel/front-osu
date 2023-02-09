@@ -26,11 +26,45 @@ const asyncRoutes: Array<RouteRecordRaw> = [
         path: '',
         name: 'user-profile',
         component: () => import('~/views/user/UserProfile.vue'),
+        meta: {
+          breadcrumb: [
+            {
+              text: 'home',
+              to: { name: 'home' },
+            },
+            {
+              text: 'profile',
+            },
+          ],
+        },
       },
       {
         path: 'tournaments',
         name: 'user-tournament',
         component: () => import('~/views/user/UserTournament.vue'),
+        meta: {
+          breadcrumb(route: RouteLocationNormalizedLoaded) {
+            const { userId } = route.params;
+            return [
+              {
+                text: 'home',
+                to: { name: 'home' },
+              },
+              {
+                text: 'profile',
+                to: {
+                  name: 'user-profile',
+                  params: {
+                    userId,
+                  },
+                },
+              },
+              {
+                text: 'my tournaments',
+              },
+            ];
+          },
+        },
       },
     ],
   },
@@ -70,7 +104,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
                 to: { name: 'tournaments' },
               },
               {
-                text: `tournament-${tournamentId}`,
+                text: tournamentId,
               },
             ];
           },
@@ -93,7 +127,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
                 to: { name: 'tournaments' },
               },
               {
-                text: 'tournaments',
+                text: tournamentId,
                 to: {
                   name: 'tournament-detail',
                   params: {
@@ -125,7 +159,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
                 to: { name: 'tournaments' },
               },
               {
-                text: 'tournaments',
+                text: tournamentId,
                 to: {
                   name: 'tournament-detail',
                   params: {
@@ -157,7 +191,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
                 to: { name: 'tournaments' },
               },
               {
-                text: 'tournaments',
+                text: tournamentId,
                 to: {
                   name: 'tournament-detail',
                   params: {
@@ -189,7 +223,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
                 to: { name: 'tournaments' },
               },
               {
-                text: 'tournaments',
+                text: tournamentId,
                 to: {
                   name: 'tournament-detail',
                   params: {
@@ -221,7 +255,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
                 to: { name: 'tournaments' },
               },
               {
-                text: 'tournaments',
+                text: tournamentId,
                 to: {
                   name: 'tournament-detail',
                   params: {
@@ -262,7 +296,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
                 to: { name: 'tournaments' },
               },
               {
-                text: 'tournaments',
+                text: tournamentId,
                 to: {
                   name: 'tournament-detail',
                   params: {
@@ -294,7 +328,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
                 to: { name: 'tournaments' },
               },
               {
-                text: 'tournaments',
+                text: tournamentId,
                 to: {
                   name: 'tournament-detail',
                   params: {
@@ -329,7 +363,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
                     to: { name: 'tournaments' },
                   },
                   {
-                    text: `draft-${draftId}`,
+                    text: draftId,
                   },
                 ];
               },

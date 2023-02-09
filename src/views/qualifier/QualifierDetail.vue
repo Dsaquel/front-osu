@@ -34,12 +34,21 @@ function passTournamentPublic() {
   updatePublication(tournamentId);
 }
 
-const goLobbies = () => {
-  router.push({ name: 'qualifier-lobbies', params: { tournamentId } });
-};
-
 function getQualifierParticipant(row: QualifierParticipant) {
   return row;
+}
+
+function calculMedian(numbers: number[]) {
+  numbers.sort((a, b) => a - b);
+  let median: number;
+
+  if (numbers.length % 2 === 0) {
+    median = (numbers[numbers.length / 2 - 1] + numbers[numbers.length / 2]) / 2;
+  } else {
+    median = numbers[Math.floor(numbers.length / 2)];
+  }
+
+  return median;
 }
 </script>
 
@@ -61,12 +70,16 @@ function getQualifierParticipant(row: QualifierParticipant) {
       />
       <div></div>
       <el-button v-if="!tournament.isPublic" type="success" @click="passTournamentPublic">pass to public</el-button>
-      <el-button link @click="goLobbies"> see lobbies </el-button>
 
       <div v-if="participantsRanking" flex="~ wrap" grid="gap-5" justify="center">
         <div class="lg:basis-4/5 md:basis-full">
-          <el-descriptions w="min" align="self-end" border direction="vertical">
-            <el-descriptions-item label="average total score">
+          <el-descriptions border direction="vertical" :column="4">
+            <template #extra>
+              <router-link :to="{ name: 'qualifier-lobbies', params: { tournamentId } }">
+                <el-button link>lobbies</el-button>
+              </router-link>
+            </template>
+            <el-descriptions-item label="average total score" min-width="min-content">
               {{
                 participantsRanking.map((participant) => participant.totalScore || 0).reduce((p, c) => p + c, 0) /
                 participantsRanking.length
@@ -77,6 +90,12 @@ function getQualifierParticipant(row: QualifierParticipant) {
                 participantsRanking.map((participant) => participant.totalRank || 0).reduce((p, c) => p + c, 0) /
                 participantsRanking.length
               }}
+            </el-descriptions-item>
+            <el-descriptions-item label="total score median">
+              {{ calculMedian(participantsRanking.map((participant) => participant.totalScore || 0)) }}
+            </el-descriptions-item>
+            <el-descriptions-item label="median of total points">
+              {{ calculMedian(participantsRanking.map((participant) => participant.totalRank || 0)) }}
             </el-descriptions-item>
           </el-descriptions>
 
