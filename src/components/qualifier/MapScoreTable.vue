@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { QualifierMap, ParticipantMapScore } from '~/types';
+import { QualifierMap, ParticipantMapScore, MapType } from '~/types';
 
 defineProps<{
   mapScore: QualifierMap;
@@ -10,12 +10,21 @@ function getQualifierParticipantMapPlayed(row: ParticipantMapScore) {
 }
 
 const { copy, copied } = useClipboard();
+
+const formattedType = {
+  noMod: 'no mod',
+  hidden: 'hidden',
+  hardRock: 'hard rock',
+  doubleTime: 'double time',
+  freeMod: 'free mod',
+  tieBreaker: 'tie breaker',
+};
 </script>
 
 <template>
   <div>
     <div flex="~" justify="between" align="content-center">
-      <el-tag size="large">{{ mapScore.type }}</el-tag>
+      <el-tag size="large">{{ formattedType[mapScore.type as MapType] + ' ' + mapScore.numberOfType }}</el-tag>
       <div
         flex="~"
         align="content-center"
@@ -32,7 +41,7 @@ const { copy, copied } = useClipboard();
       <el-descriptions-item label="average score">
         {{
           mapScore.participantsMapPlayed.map((map) => map.score).reduce((p, c) => p + c, 0) /
-          mapScore.participantsMapPlayed.length
+            mapScore.participantsMapPlayed.length || 'no score set yet'
         }}
       </el-descriptions-item>
     </el-descriptions>

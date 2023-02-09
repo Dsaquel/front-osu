@@ -3,10 +3,15 @@ import apiQualifier from '~/api/modules/api.qualifier';
 import { Qualifier, Lobby, UpdateLobbyDto, QualifierMap, QualifierParticipant } from '~/types';
 
 const useQualifierStore = defineStore('qualifier', () => {
+  const typeOrder = ['noMod', 'hidden', 'hardRock', 'doubleTime', 'freeMod', 'tieBreaker'];
   const qualifier = ref(undefined as Qualifier | undefined);
   const lobbies = ref(undefined as Lobby[] | undefined);
   const mapsScore = ref(undefined as QualifierMap[] | undefined);
   const participantsRanking = ref(undefined as QualifierParticipant[] | undefined);
+
+  const mapsScoreSort = computed(() =>
+    mapsScore.value?.sort((a, b) => typeOrder.indexOf(a.type) - typeOrder.indexOf(b.type)),
+  );
 
   async function fetchQualifier(tournamentId: number) {
     try {
@@ -64,7 +69,7 @@ const useQualifierStore = defineStore('qualifier', () => {
   return {
     qualifier,
     lobbies,
-    mapsScore,
+    mapsScore: mapsScoreSort,
     participantsRanking,
     fetchQualifier,
     createLobby,

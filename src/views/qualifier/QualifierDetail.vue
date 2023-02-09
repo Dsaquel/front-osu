@@ -82,20 +82,25 @@ function calculMedian(numbers: number[]) {
             <el-descriptions-item label="average total score" min-width="min-content">
               {{
                 participantsRanking.map((participant) => participant.totalScore || 0).reduce((p, c) => p + c, 0) /
-                participantsRanking.length
+                  participantsRanking.length || 'no score set yet'
               }}
             </el-descriptions-item>
             <el-descriptions-item label="average total points">
               {{
                 participantsRanking.map((participant) => participant.totalRank || 0).reduce((p, c) => p + c, 0) /
-                participantsRanking.length
+                  participantsRanking.length || 'no score set yet'
               }}
             </el-descriptions-item>
             <el-descriptions-item label="total score median">
-              {{ calculMedian(participantsRanking.map((participant) => participant.totalScore || 0)) }}
+              {{
+                calculMedian(participantsRanking.map((participant) => participant.totalScore || 0)) ||
+                'no score set yet'
+              }}
             </el-descriptions-item>
             <el-descriptions-item label="median of total points">
-              {{ calculMedian(participantsRanking.map((participant) => participant.totalRank || 0)) }}
+              {{
+                calculMedian(participantsRanking.map((participant) => participant.totalRank || 0)) || 'no score set yet'
+              }}
             </el-descriptions-item>
           </el-descriptions>
 
