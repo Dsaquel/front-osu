@@ -11,8 +11,10 @@ const props = defineProps<{
 }>();
 
 const showCreate = ref(false);
-const options = ['noMod', 'hidden', 'hardRock', 'doubleTime', 'freeMod', 'tieBreaker'];
-const optionValue = ref<string | undefined>(undefined);
+const stringOptions = ['noMod', 'hidden', 'hardRock', 'doubleTime', 'freeMod', 'tieBreaker'];
+const numberOptions = [1, 2, 3, 4];
+const typeStringValue = ref<string | undefined>(undefined);
+const typeNumberValue = ref<number | undefined>(undefined);
 const mapInput = ref<string>('');
 let loading = $ref(false);
 const errorInput = ref('');
@@ -30,7 +32,7 @@ async function searchBeatmap() {
 }
 
 async function addMap() {
-  if (!beatmap.value || !optionValue.value) return;
+  if (!beatmap.value || !typeStringValue.value) return;
   if (!props.qualifierMappool && !props.tournamentMappool) return;
   loading = true;
   try {
@@ -40,7 +42,8 @@ async function addMap() {
         beatmapId: beatmap.value.id,
         qualifierId: props.qualifierMappool?.qualifierId,
         tournamentId: props.tournamentMappool?.tournamentId,
-        type: optionValue.value,
+        type: typeStringValue.value,
+        numberOfType: typeNumberValue?.value,
       },
       props.qualifierMappool?.id ?? (props.tournamentMappool?.id as number),
     );
@@ -53,7 +56,8 @@ async function addMap() {
 }
 
 function resetSettings() {
-  optionValue.value = undefined;
+  typeStringValue.value = undefined;
+  typeNumberValue.value = undefined;
   mapInput.value = '';
   beatmap.value = undefined;
 }
@@ -79,11 +83,23 @@ function resetSettings() {
         size="large"
         @input="searchBeatmap"
       />
-      <div>
-        <el-select v-model="optionValue" size="large" placeholder="mods">
-          <el-option v-for="(item, v) in options" :key="v" :value="item" />
+      <div flex="~">
+        <el-select v-model="typeStringValue" size="large" placeholder="mods">
+          <el-option v-for="(item, v) in stringOptions" :key="v" :value="item" />
+        </el-select>
+        <el-select
+          v-if="typeStringValue"
+          v-model="typeNumberValue"
+          size="large"
+          :placeholder="`${typeStringValue} 1`"
+          default-first-option
+          filterable
+          allow-create
+        >
+          <el-option v-for="(item, v) in numberOptions" :key="v" :value="item" />
         </el-select>
       </div>
+
       <div v-if="beatmap" grid="col-span-2" w="full">
         <el-descriptions
           direction="horizontal"
@@ -131,7 +147,7 @@ function resetSettings() {
     <template #footer>
       <span class="dialog-footer">
         <el-button :disabled="loading" @click="showCreate = false">Cancel</el-button>
-        <el-button :loading="loading" type="primary" :disabled="!beatmap || !optionValue" @click="addMap"
+        <el-button :loading="loading" type="primary" :disabled="!beatmap || !stringOptions" @click="addMap"
           >{{ loading ? 'Adding...' : 'Add beatmap' }}
         </el-button>
       </span>

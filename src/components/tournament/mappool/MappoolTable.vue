@@ -60,7 +60,9 @@ const formattedType = {
 
     <el-table-column label="mod">
       <template #default="scope">
-        <el-tag disable-transitions>{{ formattedType[scope.row.type as MapType] }}</el-tag>
+        <el-tag disable-transitions>{{
+          formattedType[scope.row.type as MapType] + ' ' + scope.row.numberOfType
+        }}</el-tag>
       </template>
     </el-table-column>
 

@@ -27,13 +27,6 @@ onBeforeMount(async () => {
   await init();
   initLoading = false;
 });
-
-watch([tournamentMappools, qualifierMappool], () => {
-  const thImages = document.getElementsByClassName('image-label');
-  Array.from(thImages).forEach((element) => {
-    element.setAttribute('rowspan', '2');
-  });
-});
 </script>
 
 <template>

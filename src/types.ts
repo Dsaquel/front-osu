@@ -84,6 +84,7 @@ export interface Map extends Node {
   beatmapId: number;
   mappoolId: number;
   osuBeatmap: Beatmap;
+  numberOfType: number;
 }
 
 export interface MapParams {
@@ -134,6 +135,7 @@ export interface CreateMapDto {
   beatmapId: number;
   tournamentId?: number;
   qualifierId?: number;
+  numberOfType?: number;
 }
 export interface User extends Node {
   osuId: number;
