@@ -5,10 +5,9 @@ export default {
 </script>
 
 <script setup lang="ts">
-import router from '~/router';
 import { QualifierParticipant } from '~/types';
 
-const { fetchQualifier, fetchMapsScore, fetchParticipantsRanking } = qualifierStore();
+const { fetchQualifier, fetchMapsScore, fetchParticipantsRanking, passQualifierToFinished } = qualifierStore();
 const { fetchTournament, fetchControlAccess, updatePublication } = tournamentStore();
 const { qualifier, mapsScore, participantsRanking } = storeToRefs(qualifierStore());
 const { tournament, isAuthorized } = storeToRefs(tournamentStore());
@@ -29,10 +28,6 @@ onBeforeMount(async () => {
   await init();
   initLoading = false;
 });
-
-function passTournamentPublic() {
-  updatePublication(tournamentId);
-}
 
 function getQualifierParticipant(row: QualifierParticipant) {
   return row;
@@ -68,8 +63,15 @@ function calculMedian(numbers: number[]) {
         pos="absolute inset-0"
         m="b-3"
       />
-      <div></div>
-      <el-button v-if="!tournament.isPublic" type="success" @click="passTournamentPublic">pass to public</el-button>
+      <el-button v-if="!tournament.isPublic" type="success" @click="updatePublication(tournamentId)"
+        >pass tournament to public</el-button
+      >
+      <el-button
+        v-if="!qualifier.isFinished"
+        type="success"
+        @click="passQualifierToFinished(qualifier.id, tournament.id)"
+        >pass qualifier to finished</el-button
+      >
 
       <div v-if="participantsRanking" flex="~ wrap" grid="gap-5" justify="center">
         <div class="lg:basis-4/5 md:basis-full">

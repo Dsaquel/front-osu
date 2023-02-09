@@ -17,6 +17,8 @@ const QualifierApi = {
   fetchMapsScore: (qualifierId: number) => service.get<QualifierMap[]>(`/qualifier/${qualifierId}/map`),
   fetchParticipantsRanking: (qualifierId: number) =>
     service.get<QualifierParticipant[]>(`/qualifier/${qualifierId}/participant/ranking`),
+  passQualifierToFinished: (qualifierId: number, tournamentId: number) =>
+    service.put<void>(`/qualifier/${qualifierId}/finished`, undefined, { tournamentId }),
 };
 
 export default QualifierApi;

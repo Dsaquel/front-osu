@@ -148,7 +148,6 @@ export interface User extends Node {
 
 export interface Participant extends Node {
   validate: boolean;
-  seed: number | null;
   tournamentId: number;
   userId: number;
   user: User;
@@ -192,6 +191,7 @@ export interface CreateTournamentDto {
 }
 
 export interface Qualifier extends Node {
+  isFinished: boolean;
   tournamentId: number;
   mappool: MappoolQualifier;
 }
@@ -206,6 +206,7 @@ export interface Lobby extends Node {
 }
 
 export interface QualifierParticipant extends Participant {
+  seed: number | null;
   totalRank: number | null;
   totalScore: number | null;
   lobbyId: number | null;

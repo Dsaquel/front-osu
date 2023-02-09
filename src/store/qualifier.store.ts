@@ -66,6 +66,10 @@ const useQualifierStore = defineStore('qualifier', () => {
     participantsRanking.value = data;
   }
 
+  async function passQualifierToFinished(qualifierId: number, tournamentId: number) {
+    await apiQualifier.passQualifierToFinished(qualifierId, tournamentId);
+  }
+
   return {
     qualifier,
     lobbies,
@@ -80,6 +84,7 @@ const useQualifierStore = defineStore('qualifier', () => {
     updateScoresLobby,
     fetchMapsScore,
     fetchParticipantsRanking,
+    passQualifierToFinished,
   };
 });
 
