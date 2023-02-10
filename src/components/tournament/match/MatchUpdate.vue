@@ -1,5 +1,11 @@
 <script lang="ts" setup>
+import { Match } from '~/types';
+
 const { access } = storeToRefs(tournamentStore());
+
+defineProps<{
+  match: Match;
+}>();
 
 const showMatchUpdate = ref(false);
 </script>

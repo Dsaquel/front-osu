@@ -251,6 +251,8 @@ export interface Match extends Node {
   identifier: number;
   round: number;
   player1Score: number | null;
+  player1: Player;
+  player2: Player;
   player2Score: number | null;
   startDate: string | null;
   player1PrevIdentifier: number;
@@ -264,6 +266,14 @@ export interface Match extends Node {
   winnerId: number | null;
   player1Id: number | null;
   player2Id: number | null;
+}
+
+export interface Player extends Node {
+  validate: boolean;
+  user: User;
+  tournamentId: number;
+  userId: number;
+  seed: number;
 }
 
 export interface UpdateLobbyDto {
