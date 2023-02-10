@@ -260,7 +260,7 @@ export interface Match extends Node {
   state: 'pending' | 'playing' | 'complete';
   firstTo: number;
   refereeId: number | null;
-  ruleLobby: string | null;
+  rulesLobby: string | null;
   matchesHistoryOsu: string;
   tournamentId: number;
   winnerId: number | null;

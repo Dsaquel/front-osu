@@ -1,14 +1,26 @@
 <script lang="ts" setup>
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import CommonDatepicker from '~/components/Common/CommonDatepicker.vue';
+
 import { Match } from '~/types';
 
-const firstToOptions = [5, 6, 7];
+dayjs.extend(utc);
+
 const props = defineProps<{
   match: Match;
 }>();
 
-const firstToTemplate = ref(props.match.firstTo);
-const player1ScoreTemplate = ref(props.match.player1Score);
-const player2ScoreTemplate = ref(props.match.player2Score);
+const firstToOptions = [5, 6, 7];
+const stateOptions = ['pending', 'playing', 'complete'];
+
+const firstToTemplate = $ref(props.match.firstTo);
+const player1ScoreTemplate = $ref(props.match.player1Score);
+const player2ScoreTemplate = $ref(props.match.player2Score);
+const matchesHistoryOsuTemplate = $ref(props.match.matchesHistoryOsu);
+const stateTemplate = $ref(props.match.state);
+const startDateTemplate = $ref(props.match.startDate);
+const rulesLobbyTemplate = $ref(props.match.rulesLobby ?? '');
 </script>
 
 <template>
@@ -33,16 +45,35 @@ const player2ScoreTemplate = ref(props.match.player2Score);
     </div>
   </div>
 
-  <div grid="~ cols-3" m="t-4">
+  <div grid="~ cols-4 gap-3" m="t-4">
     <div>
       <span display="block" text="xs">first to</span>
-      <el-select v-model="firstToTemplate" size="large" default-first-option filterable allow-create>
+      <el-select v-model="firstToTemplate" filterable allow-create>
         <el-option-group label="first to" tag-type="success">
           <el-option v-for="(item, v) in firstToOptions" :key="v" :value="item" :disabled="item === firstToTemplate" />
         </el-option-group>
       </el-select>
     </div>
-    <div>toto</div>
-    <div>toto</div>
+    <div>
+      <span display="block" text="xs">matches history link</span>
+      <el-input v-model="matchesHistoryOsuTemplate" />
+    </div>
+    <div>
+      <span display="block" text="xs">state of match</span>
+      <el-select v-model="stateTemplate">
+        <el-option v-for="(item, v) in stateOptions" :key="v" :value="item" :disabled="item === stateTemplate" />
+      </el-select>
+    </div>
+
+    <CommonDatepicker
+      :model-value="startDateTemplate"
+      type="datetime"
+      title="start of match"
+      @update:model-value="(val) => (startDateTemplate = dayjs(val).utc().format())"
+    />
+    <div grid="col-span-4" justify="self-center" class="sm:w-min-80">
+      <span display="block" text="sm">rules lobby (if exist)</span>
+      <el-input v-model="rulesLobbyTemplate" type="textarea" :autosize="{ minRows: 3, maxRows: 6 }" w="min-[80%]" />
+    </div>
   </div>
 </template>
