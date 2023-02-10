@@ -8,6 +8,7 @@ dayjs.extend(utc);
 dayjs.extend(LocalizedFormat);
 
 const { access } = storeToRefs(tournamentStore());
+const { updateMatch } = matchStore();
 
 const props = defineProps<{
   match: Match;
@@ -36,7 +37,6 @@ watch(
     player1ScoreTemplate,
     player2ScoreTemplate,
     matchesHistoryOsuTemplate,
-    matchesHistoryOsuTemplate,
     stateTemplate,
     startDateTemplate,
     rulesLobbyTemplate,
@@ -46,10 +46,18 @@ watch(
   },
   { immediate: false },
 );
-async function updateMatch() {
+async function updateMatchTemplate() {
   try {
     updateLoading = true;
-    // call update
+    await updateMatch(props.match.id, {
+      firstTo: firstToTemplate.value,
+      state: stateTemplate.value,
+      startDate: startDateTemplate.value ?? undefined,
+      rulesLobby: rulesLobbyTemplate.value ?? undefined,
+      matchesHistoryOsu: matchesHistoryOsuTemplate.value ?? undefined,
+      player1Score: player1ScoreTemplate.value ?? undefined,
+      player2Score: player2ScoreTemplate.value ?? undefined,
+    });
     ElMessage({ type: 'success', message: 'match updated', duration: 1000 });
   } catch (e) {
     ElMessage({ message: `error: ${e}`, duration: 1000 });
@@ -183,7 +191,7 @@ async function updateMatch() {
         {{ match.startDate ? 'schedule: ' + dayjs(match.startDate).format('LLLL') : 'unscheduled yet' }}
       </template>
       <template v-if="activeTab === 'matchUpdate'">
-        <el-button type="success" :disabled="cannotUpdate" :loading="updateLoading" @click="updateMatch"
+        <el-button type="success" :disabled="cannotUpdate" :loading="updateLoading" @click="updateMatchTemplate"
           >Update</el-button
         >
       </template>

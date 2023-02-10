@@ -1,10 +1,10 @@
 import service from '~/api/http';
-import { Match } from '~/types';
+import { Match, UpdateMatchDto } from '~/types';
 
 const MatchApi = {
   fetchMatches: (tournamentId: number) => service.get<Match[]>(`/match`, { tournamentId }),
-  // update: (updateTournamentDto: UpdateTournamentDto, tournamentId: number) =>
-  //   service.put<Tournament>(`/match/${tournamentId}`, updateTournamentDto),
+  udpateMatch: (matchId: number, updateMatchDto: UpdateMatchDto) =>
+    service.put<Match[]>(`/match/${matchId}`, updateMatchDto),
 };
 
 export default MatchApi;

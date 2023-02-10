@@ -119,6 +119,16 @@ export interface CreateMappoolDto {
 
 export type UpdateMappoolDto = Omit<CreateMappoolDto, 'rounds'>;
 
+export interface UpdateMatchDto {
+  firstTo?: number;
+  state?: 'playing' | 'pending' | 'complete';
+  startDate?: string;
+  rulesLobby?: string;
+  matchesHistoryOsu?: string;
+  player1Score?: number;
+  player2Score?: number;
+}
+
 export interface QualifierMappool extends Mappool {
   qualifierId: number;
   maps: QualifierMap[];
