@@ -104,6 +104,8 @@ declare module '@vue/runtime-core' {
     MapScoreTable: typeof import('./components/qualifier/MapScoreTable.vue')['default']
     MarkdownRender: typeof import('./components/Inputs/MarkdownRender.vue')['default']
     MarkdownTextarea: typeof import('./components/Inputs/MarkdownTextarea.vue')['default']
+    MatchDetail: typeof import('./components/tournament/match/MatchDetail.vue')['default']
+    MatchUpdate: typeof import('./components/tournament/match/MatchUpdate.vue')['default']
     NavigationDrawer: typeof import('./components/Ui/Layout/childs/NavigationDrawer.vue')['default']
     QualifierCreateLobby: typeof import('./components/qualifier/QualifierCreateLobby.vue')['default']
     QualifierSettingsLobby: typeof import('./components/qualifier/QualifierSettingsLobby.vue')['default']

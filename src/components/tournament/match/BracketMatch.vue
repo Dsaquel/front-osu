@@ -5,11 +5,11 @@ defineProps<{
   match: Match;
 }>();
 
-const showMatch = ref(false);
+const showMatchDetail = ref(false);
 </script>
 
 <template>
-  <div class="match has-identifier reportable" v-bind="useAttrs()" tabindex="0" @click="showMatch = true">
+  <div class="match has-identifier reportable" v-bind="useAttrs()" tabindex="0" @click="showMatchDetail = true">
     <div class="match-affix-wrapper">
       <div class="match-section match-section-top">
         <div class="matchSectionWrapper">
@@ -50,7 +50,7 @@ const showMatch = ref(false);
       /></span>
     </div>
   </div>
-  <el-dialog v-model="showMatch"></el-dialog>
+  <MatchDetail v-model="showMatchDetail" :match="match" />
 </template>
 
 <style scoped lang="scss">

@@ -250,20 +250,20 @@ export interface Tournament extends Node {
 export interface Match extends Node {
   identifier: number;
   round: number;
-  player1Score: number;
-  player2Score: number;
-  startDate: string;
+  player1Score: number | null;
+  player2Score: number | null;
+  startDate: string | null;
   player1PrevIdentifier: number;
   player2PrevIdentifier: number;
   state: 'pending' | 'playing' | 'complete';
   firstTo: number;
-  refereeId: number;
-  ruleLobby: string;
+  refereeId: number | null;
+  ruleLobby: string | null;
   matchesHistoryOsu: string;
   tournamentId: number;
-  winnerId: number;
-  player1Id: number;
-  player2Id: number;
+  winnerId: number | null;
+  player1Id: number | null;
+  player2Id: number | null;
 }
 
 export interface UpdateLobbyDto {
