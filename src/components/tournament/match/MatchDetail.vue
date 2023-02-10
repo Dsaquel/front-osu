@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import dayjs from 'dayjs';
+import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import { Match } from '~/types';
+
+dayjs.extend(LocalizedFormat);
 
 const { access } = storeToRefs(tournamentStore());
 
@@ -69,5 +73,9 @@ const activeTab = ref('matchDetail');
         <MatchUpdate :match="match" />
       </el-tab-pane>
     </el-tabs>
+
+    <template #footer>
+      {{ match.startDate ? 'schedule: ' + dayjs(match.startDate).format('LLLL') : 'unscheduled yet' }}
+    </template>
   </el-dialog>
 </template>

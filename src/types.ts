@@ -250,10 +250,10 @@ export interface Tournament extends Node {
 export interface Match extends Node {
   identifier: number;
   round: number;
-  player1Score: number | null;
+  player1Score: number;
   player1: Player;
   player2: Player;
-  player2Score: number | null;
+  player2Score: number;
   startDate: string | null;
   player1PrevIdentifier: number;
   player2PrevIdentifier: number;
