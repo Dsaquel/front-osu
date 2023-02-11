@@ -7,7 +7,7 @@ import { Match } from '~/types';
 dayjs.extend(utc);
 dayjs.extend(LocalizedFormat);
 
-const { access } = storeToRefs(tournamentStore());
+const { access, tournament } = storeToRefs(tournamentStore());
 const { user } = storeToRefs(userStore());
 const { updateMatch, createRescheduleMatch } = matchStore();
 
@@ -226,16 +226,17 @@ function getDateString(date: string) {
         name="matchReschedule"
         :disabled="match.state === 'complete' || match.state === 'playing'"
       >
-        <el-timeline p="2" h="max-[20%]">
+        <el-timeline p="2">
           <el-timeline-item
             v-for="(reschedule, index) in match.reschedules"
             :key="index"
             :timestamp="
-              reschedule.schedule
+              'schedule: ' +
+              (reschedule.schedule
                 ? getDateString(reschedule.schedule)
                 : reschedule.status === 'accepted'
                 ? 'Accept'
-                : 'Refuse'
+                : 'Refuse')
             "
             placement="top"
             :type="
@@ -259,7 +260,11 @@ function getDateString(date: string) {
                         {{
                           reschedule.playerId === match.player1Id
                             ? match.player1.user.username
-                            : match.player2.user.username
+                            : reschedule.playerId === match.player2Id
+                            ? match.player2.user.username
+                            : reschedule.superReferee?.admin?.user.username ||
+                              reschedule.superReferee?.referee?.user.username ||
+                              tournament?.owner.username
                         }}
                       </div>
                       <div>
@@ -274,7 +279,7 @@ function getDateString(date: string) {
             </el-card>
           </el-timeline-item>
           <el-timeline-item
-            v-if="match.reschedules.at(-1)?.status !== 'accepted'"
+            v-if="match.reschedules.at(-1)?.status !== 'accepted' && !match.reschedules.at(-1)?.superRefereeId"
             placement="top"
             :type="
               statusNewReschedule === 'accepted' ? 'success' : statusNewReschedule === 'refused' ? 'danger' : 'info'
@@ -346,15 +351,23 @@ function getDateString(date: string) {
           >Update
         </el-button>
       </template>
-      <template v-if="activeTab === 'matchReschedule' && match.reschedules.at(-1)?.status !== 'accepted'">
+      <template v-if="activeTab === 'matchReschedule'">
         <el-button
+          v-if="match.reschedules.at(-1)?.status !== 'accepted' && !match.reschedules.at(-1)?.superRefereeId"
           type="success"
           :disabled="statusNewReschedule === 'request' && !rescheduleDate"
           :loading="updateLoading"
           @click="rescheduleMatchTemplate"
           >Confirm
         </el-button>
+        <div v-else>If schedule goes wrong please contact a referee</div>
       </template>
     </template>
   </el-dialog>
 </template>
+
+<style lang="scss" scoped>
+:deep(.el-timeline-item__wrapper div) {
+  color: inherit;
+}
+</style>

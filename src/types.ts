@@ -290,7 +290,9 @@ export interface Reschedule extends Node {
   status: 'request' | 'accepted' | 'refused';
   shortMessage: string | null;
   matchId: number;
-  playerId: number;
+  superRefereeId: number | null;
+  superReferee: SuperReferee | null;
+  playerId: number | null;
 }
 
 export interface Player extends Node {
