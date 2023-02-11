@@ -31,26 +31,9 @@ const rulesLobbyTemplate = ref(props.match.rulesLobby ?? '');
 const rescheduleDate = ref<string>();
 const shortMessage = ref<string>();
 const showCreateReschedule = ref(false);
-const statusNewReschedule = ref<'request' | 'acceped' | 'refused'>('request');
+const statusNewReschedule = ref<'request' | 'accepted' | 'refused'>('request');
 
-let cannotUpdateMatch = $ref(true);
 let updateLoading = $ref(false);
-
-watch(
-  [
-    firstToTemplate,
-    player1ScoreTemplate,
-    player2ScoreTemplate,
-    matchesHistoryOsuTemplate,
-    stateTemplate,
-    startDateTemplate,
-    rulesLobbyTemplate,
-  ],
-  () => {
-    cannotUpdateMatch = false;
-  },
-  { immediate: false },
-);
 
 async function updateMatchTemplate() {
   try {
@@ -69,15 +52,14 @@ async function updateMatchTemplate() {
     ElMessage({ message: `error: ${e}`, duration: 1000 });
   } finally {
     updateLoading = false;
-    cannotUpdateMatch = true;
   }
 }
 
 async function rescheduleMatchTemplate() {
   try {
     updateLoading = true;
-    if (statusNewReschedule.value === 'acceped' || statusNewReschedule.value === 'refused') {
-      shortMessage.value = statusNewReschedule.value === 'acceped' ? 'Accept to reschedule' : 'Refuse to reschedule';
+    if (statusNewReschedule.value === 'accepted' || statusNewReschedule.value === 'refused') {
+      shortMessage.value = statusNewReschedule.value === 'accepted' ? 'Accept to reschedule' : 'Refuse to reschedule';
     }
     await createRescheduleMatch(props.match.id, {
       shortMessage: shortMessage.value,
@@ -98,7 +80,7 @@ async function rescheduleMatchTemplate() {
 function replyReschedule(status: typeof statusNewReschedule.value, createReschedule: boolean) {
   statusNewReschedule.value = status;
   showCreateReschedule.value = createReschedule;
-  if (status === 'acceped' || status === 'refused') {
+  if (status === 'accepted' || status === 'refused') {
     rescheduleDate.value = undefined;
   }
 }
@@ -248,12 +230,14 @@ function getDateString(date: string) {
             :timestamp="
               reschedule.schedule
                 ? getDateString(reschedule.schedule)
-                : reschedule.status === 'acceped'
+                : reschedule.status === 'accepted'
                 ? 'Accept'
                 : 'Refuse'
             "
             placement="top"
-            :type="reschedule.status === 'request' ? 'warning' : reschedule.status === 'acceped' ? 'success' : 'danger'"
+            :type="
+              reschedule.status === 'request' ? 'warning' : reschedule.status === 'accepted' ? 'success' : 'danger'
+            "
             size="large"
           >
             <div>
@@ -261,19 +245,19 @@ function getDateString(date: string) {
             </div>
           </el-timeline-item>
           <el-timeline-item
-            v-if="match.reschedules.at(-1)?.status !== 'acceped'"
+            v-if="match.reschedules.at(-1)?.status !== 'accepted'"
             placement="top"
             :type="
-              statusNewReschedule === 'acceped' ? 'success' : statusNewReschedule === 'refused' ? 'danger' : 'info'
+              statusNewReschedule === 'accepted' ? 'success' : statusNewReschedule === 'refused' ? 'danger' : 'info'
             "
             :timestamp="
               !match.reschedules.length && !rescheduleDate
                 ? 'date request'
                 : match.reschedules.length && !rescheduleDate && showCreateReschedule
-                ? 'Respond with new date'
+                ? 'Respond with a new date'
                 : rescheduleDate
                 ? getDateString(rescheduleDate)
-                : statusNewReschedule === 'acceped'
+                : statusNewReschedule === 'accepted'
                 ? 'Accept'
                 : statusNewReschedule === 'refused'
                 ? 'Refuse'
@@ -286,7 +270,7 @@ function getDateString(date: string) {
                   ><i-fluent-mdl2:calendar-reply
                 /></el-button>
               </el-tooltip>
-              <el-button type="primary" @click="replyReschedule('acceped', false)">accept reschedule</el-button>
+              <el-button type="primary" @click="replyReschedule('accepted', false)">accept reschedule</el-button>
               <el-button type="primary" @click="replyReschedule('refused', false)">don't accept reschedule</el-button>
             </el-button-group>
             <el-card v-if="showCreateReschedule || !match.reschedules.length" shadow="never">
@@ -317,11 +301,23 @@ function getDateString(date: string) {
         {{ match.startDate ? 'schedule: ' + dayjs(match.startDate).format('LLLL') : 'unscheduled yet' }}
       </template>
       <template v-if="activeTab === 'matchUpdate'">
-        <el-button type="success" :disabled="cannotUpdateMatch" :loading="updateLoading" @click="updateMatchTemplate"
+        <el-button
+          type="success"
+          :disabled="
+            firstToTemplate === match.firstTo &&
+            player1ScoreTemplate === match.player1Score &&
+            player2ScoreTemplate === match.player2Score &&
+            matchesHistoryOsuTemplate === match.matchesHistoryOsu &&
+            stateTemplate === match.state &&
+            startDateTemplate === match.startDate &&
+            rulesLobbyTemplate === match.rulesLobby
+          "
+          :loading="updateLoading"
+          @click="updateMatchTemplate"
           >Update
         </el-button>
       </template>
-      <template v-if="activeTab === 'matchReschedule' && match.reschedules.at(-1)?.status !== 'acceped'">
+      <template v-if="activeTab === 'matchReschedule' && match.reschedules.at(-1)?.status !== 'accepted'">
         <el-button
           type="success"
           :disabled="statusNewReschedule === 'request' && !rescheduleDate"
