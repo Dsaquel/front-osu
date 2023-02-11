@@ -8,7 +8,8 @@ dayjs.extend(utc);
 dayjs.extend(LocalizedFormat);
 
 const { access } = storeToRefs(tournamentStore());
-const { updateMatch } = matchStore();
+const { user } = storeToRefs(userStore());
+const { updateMatch, updateRescheduleMatch } = matchStore();
 
 const props = defineProps<{
   match: Match;
@@ -27,8 +28,11 @@ const matchesHistoryOsuTemplate = ref(props.match.matchesHistoryOsu);
 const stateTemplate = ref(props.match.state);
 const startDateTemplate = ref(props.match.startDate);
 const rulesLobbyTemplate = ref(props.match.rulesLobby ?? '');
+const rescheduleDate = ref('');
+const shortMessage = ref<string>();
 
-let cannotUpdate = $ref(true);
+let cannotUpdateMatch = $ref(true);
+let cannotUpdateReschedule = $ref(true);
 let updateLoading = $ref(false);
 
 watch(
@@ -42,7 +46,14 @@ watch(
     rulesLobbyTemplate,
   ],
   () => {
-    cannotUpdate = false;
+    cannotUpdateMatch = false;
+  },
+  { immediate: false },
+);
+watch(
+  rescheduleDate,
+  () => {
+    cannotUpdateReschedule = false;
   },
   { immediate: false },
 );
@@ -63,7 +74,22 @@ async function updateMatchTemplate() {
     ElMessage({ message: `error: ${e}`, duration: 1000 });
   } finally {
     updateLoading = false;
-    cannotUpdate = true;
+    cannotUpdateMatch = true;
+  }
+}
+
+async function rescheduleMatchTemplate() {
+  try {
+    updateLoading = true;
+    await updateRescheduleMatch(props.match.id, { shortMessage: shortMessage.value, schedule: rescheduleDate.value });
+    ElMessage({ type: 'success', message: 'Reschedule request sent', duration: 1000 });
+  } catch (e) {
+    ElMessage({ type: 'error', message: 'error', duration: 1000 });
+  } finally {
+    shortMessage.value = '';
+    rescheduleDate.value = '';
+    updateLoading = false;
+    cannotUpdateReschedule = true;
   }
 }
 </script>
@@ -184,6 +210,41 @@ async function updateMatchTemplate() {
           </div>
         </div>
       </el-tab-pane>
+
+      <el-tab-pane
+        v-if="
+          access?.isAdmin ||
+          access?.isReferee ||
+          access?.isOwner ||
+          match.player1Id === user?.id ||
+          match.player2Id === user?.id
+        "
+        label="Reschedule"
+        name="matchReschedule"
+        :disabled="match.state === 'complete' || match.state === 'playing'"
+      >
+        <el-timeline v-if="match.reschedules.length > 0">
+          <el-timeline-item
+            v-for="(reschedule, index) in match.reschedules"
+            :key="index"
+            :timestamp="dayjs(reschedule.schedule).format()"
+          >
+            {{ reschedule.shortMessage }}
+          </el-timeline-item>
+        </el-timeline>
+        <div flex="~ col">
+          <CommonDatepicker
+            :model-value="rescheduleDate"
+            type="datetime"
+            title="reschedule"
+            @update:model-value="(val) => (rescheduleDate = dayjs(val).utc().format())"
+          />
+          <div>
+            <span display="block" text="xs">short message (if necessary)</span>
+            <el-input v-model="shortMessage" type="textarea" :autosize="{ minRows: 2, maxRows: 3 }" w="max-250px" />
+          </div>
+        </div>
+      </el-tab-pane>
     </el-tabs>
 
     <template #footer>
@@ -191,9 +252,18 @@ async function updateMatchTemplate() {
         {{ match.startDate ? 'schedule: ' + dayjs(match.startDate).format('LLLL') : 'unscheduled yet' }}
       </template>
       <template v-if="activeTab === 'matchUpdate'">
-        <el-button type="success" :disabled="cannotUpdate" :loading="updateLoading" @click="updateMatchTemplate"
-          >Update</el-button
-        >
+        <el-button type="success" :disabled="cannotUpdateMatch" :loading="updateLoading" @click="updateMatchTemplate"
+          >Update
+        </el-button>
+      </template>
+      <template v-if="activeTab === 'matchReschedule'">
+        <el-button
+          type="success"
+          :disabled="cannotUpdateReschedule"
+          :loading="updateLoading"
+          @click="rescheduleMatchTemplate"
+          >Reschedule
+        </el-button>
       </template>
     </template>
   </el-dialog>

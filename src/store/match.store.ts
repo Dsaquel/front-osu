@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { defineStore } from 'pinia';
 import apiMatch from '~/api/modules/api.match';
-import { Match, groupBy, UpdateMatchDto } from '~/types';
+import { Match, groupBy, UpdateMatchDto, CreateRescheduleDto } from '~/types';
 
 const useMatchStore = defineStore('match', () => {
   const matches = ref(undefined as Match[] | undefined);
@@ -42,7 +42,11 @@ const useMatchStore = defineStore('match', () => {
     const data = await apiMatch.udpateMatch(matchId, udpateMatchDto);
     matches.value = data;
   }
-  return { matches, fetchMatches, updateMatch, matchesGrouped };
+  async function updateRescheduleMatch(matchId: number, createRescheduleDto: CreateRescheduleDto) {
+    const data = await apiMatch.createReschedule(matchId, createRescheduleDto);
+    matches.value = data;
+  }
+  return { matches, fetchMatches, updateMatch, matchesGrouped, updateRescheduleMatch };
 });
 
 export default useMatchStore;

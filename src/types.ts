@@ -173,6 +173,11 @@ export interface DraftDto {
   type?: 'standard' | 'taiko';
 }
 
+export interface CreateRescheduleDto {
+  schedule: string;
+  shortMessage?: string;
+}
+
 export interface Draft extends Node {
   isPublic: boolean;
   name: string;
@@ -276,6 +281,14 @@ export interface Match extends Node {
   winnerId: number | null;
   player1Id: number | null;
   player2Id: number | null;
+  reschedules: Reschedule[];
+}
+
+export interface Reschedule extends Node {
+  schedule: string;
+  isAccepted: boolean | null;
+  shortMessage: string | null;
+  matchId: number;
 }
 
 export interface Player extends Node {
