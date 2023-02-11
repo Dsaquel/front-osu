@@ -38,5 +38,6 @@ module.exports = {
     'no-new': 'off',
     'no-param-reassign': 'off',
     'import/first': 'off',
+    'no-nested-ternary': 'off'
   },
 };

@@ -176,7 +176,7 @@ export interface DraftDto {
 export interface CreateRescheduleDto {
   schedule?: string;
   status?: 'request' | 'accepted' | 'refused';
-  shortMessage?: string;
+  shortMessage: string;
 }
 
 export interface Draft extends Node {
@@ -290,6 +290,7 @@ export interface Reschedule extends Node {
   status: 'request' | 'accepted' | 'refused';
   shortMessage: string | null;
   matchId: number;
+  playerId: number;
 }
 
 export interface Player extends Node {

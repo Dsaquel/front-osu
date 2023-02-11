@@ -61,6 +61,9 @@ async function rescheduleMatchTemplate() {
     if (statusNewReschedule.value === 'accepted' || statusNewReschedule.value === 'refused') {
       shortMessage.value = statusNewReschedule.value === 'accepted' ? 'Accept to reschedule' : 'Refuse to reschedule';
     }
+    if (!shortMessage.value) {
+      shortMessage.value = 'has request';
+    }
     await createRescheduleMatch(props.match.id, {
       shortMessage: shortMessage.value,
       schedule: rescheduleDate.value,
@@ -223,7 +226,7 @@ function getDateString(date: string) {
         name="matchReschedule"
         :disabled="match.state === 'complete' || match.state === 'playing'"
       >
-        <el-timeline p="2">
+        <el-timeline p="2" h="max-[20%]">
           <el-timeline-item
             v-for="(reschedule, index) in match.reschedules"
             :key="index"
@@ -240,9 +243,35 @@ function getDateString(date: string) {
             "
             size="large"
           >
-            <div>
-              {{ reschedule.shortMessage }}
-            </div>
+            <el-card shadow="never">
+              <div flex="~ wrap">
+                <div flex="~ 1">
+                  <el-avatar
+                    :src="
+                      reschedule.playerId === match.player1Id
+                        ? match.player1.user.avatarUrl
+                        : match.player2.user.avatarUrl
+                    "
+                  />
+                  <div flex="~" align="items-center">
+                    <div flex="~ col" justify="between" m="l-2">
+                      <div font="semibold">
+                        {{
+                          reschedule.playerId === match.player1Id
+                            ? match.player1.user.username
+                            : match.player2.user.username
+                        }}
+                      </div>
+                      <div>
+                        {{ reschedule.shortMessage }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div></div>
+              </div>
+            </el-card>
           </el-timeline-item>
           <el-timeline-item
             v-if="match.reschedules.at(-1)?.status !== 'accepted'"
