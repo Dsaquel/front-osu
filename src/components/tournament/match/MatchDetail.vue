@@ -251,7 +251,11 @@ function getDateString(date: string) {
                     :src="
                       reschedule.playerId === match.player1Id
                         ? match.player1.user.avatarUrl
-                        : match.player2.user.avatarUrl
+                        : reschedule.playerId === match.player2Id
+                        ? match.player2.user.avatarUrl
+                        : reschedule.superReferee?.admin?.user.avatarUrl ||
+                          reschedule.superReferee?.referee?.user.avatarUrl ||
+                          tournament?.owner.avatarUrl
                     "
                   />
                   <div flex="~" align="items-center">
@@ -266,6 +270,7 @@ function getDateString(date: string) {
                               reschedule.superReferee?.referee?.user.username ||
                               tournament?.owner.username
                         }}
+                        <span v-if="reschedule.superRefereeId" font="normal italic" text="sm" m="l-1">referee</span>
                       </div>
                       <div>
                         {{ reschedule.shortMessage }}
@@ -273,8 +278,6 @@ function getDateString(date: string) {
                     </div>
                   </div>
                 </div>
-
-                <div></div>
               </div>
             </el-card>
           </el-timeline-item>
