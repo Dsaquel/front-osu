@@ -42,11 +42,11 @@ const useMatchStore = defineStore('match', () => {
     const data = await apiMatch.udpateMatch(matchId, udpateMatchDto);
     matches.value = data;
   }
-  async function updateRescheduleMatch(matchId: number, createRescheduleDto: CreateRescheduleDto) {
+  async function createRescheduleMatch(matchId: number, createRescheduleDto: CreateRescheduleDto) {
     const data = await apiMatch.createReschedule(matchId, createRescheduleDto);
     matches.value = data;
   }
-  return { matches, fetchMatches, updateMatch, matchesGrouped, updateRescheduleMatch };
+  return { matches, fetchMatches, updateMatch, matchesGrouped, createRescheduleMatch };
 });
 
 export default useMatchStore;

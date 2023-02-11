@@ -9,7 +9,7 @@ dayjs.extend(LocalizedFormat);
 
 const { access } = storeToRefs(tournamentStore());
 const { user } = storeToRefs(userStore());
-const { updateMatch, updateRescheduleMatch } = matchStore();
+const { updateMatch, createRescheduleMatch } = matchStore();
 
 const props = defineProps<{
   match: Match;
@@ -28,10 +28,10 @@ const matchesHistoryOsuTemplate = ref(props.match.matchesHistoryOsu);
 const stateTemplate = ref(props.match.state);
 const startDateTemplate = ref(props.match.startDate);
 const rulesLobbyTemplate = ref(props.match.rulesLobby ?? '');
-const rescheduleDate = ref('');
+const rescheduleDate = ref<string>();
 const shortMessage = ref<string>();
 const showCreateReschedule = ref(false);
-const isAcceptReschedule = ref<boolean>();
+const statusNewReschedule = ref<'request' | 'acceped' | 'refused'>('request');
 
 let cannotUpdateMatch = $ref(true);
 let updateLoading = $ref(false);
@@ -76,20 +76,39 @@ async function updateMatchTemplate() {
 async function rescheduleMatchTemplate() {
   try {
     updateLoading = true;
-    await updateRescheduleMatch(props.match.id, { shortMessage: shortMessage.value, schedule: rescheduleDate.value });
-    ElMessage({ type: 'success', message: 'Reschedule request sent', duration: 1000 });
+    if (statusNewReschedule.value === 'acceped' || statusNewReschedule.value === 'refused') {
+      shortMessage.value = statusNewReschedule.value === 'acceped' ? 'Accept to reschedule' : 'Refuse to reschedule';
+    }
+    await createRescheduleMatch(props.match.id, {
+      shortMessage: shortMessage.value,
+      schedule: rescheduleDate.value,
+      status: statusNewReschedule.value,
+    });
+    // ElMessage({ type: 'success', message: 'Reschedule request sent', duration: 1000 });
   } catch (e) {
     ElMessage({ type: 'error', message: 'error', duration: 1000 });
   } finally {
-    shortMessage.value = '';
-    rescheduleDate.value = '';
+    shortMessage.value = undefined;
+    rescheduleDate.value = undefined;
+    statusNewReschedule.value = 'request';
     updateLoading = false;
   }
 }
 
-function replyReschedule() {
-  isAcceptReschedule.value = undefined;
-  showCreateReschedule.value = true;
+function replyReschedule(status: typeof statusNewReschedule.value, createReschedule: boolean) {
+  statusNewReschedule.value = status;
+  showCreateReschedule.value = createReschedule;
+  if (status === 'acceped' || status === 'refused') {
+    rescheduleDate.value = undefined;
+  }
+}
+
+function getDateString(date: string) {
+  if (dayjs(date).format('lll') === 'Invalid Date') {
+    rescheduleDate.value = undefined;
+    return undefined;
+  }
+  return dayjs(date).format('lll');
 }
 </script>
 
@@ -222,13 +241,19 @@ function replyReschedule() {
         name="matchReschedule"
         :disabled="match.state === 'complete' || match.state === 'playing'"
       >
-        <el-timeline v-if="match.reschedules.length > 0" p="2">
+        <el-timeline p="2">
           <el-timeline-item
             v-for="(reschedule, index) in match.reschedules"
             :key="index"
-            :timestamp="dayjs(reschedule.schedule).format('lll')"
+            :timestamp="
+              reschedule.schedule
+                ? getDateString(reschedule.schedule)
+                : reschedule.status === 'acceped'
+                ? 'Accept'
+                : 'Refuse'
+            "
             placement="top"
-            :type="reschedule.isAccepted === null ? 'warning' : reschedule.isAccepted ? 'success' : 'danger'"
+            :type="reschedule.status === 'request' ? 'warning' : reschedule.status === 'acceped' ? 'success' : 'danger'"
             size="large"
           >
             <div>
@@ -236,17 +261,35 @@ function replyReschedule() {
             </div>
           </el-timeline-item>
           <el-timeline-item
+            v-if="match.reschedules.at(-1)?.status !== 'acceped'"
             placement="top"
-            :type="isAcceptReschedule ? 'success' : isAcceptReschedule === false ? 'danger' : 'info'"
+            :type="
+              statusNewReschedule === 'acceped' ? 'success' : statusNewReschedule === 'refused' ? 'danger' : 'info'
+            "
+            :timestamp="
+              !match.reschedules.length && !rescheduleDate
+                ? 'date request'
+                : match.reschedules.length && !rescheduleDate && showCreateReschedule
+                ? 'Respond with new date'
+                : rescheduleDate
+                ? getDateString(rescheduleDate)
+                : statusNewReschedule === 'acceped'
+                ? 'Accept'
+                : statusNewReschedule === 'refused'
+                ? 'Refuse'
+                : 'Waiting your choice'
+            "
           >
-            <el-button-group>
+            <el-button-group v-if="match.reschedules.length > 0">
               <el-tooltip content="reply with reschedule" placement="bottom">
-                <el-button type="primary" @click="replyReschedule"><i-fluent-mdl2:calendar-reply /></el-button>
+                <el-button type="primary" @click="replyReschedule('request', true)"
+                  ><i-fluent-mdl2:calendar-reply
+                /></el-button>
               </el-tooltip>
-              <el-button type="primary" @click="isAcceptReschedule = true">accept reschedule</el-button>
-              <el-button type="primary" @click="isAcceptReschedule = false">don't accept reschedule</el-button>
+              <el-button type="primary" @click="replyReschedule('acceped', false)">accept reschedule</el-button>
+              <el-button type="primary" @click="replyReschedule('refused', false)">don't accept reschedule</el-button>
             </el-button-group>
-            <el-card v-if="showCreateReschedule" shadow="never">
+            <el-card v-if="showCreateReschedule || !match.reschedules.length" shadow="never">
               <CommonDatepicker
                 :model-value="rescheduleDate"
                 type="datetime"
@@ -255,7 +298,13 @@ function replyReschedule() {
               />
               <div>
                 <span display="block" text="xs">short message (if necessary)</span>
-                <el-input v-model="shortMessage" type="textarea" :autosize="{ minRows: 2, maxRows: 3 }" w="max-250px" />
+                <el-input
+                  v-model="shortMessage"
+                  type="textarea"
+                  resize="none"
+                  :autosize="{ minRows: 2, maxRows: 3 }"
+                  w="max-250px"
+                />
               </div>
             </el-card>
           </el-timeline-item>
@@ -272,8 +321,12 @@ function replyReschedule() {
           >Update
         </el-button>
       </template>
-      <template v-if="activeTab === 'matchReschedule'">
-        <el-button type="success" :disabled="!rescheduleDate" :loading="updateLoading" @click="rescheduleMatchTemplate"
+      <template v-if="activeTab === 'matchReschedule' && match.reschedules.at(-1)?.status !== 'acceped'">
+        <el-button
+          type="success"
+          :disabled="statusNewReschedule === 'request' && !rescheduleDate"
+          :loading="updateLoading"
+          @click="rescheduleMatchTemplate"
           >Confirm
         </el-button>
       </template>
