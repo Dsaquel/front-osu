@@ -30,9 +30,10 @@ const startDateTemplate = ref(props.match.startDate);
 const rulesLobbyTemplate = ref(props.match.rulesLobby ?? '');
 const rescheduleDate = ref('');
 const shortMessage = ref<string>();
+const showCreateReschedule = ref(false);
+const isAcceptReschedule = ref<boolean>();
 
 let cannotUpdateMatch = $ref(true);
-let cannotUpdateReschedule = $ref(true);
 let updateLoading = $ref(false);
 
 watch(
@@ -50,13 +51,7 @@ watch(
   },
   { immediate: false },
 );
-watch(
-  rescheduleDate,
-  () => {
-    cannotUpdateReschedule = false;
-  },
-  { immediate: false },
-);
+
 async function updateMatchTemplate() {
   try {
     updateLoading = true;
@@ -89,8 +84,12 @@ async function rescheduleMatchTemplate() {
     shortMessage.value = '';
     rescheduleDate.value = '';
     updateLoading = false;
-    cannotUpdateReschedule = true;
   }
+}
+
+function replyReschedule() {
+  isAcceptReschedule.value = undefined;
+  showCreateReschedule.value = true;
 }
 </script>
 
@@ -223,27 +222,44 @@ async function rescheduleMatchTemplate() {
         name="matchReschedule"
         :disabled="match.state === 'complete' || match.state === 'playing'"
       >
-        <el-timeline v-if="match.reschedules.length > 0">
+        <el-timeline v-if="match.reschedules.length > 0" p="2">
           <el-timeline-item
             v-for="(reschedule, index) in match.reschedules"
             :key="index"
-            :timestamp="dayjs(reschedule.schedule).format()"
+            :timestamp="dayjs(reschedule.schedule).format('lll')"
+            placement="top"
+            :type="reschedule.isAccepted === null ? 'warning' : reschedule.isAccepted ? 'success' : 'danger'"
+            size="large"
           >
-            {{ reschedule.shortMessage }}
+            <div>
+              {{ reschedule.shortMessage }}
+            </div>
+          </el-timeline-item>
+          <el-timeline-item
+            placement="top"
+            :type="isAcceptReschedule ? 'success' : isAcceptReschedule === false ? 'danger' : 'info'"
+          >
+            <el-button-group>
+              <el-tooltip content="reply with reschedule" placement="bottom">
+                <el-button type="primary" @click="replyReschedule"><i-fluent-mdl2:calendar-reply /></el-button>
+              </el-tooltip>
+              <el-button type="primary" @click="isAcceptReschedule = true">accept reschedule</el-button>
+              <el-button type="primary" @click="isAcceptReschedule = false">don't accept reschedule</el-button>
+            </el-button-group>
+            <el-card v-if="showCreateReschedule" shadow="never">
+              <CommonDatepicker
+                :model-value="rescheduleDate"
+                type="datetime"
+                title="reschedule"
+                @update:model-value="(val) => (rescheduleDate = dayjs(val).utc().format())"
+              />
+              <div>
+                <span display="block" text="xs">short message (if necessary)</span>
+                <el-input v-model="shortMessage" type="textarea" :autosize="{ minRows: 2, maxRows: 3 }" w="max-250px" />
+              </div>
+            </el-card>
           </el-timeline-item>
         </el-timeline>
-        <div flex="~ col">
-          <CommonDatepicker
-            :model-value="rescheduleDate"
-            type="datetime"
-            title="reschedule"
-            @update:model-value="(val) => (rescheduleDate = dayjs(val).utc().format())"
-          />
-          <div>
-            <span display="block" text="xs">short message (if necessary)</span>
-            <el-input v-model="shortMessage" type="textarea" :autosize="{ minRows: 2, maxRows: 3 }" w="max-250px" />
-          </div>
-        </div>
       </el-tab-pane>
     </el-tabs>
 
@@ -257,12 +273,8 @@ async function rescheduleMatchTemplate() {
         </el-button>
       </template>
       <template v-if="activeTab === 'matchReschedule'">
-        <el-button
-          type="success"
-          :disabled="cannotUpdateReschedule"
-          :loading="updateLoading"
-          @click="rescheduleMatchTemplate"
-          >Reschedule
+        <el-button type="success" :disabled="!rescheduleDate" :loading="updateLoading" @click="rescheduleMatchTemplate"
+          >Confirm
         </el-button>
       </template>
     </template>
