@@ -233,7 +233,6 @@ export interface SuperReferee extends Node {
   type: 'admin' | 'referee' | 'owner';
   admin: Admin | null;
   referee: Referee | null;
-  owner: Tournament['owner'] | null;
   adminId: number | null;
   refereeId: number | null;
   ownerId: number | null;

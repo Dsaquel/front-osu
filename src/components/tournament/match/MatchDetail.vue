@@ -399,21 +399,38 @@ function getDateString(date: string) {
 
     <template #footer>
       <template v-if="activeTab === 'matchDetail'">
-        <div flex="~" justify="between">
+        <div flex="~" align="items-center" justify="between">
           <el-button v-if="!match.superReferee" type="primary" @click="joinMatchAsReferee(match.id)"
             >Join as referee</el-button
           >
-          <el-button
-            v-else-if="
-              match.superReferee.admin?.user.id === user?.id ||
-              match.superReferee.referee?.user.id === user?.id ||
-              tournament?.owner.id === user?.id
-            "
-            type="warning"
-            @click="undoMatchReferee(match.id)"
-            >Undo Referee</el-button
-          >
-          <div v-else></div>
+          <div v-if="match.superReferee" flex="~" align="items-center">
+            <div text="lg" m="r-3">Referee:</div>
+            <el-avatar
+              :src="
+                match.superReferee.admin?.user.avatarUrl ||
+                match.superReferee.referee?.user.avatarUrl ||
+                tournament?.owner.avatarUrl
+              "
+            />
+            <span m="l-1" text="overflow-ellipsis space-nowrap" overflow="hidden">
+              {{
+                match.superReferee.admin?.user.username ||
+                match.superReferee.referee?.user.username ||
+                tournament?.owner.username
+              }}
+            </span>
+            <el-button
+              v-if="
+                match.superReferee.admin?.user.id === user?.id ||
+                match.superReferee.referee?.user.id === user?.id ||
+                tournament?.owner.id === user?.id
+              "
+              m="l-4"
+              type="warning"
+              @click="undoMatchReferee(match.id)"
+              >Undo Referee</el-button
+            >
+          </div>
           <div>
             {{ match.startDate ? 'schedule: ' + dayjs(match.startDate).format('LLLL') : 'unscheduled yet' }}
           </div>
