@@ -276,7 +276,8 @@ export interface Match extends Node {
   player2PrevIdentifier: number;
   state: 'pending' | 'playing' | 'complete';
   firstTo: number;
-  refereeId: number | null;
+  superRefereeId: number | null;
+  superReferee: SuperReferee;
   rulesLobby: string | null;
   matchesHistoryOsu: string | null;
   tournamentId: number;

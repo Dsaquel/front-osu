@@ -11,7 +11,7 @@ dayjs.extend(LocalizedFormat);
 
 const { access, tournament } = storeToRefs(tournamentStore());
 const { user } = storeToRefs(userStore());
-const { updateMatch, createRescheduleMatch } = matchStore();
+const { updateMatch, createRescheduleMatch, joinMatchAsReferee, undoMatchReferee } = matchStore();
 
 const props = defineProps<{
   match: Match;
@@ -152,7 +152,7 @@ function getDateString(date: string) {
     <el-tabs v-model="activeTab">
       <el-tab-pane label="Detail" name="matchDetail">
         <el-row justify="space-between">
-          <el-col :span="10">
+          <el-col :span="9">
             <el-card v-if="match.player1" shadow="never">
               <div flex="~" align="items-center" justify="between">
                 <div flex="~ col" align="items-center">
@@ -165,12 +165,12 @@ function getDateString(date: string) {
               </div>
             </el-card>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <div flex="~" align="items-center" h="full" justify="center">
               <span text="3xl">versus</span>
             </div>
           </el-col>
-          <el-col :span="10">
+          <el-col :span="9">
             <el-card v-if="match.player2" shadow="never">
               <div flex="~" align="items-center" justify="between">
                 <span :class="{ 'text-emerald-500': match.winnerId === match?.player2.id }" text="3xl">{{
@@ -399,7 +399,25 @@ function getDateString(date: string) {
 
     <template #footer>
       <template v-if="activeTab === 'matchDetail'">
-        {{ match.startDate ? 'schedule: ' + dayjs(match.startDate).format('LLLL') : 'unscheduled yet' }}
+        <div flex="~" justify="between">
+          <el-button v-if="!match.superReferee" type="primary" @click="joinMatchAsReferee(match.id)"
+            >Join as referee</el-button
+          >
+          <el-button
+            v-else-if="
+              match.superReferee.admin?.user.id === user?.id ||
+              match.superReferee.referee?.user.id === user?.id ||
+              tournament?.owner.id === user?.id
+            "
+            type="warning"
+            @click="undoMatchReferee(match.id)"
+            >Undo Referee</el-button
+          >
+          <div v-else></div>
+          <div>
+            {{ match.startDate ? 'schedule: ' + dayjs(match.startDate).format('LLLL') : 'unscheduled yet' }}
+          </div>
+        </div>
       </template>
       <template v-if="activeTab === 'matchUpdate'">
         <el-button

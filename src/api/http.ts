@@ -55,8 +55,8 @@ const service = {
     return axiosInstance.get(url, { params: data });
   },
 
-  post<T = any>(url: string, data?: object): Promise<T> {
-    return axiosInstance.post(url, data);
+  post<T = any>(url: string, data?: object, params?: object): Promise<T> {
+    return axiosInstance.post(url, data, { params });
   },
 
   put<T = any>(url: string, data?: object, params?: object): Promise<T> {

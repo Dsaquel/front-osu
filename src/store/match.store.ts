@@ -48,7 +48,25 @@ const useMatchStore = defineStore('match', () => {
     matches.value = data;
   }
 
-  return { matches, fetchMatches, updateMatch, matchesGrouped, createRescheduleMatch };
+  async function joinMatchAsReferee(matchId: number) {
+    const data = await apiMatch.joinMatchAsReferee(matchId);
+    matches.value = data;
+  }
+
+  async function undoMatchReferee(matchId: number) {
+    const data = await apiMatch.undoMatchReferee(matchId);
+    matches.value = data;
+  }
+
+  return {
+    matches,
+    fetchMatches,
+    updateMatch,
+    matchesGrouped,
+    createRescheduleMatch,
+    joinMatchAsReferee,
+    undoMatchReferee,
+  };
 });
 
 export default useMatchStore;

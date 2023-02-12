@@ -7,6 +7,8 @@ const MatchApi = {
     service.put<Match[]>(`/match/${matchId}`, updateMatchDto),
   createReschedule: (matchId: number, createRescheduleDto: CreateRescheduleDto) =>
     service.post<Match[]>(`/match/${matchId}/reschedule`, createRescheduleDto),
+  joinMatchAsReferee: (matchId: number) => service.post<Match[]>(`/match/${matchId}/referee`),
+  undoMatchReferee: (matchId: number) => service.post<Match[]>(`/match/${matchId}/referee`, undefined, { undo: true }),
 };
 
 export default MatchApi;
