@@ -16,11 +16,7 @@ const showMatchDetail = ref(false);
           <div class="match-player entrant winner">
             <div class="match-player-name">
               <div class="flex-item-grower text-ellipsis">
-                <span class="match-player-name-container">{{
-                  match.player1PrevIdentifier && match.round < 0
-                    ? `perdant du match ${match.player1PrevIdentifier}`
-                    : ''
-                }}</span>
+                <span class="match-player-name-container">{{ match.player1?.user.username || '' }}</span>
               </div>
             </div>
             <div class="match-player-info">
@@ -35,7 +31,7 @@ const showMatchDetail = ref(false);
           <div class="match-player entrant loser">
             <div class="match-player-name">
               <div class="flex-item-grower text-ellipsis">
-                <span class="match-player-name-container"></span>
+                <span class="match-player-name-container">{{ match.player2?.user.username || '' }}</span>
               </div>
             </div>
             <div class="match-player-info">
@@ -119,7 +115,9 @@ const showMatchDetail = ref(false);
   white-space: nowrap;
   flex: 1 1 100%;
 }
-
+.match-player-name-container {
+  color: black;
+}
 .match-player-info {
   display: flex;
   flex-direction: row;

@@ -5,7 +5,8 @@ export default {
 </script>
 <script setup lang="ts">
 const { fetchMatches } = matchStore();
-const { fetchControlAccess, fetchTournament } = tournamentStore();
+const { fetchControlAccess, fetchTournament, fetchPlayer } = tournamentStore();
+const { tournament } = storeToRefs(tournamentStore());
 const { matchesGrouped } = storeToRefs(matchStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
@@ -16,6 +17,9 @@ async function init() {
   await fetchMatches(tournamentId);
   await fetchControlAccess(tournamentId);
   await fetchTournament(tournamentId);
+  if (tournament.value?.winnerId) {
+    await fetchPlayer(tournament.value.winnerId, tournamentId);
+  }
 }
 
 onBeforeMount(async () => {

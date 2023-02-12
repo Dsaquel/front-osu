@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import 'element-plus/es/components/message-box/style/css';
 import dayjs from 'dayjs';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import utc from 'dayjs/plugin/utc';
+import { ElMessageBox } from 'element-plus';
 import { Match } from '~/types';
 
 dayjs.extend(utc);
@@ -37,17 +39,32 @@ let updateLoading = $ref(false);
 
 async function updateMatchTemplate() {
   try {
-    updateLoading = true;
-    await updateMatch(props.match.id, {
-      firstTo: firstToTemplate.value,
-      state: stateTemplate.value,
-      startDate: startDateTemplate.value ?? undefined,
-      rulesLobby: rulesLobbyTemplate.value ?? undefined,
-      matchesHistoryOsu: matchesHistoryOsuTemplate.value ?? undefined,
-      player1Score: player1ScoreTemplate.value ?? undefined,
-      player2Score: player2ScoreTemplate.value ?? undefined,
-    });
-    ElMessage({ type: 'success', message: 'match updated', duration: 1000 });
+    if (player1ScoreTemplate.value === firstToTemplate.value || player2ScoreTemplate.value === firstToTemplate.value) {
+      await ElMessageBox.confirm(
+        `${
+          player1ScoreTemplate.value === firstToTemplate.value
+            ? props.match.player1.user.username
+            : props.match.player2.user.username
+        } will be the winner of the match`,
+        'Warning',
+        {
+          confirmButtonText: 'Confirm',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
+        },
+      );
+      updateLoading = true;
+      await updateMatch(props.match.id, {
+        firstTo: firstToTemplate.value,
+        state: stateTemplate.value,
+        startDate: startDateTemplate.value ?? undefined,
+        rulesLobby: rulesLobbyTemplate.value ?? undefined,
+        matchesHistoryOsu: matchesHistoryOsuTemplate.value ?? undefined,
+        player1Score: player1ScoreTemplate.value ?? undefined,
+        player2Score: player2ScoreTemplate.value ?? undefined,
+      });
+      ElMessage({ type: 'success', message: 'match updated', duration: 1000 });
+    }
   } catch (e) {
     ElMessage({ message: `error: ${e}`, duration: 1000 });
   } finally {
@@ -120,7 +137,7 @@ function getDateString(date: string) {
       <el-tab-pane label="Detail" name="matchDetail">
         <el-row justify="space-between">
           <el-col :span="10">
-            <el-card shadow="never">
+            <el-card v-if="match.player1" shadow="never">
               <div flex="~" align="items-center" justify="between">
                 <div flex="~ col" align="items-center">
                   <el-avatar size="large" :src="match.player1.user.avatarUrl" />
@@ -136,7 +153,7 @@ function getDateString(date: string) {
             </div>
           </el-col>
           <el-col :span="10">
-            <el-card shadow="never">
+            <el-card v-if="match.player2" shadow="never">
               <div flex="~" align="items-center" justify="between">
                 <span text="3xl">{{ match.player1Score || 0 }}</span>
                 <div flex="~ col" align="items-center">
@@ -154,14 +171,14 @@ function getDateString(date: string) {
           <div text="lg center">Points</div>
           <div grid="~ cols-2" align="items-center">
             <div flex="~" align="items-center">
-              <div flex="~ col" align="items-center" p="2">
+              <div v-if="match.player1" flex="~ col" align="items-center" p="2">
                 <el-avatar :src="match.player1.user.avatarUrl" />
                 <span text="base">{{ match.player1.user.username }}</span>
               </div>
               <el-input-number v-model="player1ScoreTemplate" :min="0" :max="props.match.firstTo" />
             </div>
 
-            <div justify="end" flex="~" align="items-center">
+            <div v-if="match.player2" justify="end" flex="~" align="items-center">
               <el-input-number v-model="player2ScoreTemplate" :min="0" :max="props.match.firstTo" />
               <div flex="~ col" align="items-center" p="2">
                 <el-avatar :src="match.player2.user.avatarUrl" />

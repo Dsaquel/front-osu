@@ -10,6 +10,7 @@ import {
   Staffs,
   User,
   Participant,
+  Player,
 } from '~/types';
 
 const useTournamentStore = defineStore('tournament', () => {
@@ -19,6 +20,7 @@ const useTournamentStore = defineStore('tournament', () => {
   const tournament = ref(undefined as Tournament | undefined);
   const staffs = ref(undefined as Staffs | undefined);
   const participants = ref(undefined as Participant[] | undefined);
+  const winner = ref(undefined as Player | undefined | null);
 
   const staffRequests = computed(() =>
     Object.entries(staffs.value ?? {}).flatMap(([key, array]) =>
@@ -184,6 +186,11 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
+  async function fetchPlayer(playerId: number, tournamentId: number) {
+    const data = await apiTournament.fetchPlayer(playerId, tournamentId);
+    winner.value = data;
+  }
+
   return {
     access,
     isAuthorized,
@@ -204,6 +211,7 @@ const useTournamentStore = defineStore('tournament', () => {
     participantsAccepted,
     removeParticipant,
     updatePublication,
+    fetchPlayer,
   };
 });
 

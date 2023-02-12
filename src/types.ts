@@ -261,14 +261,15 @@ export interface Tournament extends Node {
   qualifier: Qualifier | null;
   ownerId: number;
   owner: User;
+  winnerId: number | null;
 }
 
 export interface Match extends Node {
   identifier: number;
   round: number;
   player1Score: number;
-  player1: Player;
-  player2: Player;
+  player1: Player | null;
+  player2: Player | null;
   player2Score: number;
   startDate: string | null;
   player1PrevIdentifier: number;
