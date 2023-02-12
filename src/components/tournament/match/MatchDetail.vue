@@ -34,6 +34,7 @@ const rescheduleDate = ref<string>();
 const shortMessage = ref<string>();
 const showCreateReschedule = ref(false);
 const statusNewReschedule = ref<'request' | 'accepted' | 'refused'>('request');
+const formsError = ref<string>();
 
 let updateLoading = $ref(false);
 
@@ -73,6 +74,7 @@ async function updateMatchTemplate() {
     ElMessage({ message: e as never, duration: 1000 });
   } finally {
     updateLoading = false;
+    formsError.value = undefined;
   }
 }
 
@@ -193,11 +195,21 @@ function getDateString(date: string) {
                 <el-avatar :src="match.player1.user.avatarUrl" />
                 <span text="base">{{ match.player1.user.username }}</span>
               </div>
-              <el-input-number v-model="player1ScoreTemplate" :min="0" :max="props.match.firstTo" />
+              <el-input-number
+                v-model="player1ScoreTemplate"
+                :disabled="match.state === 'complete'"
+                :min="0"
+                :max="props.match.firstTo"
+              />
             </div>
 
             <div v-if="match.player2" justify="end" flex="~" align="items-center">
-              <el-input-number v-model="player2ScoreTemplate" :min="0" :max="props.match.firstTo" />
+              <el-input-number
+                v-model="player2ScoreTemplate"
+                :disabled="match.state === 'complete'"
+                :min="0"
+                :max="props.match.firstTo"
+              />
               <div flex="~ col" align="items-center" p="2">
                 <el-avatar :src="match.player2.user.avatarUrl" />
                 <span text="base">{{ match.player2.user.username }}</span>
@@ -209,7 +221,7 @@ function getDateString(date: string) {
         <div grid="~ cols-4 gap-3" m="t-4">
           <div>
             <span display="block" text="xs">first to</span>
-            <el-select v-model="firstToTemplate" filterable allow-create>
+            <el-select v-model="firstToTemplate" :disabled="match.state === 'complete'" filterable allow-create>
               <el-option-group label="first to" tag-type="success">
                 <el-option
                   v-for="(item, v) in firstToOptions"
@@ -235,12 +247,14 @@ function getDateString(date: string) {
             :model-value="startDateTemplate"
             type="datetime"
             title="start of match"
+            :disabled="match.state !== 'pending'"
             @update:model-value="(val) => (startDateTemplate = dayjs(val).utc().format())"
           />
           <div grid="col-span-4" justify="self-center" class="sm:w-min-80">
             <span display="block" text="sm">rules lobby (if exist)</span>
             <el-input
               v-model="rulesLobbyTemplate"
+              :disabled="match.state !== 'pending'"
               type="textarea"
               :autosize="{ minRows: 3, maxRows: 6 }"
               w="min-[80%]"
