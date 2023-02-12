@@ -278,7 +278,7 @@ export interface Match extends Node {
   firstTo: number;
   refereeId: number | null;
   rulesLobby: string | null;
-  matchesHistoryOsu: string;
+  matchesHistoryOsu: string | null;
   tournamentId: number;
   winnerId: number | null;
   player1Id: number | null;

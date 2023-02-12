@@ -32,7 +32,7 @@ const TournamentApi = {
     service.put<TemplateNotification>(`/tournament/${tournamentId}/participant/${participantId}`),
   updatePublication: (tournamentId: number) => service.post<void>(`/tournament/${tournamentId}/start`),
   fetchPlayer: (playerId: number, tournamentId: number) =>
-    service.get<Player | null>(`/tournament/${tournamentId}/winner`),
+    service.get<Player | null>(`/tournament/${tournamentId}/player/${playerId}`),
 };
 
 export default TournamentApi;

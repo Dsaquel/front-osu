@@ -39,12 +39,16 @@ let updateLoading = $ref(false);
 
 async function updateMatchTemplate() {
   try {
-    if (player1ScoreTemplate.value === firstToTemplate.value || player2ScoreTemplate.value === firstToTemplate.value) {
+    if (
+      (player1ScoreTemplate.value === firstToTemplate.value || player2ScoreTemplate.value === firstToTemplate.value) &&
+      (props.match.player1Score !== player1ScoreTemplate.value ||
+        props.match.player2Score !== player2ScoreTemplate.value)
+    ) {
       await ElMessageBox.confirm(
         `${
           player1ScoreTemplate.value === firstToTemplate.value
-            ? props.match.player1.user.username
-            : props.match.player2.user.username
+            ? props.match.player1?.user.username
+            : props.match.player2?.user.username
         } will be the winner of the match`,
         'Warning',
         {
@@ -53,20 +57,20 @@ async function updateMatchTemplate() {
           type: 'warning',
         },
       );
-      updateLoading = true;
-      await updateMatch(props.match.id, {
-        firstTo: firstToTemplate.value,
-        state: stateTemplate.value,
-        startDate: startDateTemplate.value ?? undefined,
-        rulesLobby: rulesLobbyTemplate.value ?? undefined,
-        matchesHistoryOsu: matchesHistoryOsuTemplate.value ?? undefined,
-        player1Score: player1ScoreTemplate.value ?? undefined,
-        player2Score: player2ScoreTemplate.value ?? undefined,
-      });
-      ElMessage({ type: 'success', message: 'match updated', duration: 1000 });
     }
+    updateLoading = true;
+    await updateMatch(props.match.id, {
+      firstTo: firstToTemplate.value,
+      state: stateTemplate.value,
+      startDate: startDateTemplate.value ?? undefined,
+      rulesLobby: rulesLobbyTemplate.value ?? undefined,
+      matchesHistoryOsu: matchesHistoryOsuTemplate.value ?? undefined,
+      player1Score: player1ScoreTemplate.value ?? undefined,
+      player2Score: player2ScoreTemplate.value ?? undefined,
+    });
+    ElMessage({ type: 'success', message: 'match updated', duration: 1000 });
   } catch (e) {
-    ElMessage({ message: `error: ${e}`, duration: 1000 });
+    ElMessage({ message: e as never, duration: 1000 });
   } finally {
     updateLoading = false;
   }
@@ -86,7 +90,6 @@ async function rescheduleMatchTemplate() {
       schedule: rescheduleDate.value,
       status: statusNewReschedule.value,
     });
-    // ElMessage({ type: 'success', message: 'Reschedule request sent', duration: 1000 });
   } catch (e) {
     ElMessage({ type: 'error', message: 'error', duration: 1000 });
   } finally {
@@ -118,18 +121,29 @@ function getDateString(date: string) {
   <el-dialog v-bind="useAttrs()" append-to-body align-center :show-close="false">
     <template #header>
       <div flex="~" justify="between">
-        <div>Match {{ match.identifier }}</div>
-        <div flex="~" align="items-center">
-          <i-tabler:point-filled
-            :class="{
-              'text-red-600': match.state === 'playing',
-              'text-green-500': match.state === 'complete',
-              'text-orange-500': match.state === 'pending',
-            }"
-          />
-          <span font="semibold">
-            {{ match.state === 'playing' ? 'live' : match.state === 'complete' ? 'finished' : match.state }}
-          </span>
+        <div flex="~ col">
+          <div>Match {{ match.identifier }}</div>
+          <div text="gray-500 sm">first to {{ match.firstTo }}</div>
+        </div>
+        <div flex="~ col" align="items-end">
+          <div flex="~" align="items-center">
+            <i-tabler:point-filled
+              :class="{
+                'text-red-600': match.state === 'playing',
+                'text-green-500': match.state === 'complete',
+                'text-orange-500': match.state === 'pending',
+              }"
+            />
+            <span font="semibold">
+              {{ match.state === 'playing' ? 'live' : match.state === 'complete' ? 'finished' : match.state }}
+            </span>
+          </div>
+          <a
+            v-if="match.matchesHistoryOsu && match.state !== 'pending'"
+            class="text-gray-500 text-sm"
+            :href="match.matchesHistoryOsu"
+            >link</a
+          >
         </div>
       </div>
     </template>
@@ -143,7 +157,9 @@ function getDateString(date: string) {
                   <el-avatar size="large" :src="match.player1.user.avatarUrl" />
                   <span text="base">{{ match.player1.user.username }}</span>
                 </div>
-                <span text="3xl">{{ match.player1Score || 0 }}</span>
+                <span :class="{ 'text-emerald-500': match.winnerId === match?.player1.id }" text="3xl">{{
+                  match.player1Score
+                }}</span>
               </div>
             </el-card>
           </el-col>
@@ -155,7 +171,9 @@ function getDateString(date: string) {
           <el-col :span="10">
             <el-card v-if="match.player2" shadow="never">
               <div flex="~" align="items-center" justify="between">
-                <span text="3xl">{{ match.player1Score || 0 }}</span>
+                <span :class="{ 'text-emerald-500': match.winnerId === match?.player2.id }" text="3xl">{{
+                  match.player2Score
+                }}</span>
                 <div flex="~ col" align="items-center">
                   <el-avatar size="large" :src="match.player2.user.avatarUrl" />
                   <span text="base">{{ match.player2.user.username }}</span>
@@ -267,9 +285,9 @@ function getDateString(date: string) {
                   <el-avatar
                     :src="
                       reschedule.playerId === match.player1Id
-                        ? match.player1.user.avatarUrl
+                        ? match.player1?.user.avatarUrl
                         : reschedule.playerId === match.player2Id
-                        ? match.player2.user.avatarUrl
+                        ? match.player2?.user.avatarUrl
                         : reschedule.superReferee?.admin?.user.avatarUrl ||
                           reschedule.superReferee?.referee?.user.avatarUrl ||
                           tournament?.owner.avatarUrl
@@ -280,9 +298,9 @@ function getDateString(date: string) {
                       <div font="semibold">
                         {{
                           reschedule.playerId === match.player1Id
-                            ? match.player1.user.username
+                            ? match.player1?.user.username
                             : reschedule.playerId === match.player2Id
-                            ? match.player2.user.username
+                            ? match.player2?.user.username
                             : reschedule.superReferee?.admin?.user.username ||
                               reschedule.superReferee?.referee?.user.username ||
                               tournament?.owner.username
@@ -347,6 +365,21 @@ function getDateString(date: string) {
             </el-card>
           </el-timeline-item>
         </el-timeline>
+      </el-tab-pane>
+
+      <el-tab-pane
+        v-if="
+          (access?.isAdmin ||
+            access?.isReferee ||
+            access?.isOwner ||
+            match.player1Id === user?.id ||
+            match.player2Id === user?.id) &&
+          match.rulesLobby
+        "
+        label="rules in lobby"
+        name="matchRules"
+      >
+        <el-card>{{ match.rulesLobby }}</el-card>
       </el-tab-pane>
     </el-tabs>
 
