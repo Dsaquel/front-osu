@@ -5,6 +5,8 @@ import { Match } from '~/types';
 defineProps<{
   lowerBracketMatches: Dictionary<Match[]>;
 }>();
+
+const { matchPlayerIdOver } = storeToRefs(matchStore());
 </script>
 
 <template>
@@ -25,7 +27,7 @@ defineProps<{
               lowerBracketMatches[+i - 1] && lowerBracketMatches[+i].length === lowerBracketMatches[+i - 1].length,
           }"
         >
-          <BracketMatch :match="match" />
+          <BracketMatch :match="match" :player-id-over="matchPlayerIdOver" />
         </li>
       </ul>
     </div>

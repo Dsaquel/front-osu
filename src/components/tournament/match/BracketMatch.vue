@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import { Match } from '~/types';
 
+const { matchPlayerIdOver } = storeToRefs(matchStore());
+
 defineProps<{
   match: Match;
+  playerIdOver?: number;
 }>();
 
 const showMatchDetail = ref(false);
+
+function mouseUp(playerId: number | undefined) {
+  matchPlayerIdOver.value = playerId;
+}
 </script>
 
 <template>
@@ -13,8 +20,15 @@ const showMatchDetail = ref(false);
     <div class="match-affix-wrapper">
       <div class="match-section match-section-top">
         <div class="matchSectionWrapper">
-          <div class="match-player entrant">
-            <div class="match-player-name" :class="{ 'match-winner-player-name': match.winnerId === match.player1Id }">
+          <div class="match-player entrant" :class="{ '!bg-yellow-900': playerIdOver === match.player1Id }">
+            <div
+              class="match-player-name"
+              :class="{
+                'match-winner-player-name': match.winnerId === match.player1Id,
+              }"
+              @mouseover="mouseUp(match.player1Id ?? undefined)"
+              @mouseleave="mouseUp(undefined)"
+            >
               <div class="flex-item-grower text-ellipsis">
                 <span class="match-player-name-container">{{ match.player1?.user.username || '' }}</span>
               </div>
@@ -35,8 +49,15 @@ const showMatchDetail = ref(false);
       <div class="match-spacer"></div>
       <div class="match-section match-section-bottom">
         <div class="matchSectionWrapper">
-          <div class="match-player entrant">
-            <div class="match-player-name" :class="{ 'match-winner-player-name': match.winnerId === match.player2Id }">
+          <div class="match-player entrant" :class="{ '!bg-yellow-900': playerIdOver === match.player2Id }">
+            <div
+              class="match-player-name"
+              :class="{
+                'match-winner-player-name': match.winnerId === match.player2Id,
+              }"
+              @mouseover="mouseUp(match.player2Id ?? undefined)"
+              @mouseleave="mouseUp(undefined)"
+            >
               <div class="flex-item-grower text-ellipsis">
                 <span class="match-player-name-container">{{ match.player2?.user.username || '' }}</span>
               </div>

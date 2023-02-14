@@ -5,6 +5,7 @@ import { Match, groupBy, UpdateMatchDto, CreateRescheduleDto } from '~/types';
 
 const useMatchStore = defineStore('match', () => {
   const matches = ref(undefined as Match[] | undefined);
+  const matchPlayerIdOver = ref(undefined as number | undefined);
 
   const matchesGrouped = computed(() => {
     if (matches.value) {
@@ -60,6 +61,7 @@ const useMatchStore = defineStore('match', () => {
 
   return {
     matches,
+    matchPlayerIdOver,
     fetchMatches,
     updateMatch,
     matchesGrouped,

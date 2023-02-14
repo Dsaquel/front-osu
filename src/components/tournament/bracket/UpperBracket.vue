@@ -5,6 +5,8 @@ import { Match } from '~/types';
 defineProps<{
   upperBracketMatches: Dictionary<Match[]>;
 }>();
+
+const { matchPlayerIdOver } = storeToRefs(matchStore());
 </script>
 
 <template>
@@ -26,7 +28,7 @@ defineProps<{
       </h3>
       <ul class="tournament-bracket__list" :class="{ 'last-items-row': !upperBracketMatches[+i + 1] }">
         <li v-for="(match, z) in matchesUpper" :key="z" class="tournament-bracket__item">
-          <BracketMatch :match="match" />
+          <BracketMatch :match="match" :player-id-over="matchPlayerIdOver" />
         </li>
       </ul>
     </div>
