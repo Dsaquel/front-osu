@@ -44,6 +44,7 @@ $breakpoint-lg: 72em;
   display: block;
   margin-left: -7px;
   flex: 1;
+  min-width: 250px;
 }
 
 .items-row {
