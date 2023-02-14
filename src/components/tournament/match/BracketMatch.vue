@@ -14,16 +14,16 @@ const showMatchDetail = ref(false);
       <div class="match-section match-section-top">
         <div class="matchSectionWrapper">
           <div class="match-player entrant">
-            <div :class="{ 'match-winner-player-name': match.winnerId === match.player1Id }">
+            <div class="match-player-name" :class="{ 'match-winner-player-name': match.winnerId === match.player1Id }">
               <div class="flex-item-grower text-ellipsis">
                 <span class="match-player-name-container">{{ match.player1?.user.username || '' }}</span>
               </div>
             </div>
             <div class="match-player-info">
               <div
+                class="match-player-stocks"
                 :class="{
-                  'match-winner-player-stocks': match.winnerId === match.player1Id,
-                  'match-player-stocks': match.winnerId !== match.player1Id,
+                  'winner-stocks': match.winnerId === match.player1Id,
                 }"
               >
                 {{ match.state === 'pending' ? '' : match.player1Score }}
@@ -36,16 +36,16 @@ const showMatchDetail = ref(false);
       <div class="match-section match-section-bottom">
         <div class="matchSectionWrapper">
           <div class="match-player entrant">
-            <div :class="{ 'match-winner-player-name': match.winnerId === match.player2Id }">
+            <div class="match-player-name" :class="{ 'match-winner-player-name': match.winnerId === match.player2Id }">
               <div class="flex-item-grower text-ellipsis">
                 <span class="match-player-name-container">{{ match.player2?.user.username || '' }}</span>
               </div>
             </div>
             <div class="match-player-info">
               <div
+                class="match-player-stocks"
                 :class="{
-                  'match-winner-player-stocks': match.winnerId === match.player2Id,
-                  'match-player-stocks': match.winnerId !== match.player2Id,
+                  'winner-stocks': match.winnerId === match.player2Id,
                 }"
               >
                 {{ match.state === 'pending' ? '' : match.player2Score }}
@@ -135,8 +135,8 @@ const showMatchDetail = ref(false);
   align-items: center;
   flex-wrap: nowrap;
 }
-.match-winner-player-stocks {
-  background: #22b24c;
+.winner-stocks {
+  background: #22b24c !important;
   color: #fff;
 }
 
@@ -144,14 +144,10 @@ const showMatchDetail = ref(false);
   font-weight: 700;
 }
 
-.loser .match-player-stocks {
-  color: #fff;
-  background: #282828;
-}
-
 .match-player-stocks {
   width: 17px;
   height: 100%;
+  background: #282828;
   display: flex;
   flex-direction: row;
   justify-content: center;
