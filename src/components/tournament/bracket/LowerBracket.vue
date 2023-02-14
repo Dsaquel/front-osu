@@ -14,7 +14,7 @@ defineProps<{
       :key="i"
       class="tournament-bracket__round"
     >
-      <h3 class="tournament-bracket__round-title">les nuls</h3>
+      <h3 class="tournament-bracket__round-title">{{ `Losers round ${Math.abs(+i)}` }}</h3>
       <ul class="tournament-bracket__list">
         <li
           v-for="(match, z) in matchesLower"
@@ -51,6 +51,10 @@ $breakpoint-lg: 72em;
   display: block;
   margin-left: -7px;
   flex: 1;
+  @media (min-width: $breakpoint-sm) {
+    min-width: 200px;
+    max-width: 200px;
+  }
 }
 
 .items-row {

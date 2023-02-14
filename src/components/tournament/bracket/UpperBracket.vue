@@ -15,7 +15,15 @@ defineProps<{
       class="tournament-bracket__round"
       :class="{ 'items-row': !upperBracketMatches[+i + 1] }"
     >
-      <h3 class="tournament-bracket__round-title">les nuls</h3>
+      <h3 class="tournament-bracket__round-title">
+        {{
+          !upperBracketMatches[+i + 1]
+            ? 'Finals'
+            : !upperBracketMatches[+i + 2]
+            ? 'Semifinals'
+            : `Round ${Math.abs(+i)}`
+        }}
+      </h3>
       <ul class="tournament-bracket__list" :class="{ 'last-items-row': !upperBracketMatches[+i + 1] }">
         <li v-for="(match, z) in matchesUpper" :key="z" class="tournament-bracket__item">
           <BracketMatch :match="match" />
@@ -44,7 +52,14 @@ $breakpoint-lg: 72em;
   display: block;
   margin-left: -7px;
   flex: 1;
-  min-width: 250px;
+  @media (min-width: $breakpoint-sm) {
+    min-width: 250px;
+    max-width: 250px;
+    &:last-child {
+      min-width: 500px;
+      max-width: 500px;
+    }
+  }
 }
 
 .items-row {
