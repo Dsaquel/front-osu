@@ -16,7 +16,7 @@ function mouseUp(playerId: number | undefined) {
 </script>
 
 <template>
-  <div class="match has-identifier reportable" v-bind="useAttrs()" tabindex="0" @click="showMatchDetail = true">
+  <div class="match has-identifier reportable" v-bind="useAttrs()" tabindex="0" @click.prevent="showMatchDetail = true">
     <div class="match-affix-wrapper">
       <div class="match-section match-section-top">
         <div class="matchSectionWrapper">

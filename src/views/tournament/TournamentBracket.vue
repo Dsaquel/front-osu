@@ -6,7 +6,7 @@ export default {
 <script setup lang="ts">
 const { fetchMatches } = matchStore();
 const { fetchControlAccess, fetchTournament, fetchPlayer } = tournamentStore();
-const { tournament } = storeToRefs(tournamentStore());
+const { tournament, winner } = storeToRefs(tournamentStore());
 const { matchesGrouped } = storeToRefs(matchStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
@@ -67,14 +67,25 @@ onDeactivated(() => {
 </script>
 <template>
   <div v-if="!initLoading">
+    <el-card v-if="tournament?.winnerId" flex="~ col" align="items-center" shadow="never" m="b-4">
+      <template #header>Winner</template>
+      <div flex="~" align="items-center">
+        <el-avatar :src="winner?.user.avatarUrl" />
+        <div text="lg orange-500" m="l-3">{{ winner?.user.username }}</div>
+      </div>
+    </el-card>
     <div
       v-if="matchesGrouped"
       ref="el"
+      pos="sticky"
       :style="{
         cursor: isDragging ? 'grabbing' : 'grab',
         'scroll-snap-type': isDragging ? '' : '',
       }"
       overflow="auto"
+      p="5px"
+      bg=" dark-700"
+      border="1 gray-600 opacity-40"
       @mousedown="onMouseDown"
       @mouseup="onMouseUp"
     >

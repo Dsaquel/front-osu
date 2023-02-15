@@ -2,6 +2,8 @@
 import { Dictionary } from 'lodash';
 import { Match } from '~/types';
 
+const { tournament } = storeToRefs(tournamentStore());
+
 defineProps<{
   upperBracketMatches: Dictionary<Match[]>;
 }>();
@@ -27,7 +29,14 @@ const { matchPlayerIdOver } = storeToRefs(matchStore());
         }}
       </h3>
       <ul class="tournament-bracket__list" :class="{ 'last-items-row': !upperBracketMatches[+i + 1] }">
-        <li v-for="(match, z) in matchesUpper" :key="z" class="tournament-bracket__item">
+        <li
+          v-for="(match, z) in matchesUpper"
+          :key="z"
+          class="tournament-bracket__item"
+          :class="{
+            'last-item-disabled': (tournament?.winnerId && !matchesUpper.at(-1)?.player1Id) || !matchesUpper.at(-1)?.player2Id,
+          }"
+        >
           <BracketMatch :match="match" :player-id-over="matchPlayerIdOver" />
         </li>
       </ul>
@@ -189,6 +198,9 @@ $breakpoint-lg: 72em;
       &:first-child::after {
         border-radius: 0;
         height: 0;
+      }
+      & + .last-item-disabled {
+        opacity: 0.5;
       }
       &:last-child {
         transform: translateX(-3%);

@@ -193,8 +193,8 @@ $breakpoint-lg: 72em;
         border-top: 0;
         border-bottom: 2px solid #9e9e9e;
         border-radius: 0;
-        height: 15px;
-        top: 45%;
+        height: 30px;
+        top: 33%;
       }
     }
   }

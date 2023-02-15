@@ -193,6 +193,7 @@ const useTournamentStore = defineStore('tournament', () => {
 
   return {
     access,
+    winner,
     isAuthorized,
     fetchControlAccess,
     fetchParticipationOfUser,
