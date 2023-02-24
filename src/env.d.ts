@@ -26,7 +26,8 @@ declare module '*.md' {
 // 声明 vite 环境变量
 declare interface ImportMetaEnv {
   readonly VITE_BASE: string;
-  readonly VITE_API_BASEURL: string;
+  readonly VITE_API_DEV_BASEURL: string;
+  readonly VITE_API_PROD_BASEURL: string;
   readonly VITE_APP_TITLE: string;
   readonly VITE_OSU_CONDITION: string
   readonly VITE_TINY_API_KEY: string

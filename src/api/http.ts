@@ -1,7 +1,10 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import formatJsonToUrlParams, { InstanceObject } from '~/utils/format';
 
-const BASE_PREFIX = import.meta.env.VITE_API_BASEURL;
+const BASE_PREFIX =
+  import.meta.env.NODE_ENV === 'production'
+    ? import.meta.env.VITE_API_PROD_BASEURL_BASEURL
+    : import.meta.env.VITE_API_DEV_BASEURL_BASEURL;
 // 创建实例
 const axiosInstance: AxiosInstance = axios.create({
   // 前缀
