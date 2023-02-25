@@ -6,8 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "build": "npm install && npm run build:app",
-    "build:app": "vite build",
+    "build": "vite build",
     "lint": "eslint src",
     "preview": "vite preview",
     "prepare": "husky install"
