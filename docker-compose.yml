@@ -8,6 +8,9 @@ services:
     networks:
       - api_network
 
+
 networks:
   api_network:
-    external: true
+    external:
+      name: api_network
+    attachable: true
