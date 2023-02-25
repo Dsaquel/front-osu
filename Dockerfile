@@ -16,7 +16,7 @@ RUN rm /etc/nginx/conf.d/*
 
 COPY nginx.conf /etc/nginx/conf.d/
 
-COPY dist/ /usr/share/nginx/html/
+COPY dist/ .
 
 EXPOSE 80
 
