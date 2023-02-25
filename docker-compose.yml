@@ -10,5 +10,4 @@ services:
 
 networks:
   api_network:
-    external:
-      name: true
+    external: true
