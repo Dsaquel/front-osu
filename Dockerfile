@@ -4,19 +4,17 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install --production
+RUN npm install
 
 COPY . .
 
 RUN npm run build
 
-FROM nginx:alpine
+FROM nginx:stable-alpine
 
-RUN rm /etc/nginx/conf.d/*
+COPY --from=build /app/build /usr/share/nginx/html
 
-COPY nginx.conf /etc/nginx/conf.d/
-
-COPY dist/ .
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
