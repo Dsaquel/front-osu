@@ -1,4 +1,5 @@
-FROM node:19.6-alpine
+# Étape de construction
+FROM node:19.6-alpine AS build
 
 WORKDIR /app
 
@@ -10,6 +11,7 @@ COPY . .
 
 RUN npm run build
 
+# Étape de production
 FROM nginx:stable-alpine
 
 COPY --from=build /app/build /usr/share/nginx/html
