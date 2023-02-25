@@ -6,7 +6,7 @@ services:
     ports:
       - '80:80'
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro # <-- Mettre à jour cette ligne
     external_links:
       - "api_node-app_1:node-app"
     networks:
