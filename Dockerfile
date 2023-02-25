@@ -5,7 +5,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install --no-verify
+RUN npm install --no-verify --force
 
 COPY . .
 
