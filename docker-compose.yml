@@ -8,3 +8,9 @@ services:
     image: dsaquel/front-app
     deploy:
       replicas: 1
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: overlay
