@@ -7,7 +7,7 @@ services:
     build: .
     image: dsaquel/front-app
     ports:
-      - '8080:8080'
+      - '8080:80'
     networks:
       - api_network
 
