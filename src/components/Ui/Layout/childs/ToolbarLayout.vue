@@ -10,7 +10,12 @@ const open = ref(false);
 const wrapper = ref(null);
 
 function signIn() {
-  window.open(import.meta.env.VITE_OSU_CONDITION, '_blank')?.focus();
+  window
+    .open(
+      import.meta.env.PROD ? import.meta.env.VITE_OSU_PROD_CALLBACK_URL : import.meta.env.VITE_OSU_DEV_CALLBACK_URL,
+      '_blank',
+    )
+    ?.focus();
 }
 function logout() {
   authStore().logout();
