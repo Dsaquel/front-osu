@@ -14,7 +14,7 @@ const axiosInstance: AxiosInstance = axios.create({
     'Cache-Control': 'no-cache',
     'Content-Type': 'application/json',
   },
-  withCredentials: false,
+  withCredentials: true,
 });
 
 // 请求拦截器
