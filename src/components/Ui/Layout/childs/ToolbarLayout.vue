@@ -10,15 +10,14 @@ const open = ref(false);
 const wrapper = ref(null);
 
 function signIn() {
-  window
-    .open(
-      import.meta.env.PROD ? import.meta.env.VITE_OSU_PROD_CALLBACK_URL : import.meta.env.VITE_OSU_DEV_CALLBACK_URL,
-      '_blank',
-    )
-    ?.focus();
+  window.open(
+    import.meta.env.PROD ? import.meta.env.VITE_OSU_PROD_CALLBACK_URL : import.meta.env.VITE_OSU_DEV_CALLBACK_URL,
+    '_self',
+  );
 }
-function logout() {
-  authStore().logout();
+async function logout() {
+  await authStore().logout();
+  document.cookie = 'cookie=; Max-Age=0';
   window.location.reload();
 }
 
@@ -65,7 +64,7 @@ onClickOutside(wrapper, () => {
   </header>
 </template>
 
-<style SCOPED lang="scss">
+<style scoped lang="scss">
 header {
   .osu-background {
     background: var(--c-color-osu);

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { user } = userStore();
+const { user } = storeToRefs(userStore());
 </script>
 
 <template>

@@ -2,8 +2,12 @@
 import en from 'element-plus/lib/locale/lang/en';
 
 onBeforeMount(() => {
-  userStore().fetch();
+  const cookie = (new RegExp(`${'cookie' || '='}=(.*?); `, 'gm').exec(`${document.cookie}; `) || ['', null])[1];
+  if (cookie) {
+    userStore().fetch();
+  }
 });
+
 const locale = en;
 </script>
 

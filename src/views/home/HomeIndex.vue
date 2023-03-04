@@ -3,7 +3,9 @@
 ElMessage.success({ message: 'welcome', duration: 1000 });
 </script>
 
-<template>Je suis la home page</template>
+<template>
+  <div>Je suis la home page</div>
+</template>
 
 <style lang="scss" scoped>
 a {

@@ -1,8 +1,25 @@
-<template>You can close this window</template>
+<template><div v-loading.fullscreen.lock="initLoading" /></template>
 
 <script setup lang="ts">
-onMounted(() => {
+import router from '~/router';
+
+const initLoading = ref(false);
+
+async function init() {
   const code = useRoute().query.code as string;
-  authStore().siginIn(code);
+  await authStore().siginIn(code);
+}
+
+onBeforeMount(async () => {
+  try {
+    initLoading.value = true;
+    await init();
+    await userStore().fetch();
+  } catch (e) {
+    //
+  } finally {
+    initLoading.value = false;
+    router.replace({ name: 'home' });
+  }
 });
 </script>

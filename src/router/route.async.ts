@@ -5,7 +5,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
   {
     path: '/',
     component: () => import('~/components/Ui/Layout/childs/MainLayout.vue'),
-    props: { minWindow: true },
+    props: { minWindow: false },
     meta: {
       breadcrumb: [{ text: 'home' }],
     },
