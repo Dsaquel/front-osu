@@ -18,6 +18,7 @@ const useTournamentStore = defineStore('tournament', () => {
   const access = ref(undefined as ControlAccess | undefined);
   const participationUser = ref(undefined as ParticipationUser | undefined);
   const tournament = ref(undefined as Tournament | undefined);
+  const tournaments = ref(undefined as Tournament[] | undefined);
   const staffs = ref(undefined as Staffs | undefined);
   const participants = ref(undefined as Participant[] | undefined);
   const winner = ref(undefined as Player | undefined | null);
@@ -62,6 +63,12 @@ const useTournamentStore = defineStore('tournament', () => {
       access.value &&
       (access.value.isAdmin || access.value.isMappooler || access.value.isOwner || access.value.isReferee),
   );
+
+  async function fetchTournaments() {
+    const data = await apiTournament.fetchAll();
+    tournaments.value = data;
+    console.log(tournaments.value);
+  }
 
   async function fetchControlAccess(tournamentId: number) {
     try {
@@ -198,6 +205,8 @@ const useTournamentStore = defineStore('tournament', () => {
     fetchControlAccess,
     fetchParticipationOfUser,
     tournament,
+    tournaments,
+    fetchTournaments,
     participationUser,
     addStaff,
     acceptCandidate,

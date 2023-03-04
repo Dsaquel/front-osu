@@ -15,6 +15,7 @@ const TournamentApi = {
   controlAccess: (tournamentId: number) => service.get<ControlAccess>(`/tournament/${tournamentId}/control-access`),
   participationOfUser: (tournamentId: number) =>
     service.get<ParticipationUser>(`/tournament/${tournamentId}/own-participation`),
+  fetchAll: () => service.get<Tournament[]>(`/tournament`),
   fetch: (tournamentId: number) => service.get<Tournament>(`/tournament/${tournamentId}`),
   fetchStaffs: (tournamentId: number) => service.get<Staffs>(`/tournament/${tournamentId}/staff`),
   update: (updateTournamentDto: UpdateTournamentDto, tournamentId: number) =>
