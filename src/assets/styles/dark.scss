@@ -14,9 +14,12 @@ body {
   }
 }
 
-//side bar
-section {
+//side bar&toolbar
+section,
+header {
   @apply dark:text-gray-50 dark: bg-dark-[#212121] dark: text-[#c9d1d9] .dark:transition-colors transition-colors;
+
+  box-shadow: 0px 0px 2px currentColor;
 
   .nav {
     @apply hover:.dark:text-white;

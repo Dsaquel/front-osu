@@ -5,11 +5,12 @@ const { user } = storeToRefs(userStore());
 <template>
   <div
     class="area"
-    grid="~ cols-[110px_1fr] rows-[110px_1fr] <sm:rows-[110px_50px_1fr]"
+    grid="~ cols-[110px_1fr] rows-[110px_1fr] <sm:rows-[110px_50px_1fr] gap-1px"
     w="full"
     h="100vh"
     sm:justify="between"
     overflow="hidden"
+    outline="solid-current"
   >
     <ToolbarLayout :user="user" />
     <NavigationDrawer :user="user" class="sidebar" />

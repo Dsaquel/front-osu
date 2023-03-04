@@ -27,8 +27,8 @@ onClickOutside(wrapper, () => {
 </script>
 
 <template>
-  <div bg="blue-600">Logo</div>
-  <header display="flex" z="3" align="items-center" justify="between" p="x-6 y-12" bg="orange-500">
+  <div bg="">Logo</div>
+  <header display="flex" z="2" align="items-center" justify="between" p="x-6 y-12" shadow=" current">
     <div flex="grow" />
 
     <el-tooltip :content="isDark ? 'change light' : 'change dark'" placement="top">
