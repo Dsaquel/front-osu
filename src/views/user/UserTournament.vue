@@ -2,7 +2,16 @@
 const { fetchDraftsCollection } = draftStore();
 const { drafts } = storeToRefs(draftStore());
 
-onBeforeMount(() => fetchDraftsCollection());
+const initLoading = ref(false);
+
+async function init() {
+  fetchDraftsCollection();
+}
+onBeforeMount(async () => {
+  initLoading.value = true;
+  await init();
+  initLoading.value = false;
+});
 </script>
 
 <template>

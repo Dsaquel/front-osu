@@ -1,4 +1,3 @@
-// 需要鉴权的业务路由
 import { RouteLocationNormalizedLoaded, RouteRecordRaw } from 'vue-router';
 
 const asyncRoutes: Array<RouteRecordRaw> = [
@@ -27,15 +26,18 @@ const asyncRoutes: Array<RouteRecordRaw> = [
         name: 'user-profile',
         component: () => import('~/views/user/UserProfile.vue'),
         meta: {
-          breadcrumb: [
-            {
-              text: 'home',
-              to: { name: 'home' },
-            },
-            {
-              text: 'profile',
-            },
-          ],
+          breadcrumb(route: RouteLocationNormalizedLoaded) {
+            const { userId } = route.params;
+            return [
+              {
+                text: 'home',
+                to: { name: 'home' },
+              },
+              {
+                text: `user-${userId}`,
+              },
+            ];
+          },
         },
       },
       {
@@ -51,7 +53,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
                 to: { name: 'home' },
               },
               {
-                text: 'profile',
+                text: `user-${userId}`,
                 to: {
                   name: 'user-profile',
                   params: {
@@ -60,7 +62,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
                 },
               },
               {
-                text: 'my tournaments',
+                text: 'tournaments',
               },
             ];
           },
@@ -345,6 +347,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
       },
       {
         path: 'drafts',
+
         children: [
           {
             path: ':draftId',
@@ -373,6 +376,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
             path: 'create',
             name: 'draft-create',
             component: () => import('~/views/draft/DraftCreate.vue'),
+            props: { minWindow: true },
             meta: {
               breadcrumb: [
                 {

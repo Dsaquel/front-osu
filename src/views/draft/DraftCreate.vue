@@ -25,7 +25,7 @@ async function submit() {
     type,
   };
   const draftCreate = await create(payload);
-  console.log(draftCreate);
+
   router.push({
     name: 'draft-update',
     params: { draftId: draftCreate.id },
@@ -44,9 +44,7 @@ async function submit() {
     v-model:type="type"
   >
     <template #last>
-      <button grid="col-end-3 " w="min-content" place="self-end" text="black" bg="light-50" @click="submit">
-        submit
-      </button>
+      <el-button grid="col-end-3 " w="min-content" place="self-end" @click="submit"> submit </el-button>
     </template>
   </TemplateDraft>
 </template>
