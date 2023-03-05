@@ -1,8 +1,12 @@
 <script setup lang="ts">
+import { Draft } from '~/types';
+
 const { fetchUserDrafts } = userStore();
+const { updatePrivacy } = draftStore();
 const { userDrafts } = storeToRefs(userStore());
 
 const initLoading = ref(false);
+const draftIdLoading = ref(undefined as number | undefined);
 
 async function init() {
   await fetchUserDrafts();
@@ -12,6 +16,13 @@ onBeforeMount(async () => {
   await init();
   initLoading.value = false;
 });
+
+async function updateDraftPrivacy(draft: Draft) {
+  draftIdLoading.value = draft.id;
+  await updatePrivacy(draft.id, draft.isPublic);
+  await init();
+  draftIdLoading.value = undefined;
+}
 </script>
 
 <template>
@@ -22,7 +33,17 @@ onBeforeMount(async () => {
         <template #default="scope"> {{ useTimeAgo(scope.row.updateAt).value }} </template>
       </el-table-column>
       <el-table-column label="actions" align="right" width="150" fixed="right">
-        <template #default="scope">
+        <template #default="scope: { row: Draft }">
+          <el-switch
+            v-if="scope.row.isPublicable"
+            v-model="scope.row.isPublic"
+            inline-prompt
+            style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+            active-text="draft visible"
+            inactive-text="draft private"
+            :loading="scope.row.id === draftIdLoading"
+            @change="updateDraftPrivacy(scope.row)"
+          />
           <el-tooltip content="tournament" placement="left">
             <router-link :to="`/tournaments/${scope.row.tournament.id}`">
               <el-button type="primary" size="small" plain round><i-mdi:tournament /> </el-button>

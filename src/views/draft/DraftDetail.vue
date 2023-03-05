@@ -9,7 +9,7 @@ import { ElNotification } from 'element-plus';
 import { Role } from '~/types';
 
 const router = useRouter();
-const { fetchDraft } = draftStore();
+const { fetchDraft, updatePrivacy } = draftStore();
 const { fetchControlAccess, addStaff, fetchParticipationOfUser } = tournamentStore();
 const { isAuthorized, participationUser, access } = storeToRefs(tournamentStore());
 const { draft } = storeToRefs(draftStore());
@@ -20,6 +20,7 @@ const draftId = $ref(parseInt(useRoute().params?.draftId as string, 10));
 const showDialog = ref(false);
 let loading = $ref(false);
 let initLoading = $ref(false);
+const isPublicLoading = ref(false);
 
 const role = ref<Role>();
 const options: Role[] = ['referee', 'mappooler', 'admin'];
@@ -70,6 +71,13 @@ const goRequests = () => {
     params: { tournamentId: draft.value?.tournament.id },
   });
 };
+
+async function updateDraftPrivacy() {
+  if (!draft.value) return;
+  isPublicLoading.value = true;
+  await updatePrivacy(draft.value.id, draft.value.isPublic);
+  isPublicLoading.value = false;
+}
 </script>
 
 <template>
@@ -89,9 +97,21 @@ const goRequests = () => {
           />
           <el-descriptions border direction="horizontal" :column="1" m="t-4">
             <template #title>
-              <span text="xl">{{ draft.name }}</span></template
-            >
+              <span text="xl">{{ draft.name }}</span>
+            </template>
             <template #extra>
+              <el-switch
+                v-if="draft.isPublicable && (access!.isAdmin || access!.isOwner)"
+                v-model="draft.isPublic"
+                class="ml-2"
+                size="large"
+                inline-prompt
+                style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                active-text="Draft visible"
+                inactive-text="Draft private"
+                :loading="isPublicLoading"
+                @change="updateDraftPrivacy"
+              />
               <router-link
                 v-if="isAuthorized"
                 :to="{ name: 'tournament-detail', params: { tournamentId: draft.tournament.id } }"
@@ -99,7 +119,11 @@ const goRequests = () => {
               >
                 <el-button type="primary" plain round> tournament </el-button>
               </router-link>
-              <router-link v-if="isAuthorized" :to="{ name: 'draft-update', params: { draftId: draft.id } }" m="l-2">
+              <router-link
+                v-if="access!.isAdmin || access!.isOwner"
+                :to="{ name: 'draft-update', params: { draftId: draft.id } }"
+                m="l-2"
+              >
                 <el-button type="primary" plain round><i-material-symbols:edit /> </el-button>
               </router-link>
             </template>

@@ -92,6 +92,12 @@ const goRequests = () => {
               <span text="xl">{{ tournament.name }}</span></template
             >
             <template #extra>
+              <router-link
+                v-if="!tournament.isPublic"
+                :to="{ name: 'draft-detail', params: { tournamentId: tournament.draftId } }"
+              >
+                <el-button link>recruitement</el-button>
+              </router-link>
               <router-link :to="{ name: 'qualifier-detail', params: { tournamentId: tournament.id } }">
                 <el-button link>qualifier</el-button>
               </router-link>

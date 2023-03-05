@@ -181,6 +181,7 @@ export interface CreateRescheduleDto {
 
 export interface Draft extends Node {
   isPublic: boolean;
+  isPublicable: boolean;
   name: string;
   details: string | null;
   rangePlayerMin: number | null;
@@ -246,6 +247,7 @@ export interface MappoolQualifier extends Mappool {
 
 export interface Tournament extends Node {
   isPublicable: boolean;
+  isFinished: boolean;
   isPublic: boolean;
   name: string;
   startDate: string | null;

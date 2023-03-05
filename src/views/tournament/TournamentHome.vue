@@ -20,18 +20,17 @@ onBeforeMount(async () => {
 
 <template>
   <el-card v-if="!initLoading" shadow="never">
-    <div display="flex" align="items-center" justify="between" m="b-6">
-      <h2 m="x-auto" text="xl">Tournament mappools</h2>
-      <router-link v-if="user" :to="`/users/${user.id}/tournaments`" m="l-2">
+    <div display="flex" align="items-center" justify="end" m="b-6">
+      <router-link v-if="user" :to="`/users/${user.id}/tournaments`" m="l-4">
         <el-button size="small" link> my tournaments</el-button>
       </router-link>
       <el-tooltip content="recruitment of all tournaments" placement="top">
-        <router-link :to="`/tournaments/drafts`" m="l-2">
+        <router-link :to="`/tournaments/drafts`" m="l-4">
           <el-button size="small" link>tournaments staff</el-button>
         </router-link>
       </el-tooltip>
       <router-link v-if="user" to="/tournaments/drafts/create">
-        <el-button type="primary" size="small" m="l-2">create</el-button>
+        <el-button type="primary" size="small" m="l-4">create</el-button>
       </router-link>
     </div>
     <el-table :data="tournaments">
