@@ -8,7 +8,11 @@ const { fetchDrafts } = draftStore();
 const initLoading = ref(false);
 
 async function init() {
-  await fetchDrafts();
+  try {
+    await fetchDrafts();
+  } catch (e) {
+    console.log('init error', e);
+  }
 }
 
 onBeforeMount(async () => {

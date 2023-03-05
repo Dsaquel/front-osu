@@ -19,9 +19,13 @@ let showDialog = $ref(false);
 let participantLoading = $ref(false);
 
 async function init() {
-  if (!tournamentId) return;
-  await fetchTournament(tournamentId);
-  await fetchControlAccess(tournamentId);
+  try {
+    if (!tournamentId) return;
+    await fetchTournament(tournamentId);
+    await fetchControlAccess(tournamentId);
+  } catch (e) {
+    console.log('init error');
+  }
 }
 
 onBeforeMount(async () => {

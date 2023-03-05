@@ -13,8 +13,12 @@ let initLoading = $ref(false);
 const tableStaff = ref();
 
 async function init() {
-  await fetchControlAccess(tournamentId);
-  await fetchTournament(tournamentId);
+  try {
+    await fetchControlAccess(tournamentId);
+    await fetchTournament(tournamentId);
+  } catch (e) {
+    console.log('init error', e);
+  }
 }
 
 onBeforeMount(async () => {

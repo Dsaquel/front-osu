@@ -13,12 +13,15 @@ const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10
 let initLoading = $ref(false);
 
 async function init() {
-  if (!tournamentId) return;
-  await fetchMatches(tournamentId);
-  await fetchControlAccess(tournamentId);
-  await fetchTournament(tournamentId);
-  if (tournament.value?.winnerId) {
-    await fetchPlayer(tournament.value.winnerId, tournamentId);
+  try {
+    await fetchMatches(tournamentId);
+    await fetchControlAccess(tournamentId);
+    await fetchTournament(tournamentId);
+    if (tournament.value?.winnerId) {
+      await fetchPlayer(tournament.value.winnerId, tournamentId);
+    }
+  } catch (e) {
+    console.log('init error', e);
   }
 }
 

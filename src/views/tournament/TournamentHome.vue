@@ -8,7 +8,11 @@ const { fetchTournaments } = tournamentStore();
 const initLoading = ref(false);
 
 async function init() {
-  await fetchTournaments();
+  try {
+    await fetchTournaments();
+  } catch (e) {
+    console.log('init error', e);
+  }
 }
 
 onBeforeMount(async () => {

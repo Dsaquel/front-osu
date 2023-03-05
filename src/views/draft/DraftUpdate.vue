@@ -4,17 +4,22 @@ import { isEqual } from 'lodash';
 const { update, fetchDraft } = draftStore();
 const { draft } = storeToRefs(draftStore());
 
-let loading = $ref(true);
+const initLoading = ref(false);
+let loading = $ref(false);
 const draftId = $ref(parseInt(useRoute().params?.draftId as string, 10));
 
 async function init() {
-  if (!draftId) return;
-  await fetchDraft(draftId);
+  try {
+    await fetchDraft(draftId);
+  } catch (e) {
+    console.log('init error', e);
+  }
 }
 
-onMounted(() => {
-  loading = false;
-  init();
+onBeforeMount(async () => {
+  initLoading.value = true;
+  await init();
+  initLoading.value = false;
 });
 
 watch(
@@ -62,32 +67,39 @@ watch(
 </script>
 
 <template>
-  <TemplateDraft
-    v-if="draft"
-    v-model:name="draft.name"
-    v-model:details="draft.details"
-    v-model:numbersPlayers="draft.numbersPlayers"
-    v-model:estimateStartDate="draft.estimateStartDate"
-    v-model:rangePlayerMax="draft.rangePlayerMax"
-    v-model:rangePlayerMin="draft.rangePlayerMin"
-    v-model:type="draft.type"
-  >
-    <template #last>
-      <div
-        v-if="loading"
-        v-loading="loading"
-        grid="col-end-3"
-        w="min-content"
-        place="self-end"
-        text="black"
-        bg="light-50"
-        m="r-8"
-      />
-      <div v-else grid="col-end-3" w="min-content" place="self-end" class="whitespace-nowrap">
-        last update: {{ useTimeAgo(draft.updateAt).value }}
-      </div>
-    </template>
-  </TemplateDraft>
+  <div v-if="!initLoading">
+    <TemplateDraft
+      v-if="draft"
+      v-model:name="draft.name"
+      v-model:details="draft.details"
+      v-model:numbersPlayers="draft.numbersPlayers"
+      v-model:estimateStartDate="draft.estimateStartDate"
+      v-model:rangePlayerMax="draft.rangePlayerMax"
+      v-model:rangePlayerMin="draft.rangePlayerMin"
+      v-model:type="draft.type"
+    >
+      <template #last>
+        <div
+          v-if="loading"
+          v-loading="loading"
+          grid="col-end-3"
+          w="min-content"
+          place="self-end"
+          text="black"
+          bg="light-50"
+          m="r-8"
+        />
+        <div v-else grid="col-end-3" w="min-content" place="self-end" class="whitespace-nowrap">
+          last update: {{ useTimeAgo(draft.updateAt).value }}
+        </div>
+      </template>
+    </TemplateDraft>
 
-  <div v-else>no draft to update</div>
+    <el-empty v-else>
+      <template #description>
+        <div display="block" m="b-2">I dont have this draft sorry</div>
+      </template>
+    </el-empty>
+  </div>
+  <div v-else v-loading.fullscreen.lock="initLoading" />
 </template>

@@ -9,12 +9,21 @@ const { staffsAccepted, isAuthorized, access } = storeToRefs(tournamentStore());
 const props = defineProps<{
   tournamentId: number;
 }>();
+
+const initLoading = ref(false);
+
 async function init() {
-  fetchStaffs(props.tournamentId);
+  try {
+    await fetchStaffs(props.tournamentId);
+  } catch (e) {
+    console.log('init error', e);
+  }
 }
 
 onBeforeMount(async () => {
-  init();
+  initLoading.value = true;
+  await init();
+  initLoading.value = false;
 });
 
 async function remove(staffId: number, roles: Exclude<Role, 'admin'>[], secondStaffId?: number | undefined) {
@@ -76,58 +85,66 @@ async function addToAnotherRole(role: Exclude<Role, 'admin'>) {
 </script>
 
 <template>
-  <div v-bind="useAttrs()">
-    <div display="flex" align="content-center" justify="between" m="b-6" w="full">
-      <h2 m="x-auto" text="xl">Staffs</h2>
-      <slot name="goRequests" />
-    </div>
-    <el-table ref="tableStaff" :data="staffsAccepted" row-key="id" height="max-content" w="full">
-      <el-table-column label="User">
-        <template #default="scope">
-          <div display="flex" align="items-center">
-            <el-avatar :src="scope.row.user.avatarUrl" />
-            <span m="l-2" text="overflow-ellipsis space-nowrap" overflow="hidden">{{ scope.row.user.username }}</span>
-          </div>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="Role" column-key="role" align="center">
-        <template #default="scope">
-          <template v-for="(source, i) in scope.row.sources" :key="i">
-            <el-tag>{{ source }}</el-tag>
+  <div v-if="!initLoading">
+    <div v-if="staffsAccepted" v-bind="useAttrs()">
+      <div display="flex" align="content-center" justify="between" m="b-6" w="full">
+        <h2 m="x-auto" text="xl">Staffs</h2>
+        <slot name="goRequests" />
+      </div>
+      <el-table ref="tableStaff" :data="staffsAccepted" row-key="id" height="max-content" w="full">
+        <el-table-column label="User">
+          <template #default="scope">
+            <div display="flex" align="items-center">
+              <el-avatar :src="scope.row.user.avatarUrl" />
+              <span m="l-2" text="overflow-ellipsis space-nowrap" overflow="hidden">{{ scope.row.user.username }}</span>
+            </div>
           </template>
-        </template>
-      </el-table-column>
+        </el-table-column>
 
-      <el-table-column v-if="isAuthorized && (access!.isAdmin || access!.isOwner)" width="40" align="right">
-        <template #default="scope">
-          <el-dropdown
-            v-if="scope.row.sources.includes('mappooler') || scope.row.sources.includes('referee')"
-            trigger="click"
-          >
-            <i-mdi:dots-vertical m="r-4" text="xl" />
-            <template #dropdown>
-              <el-dropdown-item
-                :icon="Avatar"
-                @click="upToAdmin(scope.row.id, scope.row.sources, scope.row.secondStaffId)"
-                >Up to admin
-              </el-dropdown-item>
-              <el-dropdown-item
-                v-if="!(scope.row.sources.includes('mappooler') && scope.row.sources.includes('referee'))"
-                :icon="Plus"
-                @click="addToAnotherRole(scope.row.sources[0])"
-              >
-                {{ scope.row.sources[0] === 'mappooler' ? 'add to referees' : 'add to mappoolers' }}
-              </el-dropdown-item>
-              <el-dropdown-item
-                :icon="DeleteFilled"
-                @click="remove(scope.row.id, scope.row.sources, scope.row.secondStaffId)"
-                >remove
-              </el-dropdown-item>
+        <el-table-column label="Role" column-key="role" align="center">
+          <template #default="scope">
+            <template v-for="(source, i) in scope.row.sources" :key="i">
+              <el-tag>{{ source }}</el-tag>
             </template>
-          </el-dropdown>
-        </template>
-      </el-table-column>
-    </el-table>
+          </template>
+        </el-table-column>
+
+        <el-table-column v-if="isAuthorized && (access!.isAdmin || access!.isOwner)" width="40" align="right">
+          <template #default="scope">
+            <el-dropdown
+              v-if="scope.row.sources.includes('mappooler') || scope.row.sources.includes('referee')"
+              trigger="click"
+            >
+              <i-mdi:dots-vertical m="r-4" text="xl" />
+              <template #dropdown>
+                <el-dropdown-item
+                  :icon="Avatar"
+                  @click="upToAdmin(scope.row.id, scope.row.sources, scope.row.secondStaffId)"
+                  >Up to admin
+                </el-dropdown-item>
+                <el-dropdown-item
+                  v-if="!(scope.row.sources.includes('mappooler') && scope.row.sources.includes('referee'))"
+                  :icon="Plus"
+                  @click="addToAnotherRole(scope.row.sources[0])"
+                >
+                  {{ scope.row.sources[0] === 'mappooler' ? 'add to referees' : 'add to mappoolers' }}
+                </el-dropdown-item>
+                <el-dropdown-item
+                  :icon="DeleteFilled"
+                  @click="remove(scope.row.id, scope.row.sources, scope.row.secondStaffId)"
+                  >remove
+                </el-dropdown-item>
+              </template>
+            </el-dropdown>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <el-empty v-else>
+      <template #description>
+        <div display="block" m="b-2">Error</div>
+      </template>
+    </el-empty>
   </div>
+  <div v-else v-loading.fullscreen.lock="initLoading" />
 </template>

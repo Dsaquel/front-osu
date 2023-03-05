@@ -26,9 +26,13 @@ const role = ref<Role>();
 const options: Role[] = ['referee', 'mappooler', 'admin'];
 
 async function init() {
-  await fetchDraft(draftId);
-  await fetchControlAccess(draft.value?.tournament.id as number);
-  await fetchParticipationOfUser(draft.value?.tournament.id as number);
+  try {
+    await fetchDraft(draftId);
+    await fetchControlAccess(draft.value?.tournament.id as number);
+    await fetchParticipationOfUser(draft.value?.tournament.id as number);
+  } catch (e) {
+    console.log('init error', e);
+  }
 }
 
 onBeforeMount(async () => {

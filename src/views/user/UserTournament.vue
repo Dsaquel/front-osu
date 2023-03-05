@@ -9,7 +9,11 @@ const initLoading = ref(false);
 const draftIdLoading = ref(undefined as number | undefined);
 
 async function init() {
-  await fetchUserDrafts();
+  try {
+    await fetchUserDrafts();
+  } catch (e) {
+    console.log('init error', e);
+  }
 }
 onBeforeMount(async () => {
   initLoading.value = true;
@@ -26,7 +30,7 @@ async function updateDraftPrivacy(draft: Draft) {
 </script>
 
 <template>
-  <div>
+  <div v-if="!initLoading">
     <el-table :data="userDrafts" w="full">
       <el-table-column prop="name" label="draft name" />
       <el-table-column label="last update">
@@ -64,4 +68,5 @@ async function updateDraftPrivacy(draft: Draft) {
     </el-table>
     <el-button><router-link :to="{ name: 'draft-create' }">Create new draft</router-link></el-button>
   </div>
+  <div v-else v-loading.fullscreen.lock="initLoading" />
 </template>
