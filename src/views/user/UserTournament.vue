@@ -1,11 +1,11 @@
 <script setup lang="ts">
-const { fetchDraftsCollection } = draftStore();
-const { drafts } = storeToRefs(draftStore());
+const { fetchUserDrafts } = userStore();
+const { userDrafts } = storeToRefs(userStore());
 
 const initLoading = ref(false);
 
 async function init() {
-  fetchDraftsCollection();
+  await fetchUserDrafts();
 }
 onBeforeMount(async () => {
   initLoading.value = true;
@@ -16,7 +16,7 @@ onBeforeMount(async () => {
 
 <template>
   <div>
-    <el-table :data="drafts" w="full">
+    <el-table :data="userDrafts" w="full">
       <el-table-column prop="name" label="draft name" />
       <el-table-column label="last update">
         <template #default="scope"> {{ useTimeAgo(scope.row.updateAt).value }} </template>

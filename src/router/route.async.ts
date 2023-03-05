@@ -347,8 +347,22 @@ const asyncRoutes: Array<RouteRecordRaw> = [
       },
       {
         path: 'drafts',
-
         children: [
+          {
+            path: '',
+            name: 'drafts',
+            component: () => import('~/views/draft/DraftHome.vue'),
+            meta: {
+              breadcrumb: [
+                {
+                  text: 'home',
+                  to: { name: 'home' },
+                },
+                { text: 'tournaments', to: { name: 'tournaments' } },
+                { text: 'drafts' },
+              ],
+            },
+          },
           {
             path: ':draftId',
             name: 'draft-detail',
@@ -365,6 +379,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
                     text: 'tournaments',
                     to: { name: 'tournaments' },
                   },
+                  { text: 'drafts', to: { name: 'drafts' } },
                   {
                     text: draftId,
                   },
@@ -384,7 +399,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
                   to: { name: 'home' },
                 },
                 { text: 'tournaments', to: { name: 'tournaments' } },
-                // all draft here
+                { text: 'drafts', to: { name: 'drafts' } },
                 { text: 'create' },
               ],
             },
@@ -405,6 +420,7 @@ const asyncRoutes: Array<RouteRecordRaw> = [
                     text: 'tournaments',
                     to: { name: 'tournaments' },
                   },
+                  { text: 'drafts', to: { name: 'drafts' } },
                   {
                     text: draftId,
                     to: { name: 'draft-detail', params: { draftId } },

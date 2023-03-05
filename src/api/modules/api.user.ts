@@ -1,9 +1,10 @@
 import service from '~/api/http';
-import { User } from '~/types';
+import { Draft, User } from '~/types';
 
 const UserApi = {
-  fetch: () => service.get<User>(`/users/me`),
-  updateTournamentDraft: (payload: { tournamentDraft: string }) => service.post<User>(`/users/draft`, payload),
+  fetch: () => service.get<User>(`/user/me`),
+  updateTournamentDraft: (payload: { tournamentDraft: string }) => service.post<User>(`/user/draft`, payload),
+  fetchUserDrafts: () => service.get<Draft[]>(`/user/drafts`),
 };
 
 export default UserApi;

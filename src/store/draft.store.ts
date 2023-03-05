@@ -5,19 +5,18 @@ import useTournamentStore from './tournament.store';
 
 const useDraftStore = defineStore('draft', () => {
   const tournamentStore = useTournamentStore();
-
   const draft = ref(undefined as Draft | undefined);
-  const drafts = ref<Draft[]>([]);
-
-  async function fetchDraftsCollection() {
-    const data = await apiDraft.fetchCollection();
-    drafts.value = data;
-  }
+  const drafts = ref(undefined as Draft[] | undefined);
 
   async function fetchDraft(draftId: number) {
     const data = await apiDraft.fetch(draftId);
     tournamentStore.tournament = data.tournament;
     draft.value = data;
+  }
+
+  async function fetchDrafts() {
+    const data = await apiDraft.fetchAll();
+    drafts.value = data;
   }
 
   async function create(draftDto: DraftDto): Promise<Draft> {
@@ -31,7 +30,7 @@ const useDraftStore = defineStore('draft', () => {
     Object.assign(draft.value as Draft, data);
   }
 
-  return { draft, drafts, fetchDraftsCollection, fetchDraft, create, update };
+  return { draft, drafts, fetchDraft, create, update, fetchDrafts };
 });
 
 export default useDraftStore;
