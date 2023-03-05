@@ -67,7 +67,6 @@ const useTournamentStore = defineStore('tournament', () => {
   async function fetchTournaments() {
     const data = await apiTournament.fetchAll();
     tournaments.value = data;
-    console.log(tournaments.value);
   }
 
   async function fetchControlAccess(tournamentId: number) {

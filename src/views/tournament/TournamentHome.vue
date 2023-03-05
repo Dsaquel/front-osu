@@ -74,7 +74,7 @@ onBeforeMount(async () => {
         </template>
       </el-table-column>
 
-      <el-table-column label="actions">
+      <el-table-column>
         <template #default="scope: { row: Tournament }">
           <el-tooltip content="see" placement="left">
             <router-link :to="`/tournaments/${scope.row.id}`">

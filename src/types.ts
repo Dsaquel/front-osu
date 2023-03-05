@@ -208,7 +208,6 @@ export interface CreateTournamentDto {
 }
 
 export interface Qualifier extends Node {
-  isFinished: boolean;
   tournamentId: number;
   mappool: MappoolQualifier;
 }
@@ -248,6 +247,7 @@ export interface MappoolQualifier extends Mappool {
 export interface Tournament extends Node {
   isPublicable: boolean;
   isFinished: boolean;
+  isInBracketPhase: boolean;
   isPublic: boolean;
   name: string;
   startDate: string | null;
@@ -264,6 +264,8 @@ export interface Tournament extends Node {
   owner: User;
   winnerId: number | null;
   draftId: number;
+  draft: Draft;
+  participants: Participant[];
 }
 
 export interface Match extends Node {

@@ -9,7 +9,7 @@ import { TemplateNotification } from '~/types';
 
 const router = useRouter();
 const { fetchTournament, fetchControlAccess, addParticipant } = tournamentStore();
-const { tournament, isAuthorized } = storeToRefs(tournamentStore());
+const { tournament, isAuthorized, access } = storeToRefs(tournamentStore());
 const { user } = storeToRefs(userStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
@@ -97,12 +97,12 @@ const goRequests = () => {
             >
             <template #extra>
               <router-link
-                v-if="!tournament.isPublic"
-                :to="{ name: 'draft-detail', params: { tournamentId: tournament.draftId } }"
+                v-if="tournament.draft.isPublic"
+                :to="{ name: 'draft-detail', params: { draftId: tournament.draftId } }"
               >
                 <el-button link>recruitement</el-button>
               </router-link>
-              <router-link :to="{ name: 'qualifier-detail', params: { tournamentId: tournament.id } }">
+              <router-link m="l-2" :to="{ name: 'qualifier-detail', params: { tournamentId: tournament.id } }">
                 <el-button link>qualifier</el-button>
               </router-link>
               <router-link m="l-2" :to="{ name: 'tournament-participants', params: { tournamentId: tournament.id } }">
@@ -115,11 +115,18 @@ const goRequests = () => {
                 <el-button link>bracket</el-button>
               </router-link>
               <router-link
-                v-if="isAuthorized"
+                v-if="isAuthorized && (access?.isAdmin || access?.isOwner)"
                 :to="{ name: 'tournament-update', params: { tournamentId: tournament.id } }"
                 m="l-2"
               >
                 <el-button type="primary" plain round><i-material-symbols:edit /> </el-button>
+                <el-button
+                  v-if="tournament.numbersPlayers && tournament.participants.length >= tournament.numbersPlayers"
+                  type="primary"
+                  plain
+                  round
+                  >pass in bracket phase
+                </el-button>
               </router-link>
             </template>
             <el-descriptions-item label="type">{{ `osu ${tournament.type}` }}</el-descriptions-item>

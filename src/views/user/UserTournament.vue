@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { Draft } from '~/types';
 
+dayjs.extend(utc);
 const { fetchUserDrafts } = userStore();
+const { user } = storeToRefs(userStore());
 const { updatePrivacy } = draftStore();
 const { userDrafts } = storeToRefs(userStore());
 
@@ -31,12 +35,22 @@ async function updateDraftPrivacy(draft: Draft) {
 
 <template>
   <div v-if="!initLoading">
+    <div display="flex" align="items-center" justify="end" m="b-6">
+      <router-link v-if="user" :to="{ name: 'draft-create' }">
+        <el-button type="primary" size="small" m="l-4">create new draft</el-button>
+      </router-link>
+    </div>
     <el-table :data="userDrafts" w="full">
       <el-table-column prop="name" label="draft name" />
+      <el-table-column label="estimate start date">
+        <template #default="scope: { row: Draft }">
+          {{ dayjs(scope.row.estimateStartDate).format('MMMM') }}
+        </template>
+      </el-table-column>
       <el-table-column label="last update">
         <template #default="scope"> {{ useTimeAgo(scope.row.updateAt).value }} </template>
       </el-table-column>
-      <el-table-column label="actions" align="right" width="150" fixed="right">
+      <el-table-column label="actions" align="center" width="150" fixed="right">
         <template #default="scope: { row: Draft }">
           <el-switch
             v-if="scope.row.isPublicable"
@@ -48,17 +62,25 @@ async function updateDraftPrivacy(draft: Draft) {
             :loading="scope.row.id === draftIdLoading"
             @change="updateDraftPrivacy(scope.row)"
           />
-          <el-tooltip content="tournament" placement="left">
+          <el-tooltip
+            v-if="scope.row.tournament.isPublic || (user && scope.row.ownerId === user.id)"
+            content="tournament"
+            placement="left"
+          >
             <router-link :to="`/tournaments/${scope.row.tournament.id}`">
               <el-button type="primary" size="small" plain round><i-mdi:tournament /> </el-button>
             </router-link>
           </el-tooltip>
-          <el-tooltip content="see/edit" placement="top">
+          <el-tooltip v-if="user && scope.row.ownerId === user.id" content="see/edit" placement="top">
             <router-link :to="`/tournaments/drafts/${scope.row.id}/update`">
               <el-button type="primary" size="small" plain round m="l-1"><i-material-symbols:edit /> </el-button>
             </router-link>
           </el-tooltip>
-          <el-tooltip content="see" placement="right">
+          <el-tooltip
+            v-if="scope.row.isPublic || (user && scope.row.ownerId === user.id)"
+            content="see"
+            placement="right"
+          >
             <router-link :to="`/tournaments/drafts/${scope.row.id}`">
               <el-button type="primary" size="small" plain round m="l-1"><i-mdi:eye /> </el-button>
             </router-link>
@@ -66,7 +88,6 @@ async function updateDraftPrivacy(draft: Draft) {
         </template>
       </el-table-column>
     </el-table>
-    <el-button><router-link :to="{ name: 'draft-create' }">Create new draft</router-link></el-button>
   </div>
   <div v-else v-loading.fullscreen.lock="initLoading" />
 </template>

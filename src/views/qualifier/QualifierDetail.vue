@@ -67,11 +67,11 @@ function calculMedian(numbers: number[]) {
         >pass tournament to public</el-button
       >
       <el-button
-        v-if="!qualifier.isFinished"
+        v-if="!tournament.isInBracketPhase"
         type="success"
         @click="passQualifierToFinished(qualifier?.id as number, tournament?.id as number)"
-        >pass qualifier to finished</el-button
-      >
+        >pass qualifier to finished
+      </el-button>
 
       <div v-if="participantsRanking" flex="~ wrap" grid="gap-5" justify="center">
         <div class="lg:basis-4/5 md:basis-full">
