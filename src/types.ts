@@ -261,6 +261,7 @@ export interface Tournament extends Node {
   ownerId: number;
   owner: User;
   winnerId: number | null;
+  draftId: number;
 }
 
 export interface Match extends Node {

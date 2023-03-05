@@ -19,7 +19,21 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div v-if="!initLoading">
+  <el-card v-if="!initLoading" shadow="never">
+    <div display="flex" align="items-center" justify="between" m="b-6">
+      <h2 m="x-auto" text="xl">Tournament mappools</h2>
+      <router-link v-if="user" :to="`/users/${user.id}/tournaments`" m="l-2">
+        <el-button size="small" link> my tournaments</el-button>
+      </router-link>
+      <el-tooltip content="recruitment of all tournaments" placement="top">
+        <router-link :to="`/tournaments/drafts`" m="l-2">
+          <el-button size="small" link>tournaments staff</el-button>
+        </router-link>
+      </el-tooltip>
+      <router-link v-if="user" to="/tournaments/drafts/create">
+        <el-button type="primary" size="small" m="l-2">create</el-button>
+      </router-link>
+    </div>
     <el-table :data="tournaments">
       <el-table-column label="owner">
         <template #default="scope: { row: Tournament }">
@@ -59,21 +73,19 @@ onBeforeMount(async () => {
 
       <el-table-column label="actions">
         <template #default="scope: { row: Tournament }">
-          <el-tooltip content="see" placement="right">
+          <el-tooltip content="see" placement="left">
             <router-link :to="`/tournaments/${scope.row.id}`">
               <el-button type="primary" size="small" plain round m="l-1"><i-mdi:eye /> </el-button>
             </router-link>
           </el-tooltip>
-          <el-tooltip content="see" placement="right">
-            <router-link :to="`/tournaments/${scope.row.id}`">
-              <el-button type="primary" size="small" plain round m="l-1"><i-mdi:eye /> </el-button>
+          <el-tooltip content="staff" placement="right">
+            <router-link :to="`/tournaments/drafts/${scope.row.draftId}`">
+              <el-button type="primary" size="small" plain round m="l-1"><i-fa6-solid:users-gear /> </el-button>
             </router-link>
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
-    <router-link class="bare" to="/tournaments/drafts/create">Create your tournament </router-link>
-    <router-link v-if="user" class="bare" :to="`/users/${user.id}/tournaments`">See your drafts </router-link>
-  </div>
+  </el-card>
   <div v-else v-loading.fullscreen.lock="initLoading" />
 </template>
