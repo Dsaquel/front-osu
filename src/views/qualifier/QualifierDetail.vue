@@ -8,7 +8,7 @@ export default {
 import { QualifierParticipant } from '~/types';
 
 const { fetchQualifier, fetchMapsScore, fetchParticipantsRanking, passQualifierToFinished } = qualifierStore();
-const { fetchTournament, fetchControlAccess, updatePublication } = tournamentStore();
+const { fetchTournament, fetchControlAccess } = tournamentStore();
 const { qualifier, mapsScore, participantsRanking } = storeToRefs(qualifierStore());
 const { tournament, isAuthorized } = storeToRefs(tournamentStore());
 
@@ -63,9 +63,7 @@ function calculMedian(numbers: number[]) {
         pos="absolute inset-0"
         m="b-3"
       />
-      <el-button v-if="!tournament.isPublic" type="success" @click="updatePublication(tournamentId)"
-        >pass tournament to public</el-button
-      >
+
       <el-button
         v-if="!tournament.isInBracketPhase"
         type="success"

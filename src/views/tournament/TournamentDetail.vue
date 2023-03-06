@@ -5,10 +5,12 @@ export default {
 </script>
 
 <script setup lang="ts">
+import 'element-plus/es/components/message-box/style/css';
+import { ElMessageBox } from 'element-plus';
 import { TemplateNotification } from '~/types';
 
 const router = useRouter();
-const { fetchTournament, fetchControlAccess, addParticipant, passToBracketPhase } = tournamentStore();
+const { fetchTournament, fetchControlAccess, addParticipant, passToBracketPhase, startTournament } = tournamentStore();
 const { tournament, isAuthorized, access } = storeToRefs(tournamentStore());
 const { user } = storeToRefs(userStore());
 
@@ -18,6 +20,7 @@ let initLoading = $ref(false);
 let showDialog = $ref(false);
 let participantLoading = $ref(false);
 const bracketPhaseLoading = ref(false);
+const startTournamentLoading = ref(false);
 
 async function init() {
   try {
@@ -77,6 +80,29 @@ async function bracketPhase(tournamentId: number) {
   }
   bracketPhaseLoading.value = false;
 }
+
+async function startTournamentTemplate(tournamentId: number) {
+  if (!tournament.value || tournament.value?.participants.length < (tournament.value?.numbersPlayers as number)) return;
+  ElMessageBox.confirm(
+    `This action will start earlier the tournament that will set participants into ${
+      tournament.value.hasQualifier ? 'qualifier' : 'tournament bracket'
+    } and is it not reversible.`,
+    'Wait a second',
+    {
+      confirmButtonText: 'Understand',
+      cancelButtonText: 'Cancel',
+      type: 'warning',
+    },
+  );
+  startTournamentLoading.value = true;
+  try {
+    await startTournament(tournamentId);
+  } catch (e) {
+    console.log(e);
+  } finally {
+    startTournamentLoading.value = false;
+  }
+}
 </script>
 
 <template>
@@ -133,7 +159,12 @@ async function bracketPhase(tournamentId: number) {
                 <el-button type="primary" plain round><i-material-symbols:edit /> </el-button>
               </router-link>
               <div
-                v-if="tournament.numbersPlayers && !tournament.hasQualifier && !tournament.isInBracketPhase"
+                v-if="
+                  tournament.numbersPlayers &&
+                  !tournament.hasQualifier &&
+                  !tournament.isInBracketPhase &&
+                  tournament.isPublic
+                "
                 display="inline-block"
                 m="l-2"
               >
@@ -170,7 +201,22 @@ async function bracketPhase(tournamentId: number) {
               }}
             </el-descriptions-item>
             <el-descriptions-item label="end registration">{{ tournament.registrationEndDate }}</el-descriptions-item>
-            <el-descriptions-item label="start date">{{ tournament.startDate }}</el-descriptions-item>
+            <el-descriptions-item label="start date">
+              <div flex="~" align="items-center" justify="between">
+                {{ tournament.startDate }}
+                <el-button
+                  v-if="
+                    (access?.isAdmin || access?.isOwner) &&
+                    !tournament.isPublic &&
+                    tournament.numbersPlayers &&
+                    tournament.participants.length >= tournament.numbersPlayers
+                  "
+                  type="success"
+                  @click="startTournamentTemplate(tournamentId)"
+                  >start before
+                </el-button>
+              </div>
+            </el-descriptions-item>
             <el-descriptions-item label="number player">{{ tournament.numbersPlayers }}</el-descriptions-item>
             <el-descriptions-item label="has qualifier">{{ tournament.qualifier ? 'yes' : 'no' }}</el-descriptions-item>
           </el-descriptions>

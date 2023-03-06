@@ -183,9 +183,9 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
-  async function updatePublication(tournamentId: number) {
+  async function startTournament(tournamentId: number) {
     try {
-      await apiTournament.updatePublication(tournamentId);
+      await apiTournament.startTournament(tournamentId);
       await fetchTournament(tournamentId);
     } catch (e) {
       console.log(e);
@@ -223,7 +223,7 @@ const useTournamentStore = defineStore('tournament', () => {
     fetchParticipants,
     participantsAccepted,
     removeParticipant,
-    updatePublication,
+    startTournament,
     fetchPlayer,
     passToBracketPhase,
   };
