@@ -8,7 +8,7 @@ export default {
 import { TemplateNotification } from '~/types';
 
 const router = useRouter();
-const { fetchTournament, fetchControlAccess, addParticipant } = tournamentStore();
+const { fetchTournament, fetchControlAccess, addParticipant, passToBracketPhase } = tournamentStore();
 const { tournament, isAuthorized, access } = storeToRefs(tournamentStore());
 const { user } = storeToRefs(userStore());
 
@@ -17,6 +17,7 @@ const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10
 let initLoading = $ref(false);
 let showDialog = $ref(false);
 let participantLoading = $ref(false);
+const bracketPhaseLoading = ref(false);
 
 async function init() {
   try {
@@ -66,6 +67,16 @@ const goRequests = () => {
     params: { tournamentId },
   });
 };
+
+async function bracketPhase(tournamentId: number) {
+  try {
+    bracketPhaseLoading.value = true;
+    await passToBracketPhase(tournamentId);
+  } catch (e) {
+    console.log(e);
+  }
+  bracketPhaseLoading.value = false;
+}
 </script>
 
 <template>
@@ -120,22 +131,45 @@ const goRequests = () => {
                 m="l-2"
               >
                 <el-button type="primary" plain round><i-material-symbols:edit /> </el-button>
+              </router-link>
+              <div
+                v-if="tournament.numbersPlayers && !tournament.hasQualifier && !tournament.isInBracketPhase"
+                display="inline-block"
+                m="l-2"
+              >
+                <el-popover
+                  v-if="tournament.participants.length < tournament.numbersPlayers"
+                  trigger="hover"
+                  placement="top"
+                  :hide-after="50"
+                  :content="`${tournament.participants.length}/${tournament.numbersPlayers} participants`"
+                >
+                  <template #reference>
+                    <div>
+                      <el-button type="primary" plain round disabled>pass in bracket phase </el-button>
+                    </div>
+                  </template>
+                </el-popover>
                 <el-button
-                  v-if="tournament.numbersPlayers && tournament.participants.length >= tournament.numbersPlayers"
+                  v-else-if="tournament.participants.length === tournament.numbersPlayers"
                   type="primary"
                   plain
                   round
+                  :loading="bracketPhaseLoading"
+                  @click="bracketPhase(tournament!.id)"
                   >pass in bracket phase
                 </el-button>
-              </router-link>
+              </div>
             </template>
             <el-descriptions-item label="type">{{ `osu ${tournament.type}` }}</el-descriptions-item>
-            <el-descriptions-item label="accept rank">{{
-              (tournament.rangePlayerMin === 1 || !tournament.rangePlayerMin) && !tournament.rangePlayerMax
-                ? 'Open rank'
-                : `${tournament.rangePlayerMin} to ${tournament.rangePlayerMax || '+&#8734;'}`
-            }}</el-descriptions-item>
-            <el-descriptions-item label="end registration">{{ tournament.endRegistration }}</el-descriptions-item>
+            <el-descriptions-item label="accept rank">
+              {{
+                (tournament.rangePlayerMin === 1 || !tournament.rangePlayerMin) && !tournament.rangePlayerMax
+                  ? 'Open rank'
+                  : `${tournament.rangePlayerMin} to ${tournament.rangePlayerMax || '+&#8734;'}`
+              }}
+            </el-descriptions-item>
+            <el-descriptions-item label="end registration">{{ tournament.registrationEndDate }}</el-descriptions-item>
             <el-descriptions-item label="start date">{{ tournament.startDate }}</el-descriptions-item>
             <el-descriptions-item label="number player">{{ tournament.numbersPlayers }}</el-descriptions-item>
             <el-descriptions-item label="has qualifier">{{ tournament.qualifier ? 'yes' : 'no' }}</el-descriptions-item>
@@ -146,16 +180,16 @@ const goRequests = () => {
             <MarkdownRender :text="tournament.description" />
           </div>
           <el-popover
-            v-if="isAuthorized"
+            v-if="isAuthorized || tournament.registrationEnd"
             placement="top-start"
             trigger="hover"
             width="auto"
-            content="You are in the staffs"
+            :content="isAuthorized ? 'You are in the staffs' : 'registration ended'"
           >
             <template #reference>
               <div m="t-4" place="self-end">
                 <el-button
-                  :disabled="isAuthorized"
+                  :disabled="isAuthorized || tournament.registrationEnd"
                   :loading="participantLoading"
                   type="success"
                   @click="showDialog = true"
@@ -169,7 +203,7 @@ const goRequests = () => {
             v-else-if="user"
             m="t-4"
             place="self-end"
-            :disabled="isAuthorized"
+            :disabled="isAuthorized || tournament.registrationEnd"
             :loading="participantLoading"
             type="success"
             @click="showDialog = true"

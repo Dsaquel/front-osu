@@ -70,7 +70,7 @@ onBeforeMount(async () => {
       </el-table-column>
       <el-table-column label="end of registration">
         <template #default="scope: { row: Tournament }">
-          {{ scope.row.endRegistration }}
+          {{ scope.row.registrationEndDate }}
         </template>
       </el-table-column>
 

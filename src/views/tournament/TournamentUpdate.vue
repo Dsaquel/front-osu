@@ -46,7 +46,7 @@ const timeout = useTimeoutFn(
       rangePlayerMax: tournament.value?.rangePlayerMax,
       rangePlayerMin: tournament.value?.rangePlayerMin,
       type: tournament.value?.type,
-      endRegistration: tournament.value?.endRegistration,
+      registrationEndDate: tournament.value?.registrationEndDate,
       hasQualifier: tournament.value?.hasQualifier,
     });
     loading = false;
@@ -112,7 +112,7 @@ const goBack = () => {
         <CommonDatepicker
           :model-value="tournament.startDate"
           :title="'Start date'"
-          :type="'month'"
+          :type="'datetime'"
           @update:model-value="(val) => (tournament!.startDate = dayjs(val).utc().format())"
         />
         <div grid="~ cols-2">
@@ -137,10 +137,10 @@ const goBack = () => {
         </div>
         <div>
           <CommonDatepicker
-            :model-value="tournament.endRegistration"
+            :model-value="tournament.registrationEndDate"
             :title="'End of registration (utc)'"
             :type="'datetime'"
-            @update:model-value="(val) => (tournament!.endRegistration = dayjs(val).utc().format())"
+            @update:model-value="(val) => (tournament!.registrationEndDate = dayjs(val).utc().format())"
           />
         </div>
         <div text="right">

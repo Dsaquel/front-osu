@@ -197,6 +197,10 @@ const useTournamentStore = defineStore('tournament', () => {
     winner.value = data;
   }
 
+  async function passToBracketPhase(tournamentId: number) {
+    await apiTournament.passToBracketPhase(tournamentId);
+  }
+
   return {
     access,
     winner,
@@ -221,6 +225,7 @@ const useTournamentStore = defineStore('tournament', () => {
     removeParticipant,
     updatePublication,
     fetchPlayer,
+    passToBracketPhase,
   };
 });
 

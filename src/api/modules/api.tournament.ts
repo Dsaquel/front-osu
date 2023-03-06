@@ -34,6 +34,7 @@ const TournamentApi = {
   updatePublication: (tournamentId: number) => service.post<void>(`/tournament/${tournamentId}/start`),
   fetchPlayer: (playerId: number, tournamentId: number) =>
     service.get<Player | null>(`/tournament/${tournamentId}/player/${playerId}`),
+  passToBracketPhase: (tournamentId: number) => service.post<void>(`/tournament/${tournamentId}/bracket-phase`),
 };
 
 export default TournamentApi;

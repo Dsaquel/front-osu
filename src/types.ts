@@ -256,7 +256,8 @@ export interface Tournament extends Node {
   rangePlayerMax: number | null;
   rangePlayerMin: number;
   numbersPlayers: number | null;
-  endRegistration: string | null;
+  registrationEndDate: string | null;
+  registrationEnd: boolean;
   commonSchedule: string | null;
   hasQualifier: boolean;
   qualifier: Qualifier | null;
@@ -323,7 +324,7 @@ export interface UpdateTournamentDto {
   rangePlayerMax?: number | null;
   rangePlayerMin?: number;
   numbersPlayers?: number;
-  endRegistration?: string | null;
+  registrationEndDate?: string | null;
   commonSchedule?: string | null;
   hasQualifier?: boolean;
 }
