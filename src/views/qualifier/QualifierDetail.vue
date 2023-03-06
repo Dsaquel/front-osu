@@ -16,11 +16,15 @@ const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10
 let initLoading = $ref(false);
 
 async function init() {
-  await fetchQualifier(tournamentId);
-  await fetchControlAccess(tournamentId);
-  await fetchTournament(tournamentId);
-  await fetchMapsScore(qualifier.value?.id as number);
-  await fetchParticipantsRanking(qualifier.value?.id as number);
+  try {
+    await fetchQualifier(tournamentId);
+    await fetchControlAccess(tournamentId);
+    await fetchTournament(tournamentId);
+    await fetchMapsScore(qualifier.value?.id as number);
+    await fetchParticipantsRanking(qualifier.value?.id as number);
+  } catch (e) {
+    console.log('init error', e);
+  }
 }
 
 onBeforeMount(async () => {

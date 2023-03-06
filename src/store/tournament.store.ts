@@ -201,6 +201,11 @@ const useTournamentStore = defineStore('tournament', () => {
     await apiTournament.passToBracketPhase(tournamentId);
   }
 
+  async function updateTournamentPrivacy(tournamentId: number, isPublic: boolean) {
+    const data = await apiTournament.updateTournamentPrivacy(tournamentId, isPublic);
+    Object.assign(tournament.value as Tournament, data);
+  }
+
   return {
     access,
     winner,
@@ -226,6 +231,7 @@ const useTournamentStore = defineStore('tournament', () => {
     startTournament,
     fetchPlayer,
     passToBracketPhase,
+    updateTournamentPrivacy,
   };
 });
 

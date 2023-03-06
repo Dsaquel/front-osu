@@ -9,7 +9,7 @@ import { ElNotification } from 'element-plus';
 import { Role } from '~/types';
 
 const router = useRouter();
-const { fetchDraft, updatePrivacy } = draftStore();
+const { fetchDraft, updateDraftPrivacy } = draftStore();
 const { fetchControlAccess, addStaff, fetchParticipationOfUser } = tournamentStore();
 const { isAuthorized, participationUser, access } = storeToRefs(tournamentStore());
 const { draft } = storeToRefs(draftStore());
@@ -20,7 +20,7 @@ const draftId = $ref(parseInt(useRoute().params?.draftId as string, 10));
 const showDialog = ref(false);
 let loading = $ref(false);
 let initLoading = $ref(false);
-const isPublicLoading = ref(false);
+const isDraftPrivacyLoading = ref(false);
 
 const role = ref<Role>();
 const options: Role[] = ['referee', 'mappooler', 'admin'];
@@ -76,11 +76,16 @@ const goRequests = () => {
   });
 };
 
-async function updateDraftPrivacy() {
+async function updateDraftPrivacyTemplate() {
   if (!draft.value) return;
-  isPublicLoading.value = true;
-  await updatePrivacy(draft.value.id, draft.value.isPublic);
-  isPublicLoading.value = false;
+  isDraftPrivacyLoading.value = true;
+  try {
+    await updateDraftPrivacy(draft.value.id, draft.value.isPublic);
+  } catch (e) {
+    console.log(e);
+  } finally {
+    isDraftPrivacyLoading.value = false;
+  }
 }
 </script>
 
@@ -113,8 +118,8 @@ async function updateDraftPrivacy() {
                 style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
                 active-text="Draft visible"
                 inactive-text="Draft private"
-                :loading="isPublicLoading"
-                @change="updateDraftPrivacy"
+                :loading="isDraftPrivacyLoading"
+                @change="updateDraftPrivacyTemplate"
               />
               <router-link
                 v-if="isAuthorized"

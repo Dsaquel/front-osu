@@ -6,11 +6,22 @@ export default {
 
 <script setup lang="ts">
 import 'element-plus/es/components/message-box/style/css';
+import dayjs from 'dayjs';
 import { ElMessageBox } from 'element-plus';
+import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import { TemplateNotification } from '~/types';
 
+dayjs.extend(LocalizedFormat);
+
 const router = useRouter();
-const { fetchTournament, fetchControlAccess, addParticipant, passToBracketPhase, startTournament } = tournamentStore();
+const {
+  fetchTournament,
+  fetchControlAccess,
+  addParticipant,
+  passToBracketPhase,
+  startTournament,
+  updateTournamentPrivacy,
+} = tournamentStore();
 const { tournament, isAuthorized, access } = storeToRefs(tournamentStore());
 const { user } = storeToRefs(userStore());
 
@@ -21,6 +32,7 @@ let showDialog = $ref(false);
 let participantLoading = $ref(false);
 const bracketPhaseLoading = ref(false);
 const startTournamentLoading = ref(false);
+const isTournamentPrivacyLoading = ref(false);
 
 async function init() {
   try {
@@ -103,6 +115,18 @@ async function startTournamentTemplate(tournamentId: number) {
     startTournamentLoading.value = false;
   }
 }
+
+async function updateTournamentPrivacyTemplate() {
+  if (!tournament.value) return;
+  isTournamentPrivacyLoading.value = true;
+  try {
+    await updateTournamentPrivacy(tournament.value.id, tournament.value.isPublic);
+  } catch (e) {
+    console.log(e);
+  } finally {
+    isTournamentPrivacyLoading.value = false;
+  }
+}
 </script>
 
 <template>
@@ -133,13 +157,38 @@ async function startTournamentTemplate(tournamentId: number) {
               <span text="xl">{{ tournament.name }}</span></template
             >
             <template #extra>
+              <el-switch
+                v-if="tournament.isPublicable && (access!.isAdmin || access!.isOwner)"
+                v-model="tournament.isPublic"
+                class="ml-2"
+                size="large"
+                inline-prompt
+                style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                active-text="Tournament visible"
+                inactive-text="Tournament private"
+                :loading="isTournamentPrivacyLoading"
+                @change="updateTournamentPrivacyTemplate"
+              />
               <router-link
-                v-if="tournament.draft.isPublic"
+                v-if="tournament.draft.isPublic || isAuthorized"
                 :to="{ name: 'draft-detail', params: { draftId: tournament.draftId } }"
+                m="l-2"
               >
-                <el-button link>recruitement</el-button>
+                <el-button link>
+                  {{
+                    tournament.draft.isPublic && !isAuthorized
+                      ? 'recruitement'
+                      : !tournament.draft.isPublic && isAuthorized
+                      ? 'draft'
+                      : 'draft'
+                  }}
+                </el-button>
               </router-link>
-              <router-link m="l-2" :to="{ name: 'qualifier-detail', params: { tournamentId: tournament.id } }">
+              <router-link
+                v-if="tournament.hasQualifier"
+                m="l-2"
+                :to="{ name: 'qualifier-detail', params: { tournamentId: tournament.id } }"
+              >
                 <el-button link>qualifier</el-button>
               </router-link>
               <router-link m="l-2" :to="{ name: 'tournament-participants', params: { tournamentId: tournament.id } }">
@@ -200,10 +249,12 @@ async function startTournamentTemplate(tournamentId: number) {
                   : `${tournament.rangePlayerMin} to ${tournament.rangePlayerMax || '+&#8734;'}`
               }}
             </el-descriptions-item>
-            <el-descriptions-item label="end registration">{{ tournament.registrationEndDate }}</el-descriptions-item>
+            <el-descriptions-item label="registration end">
+              {{ dayjs(tournament.registrationEndDate).format('LLLL') }}
+            </el-descriptions-item>
             <el-descriptions-item label="start date">
               <div flex="~" align="items-center" justify="between">
-                {{ tournament.startDate }}
+                {{ dayjs(tournament.startDate).format('LLLL') }}
                 <el-button
                   v-if="
                     (access?.isAdmin || access?.isOwner) &&

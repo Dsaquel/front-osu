@@ -30,12 +30,12 @@ const useDraftStore = defineStore('draft', () => {
     Object.assign(draft.value as Draft, data);
   }
 
-  async function updatePrivacy(draftId: number, isPublic: boolean) {
-    const data = await apiDraft.updatePrivacy(draftId, isPublic);
+  async function updateDraftPrivacy(draftId: number, isPublic: boolean) {
+    const data = await apiDraft.updateDraftPrivacy(draftId, isPublic);
     Object.assign(draft.value as Draft, data);
   }
 
-  return { draft, drafts, fetchDraft, create, update, fetchDrafts, updatePrivacy };
+  return { draft, drafts, fetchDraft, create, update, fetchDrafts, updateDraftPrivacy };
 });
 
 export default useDraftStore;

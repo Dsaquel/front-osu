@@ -138,7 +138,7 @@ const goBack = () => {
         <div>
           <CommonDatepicker
             :model-value="tournament.registrationEndDate"
-            :title="'End of registration (utc)'"
+            :title="'End of registration'"
             :type="'datetime'"
             @update:model-value="(val) => (tournament!.registrationEndDate = dayjs(val).utc().format())"
           />
