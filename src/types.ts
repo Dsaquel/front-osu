@@ -153,7 +153,6 @@ export interface User extends Node {
   avatarUrl: string;
   rank: number;
   discord: string | null;
-  tournamentDraft: TournamentDraft;
 }
 
 export interface Participant extends Node {

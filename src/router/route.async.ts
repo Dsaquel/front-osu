@@ -40,34 +40,6 @@ const asyncRoutes: Array<RouteRecordRaw> = [
           },
         },
       },
-      {
-        path: 'tournaments',
-        name: 'user-tournament',
-        component: () => import('~/views/user/UserTournament.vue'),
-        meta: {
-          breadcrumb(route: RouteLocationNormalizedLoaded) {
-            const { userId } = route.params;
-            return [
-              {
-                text: 'home',
-                to: { name: 'home' },
-              },
-              {
-                text: `user-${userId}`,
-                to: {
-                  name: 'user-profile',
-                  params: {
-                    userId,
-                  },
-                },
-              },
-              {
-                text: 'tournaments',
-              },
-            ];
-          },
-        },
-      },
     ],
   },
   {

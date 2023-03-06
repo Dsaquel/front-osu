@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia';
-import { Draft, User } from '~/types';
+import { Draft, Tournament, User } from '~/types';
 import apiUser from '~/api/modules/api.user';
 
 const useUserStore = defineStore('user', () => {
   const user = ref<User | null>(null);
   const userDrafts = ref(undefined as Draft[] | undefined);
+  const userInvolvement = ref(undefined as Tournament[] | undefined);
 
   function store(data: User) {
     user.value = { ...data };
@@ -15,18 +16,17 @@ const useUserStore = defineStore('user', () => {
     store(data);
   }
 
-  async function updateTournamentDraft(payload: Partial<User['tournamentDraft']>) {
-    const stringify = JSON.stringify(payload);
-    const data = await apiUser.updateTournamentDraft({ tournamentDraft: stringify });
-    store(data);
-  }
-
   async function fetchUserDrafts() {
     const data = await apiUser.fetchUserDrafts();
     userDrafts.value = data;
   }
 
-  return { user, fetch, updateTournamentDraft, userDrafts, fetchUserDrafts };
+  async function fetchUserInvolvement() {
+    const data = await apiUser.fetchUserInvolvement();
+    userInvolvement.value = data;
+  }
+
+  return { user, fetch, userDrafts, userInvolvement, fetchUserInvolvement, fetchUserDrafts };
 });
 
 export default useUserStore;

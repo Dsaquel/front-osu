@@ -56,6 +56,7 @@ function timeoutManaging() {
     timeout.start();
   }
 }
+
 watch(
   () => draft.value,
   (newVal, oldVal) => {

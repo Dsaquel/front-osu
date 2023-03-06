@@ -97,13 +97,7 @@ async function updateDraftPrivacyTemplate() {
       </el-empty>
       <div v-else grid="col-span-5">
         <div display="grid" grid="gap-4" v-bind="useAttrs()">
-          <el-alert
-            v-if="!draft.isPublic"
-            title="tournament not yet public"
-            type="info"
-            show-icon
-            pos="absolute inset-0"
-          />
+          <el-alert v-if="!draft.isPublic" title="draft not public" type="info" show-icon pos="absolute inset-0" />
           <el-descriptions border direction="horizontal" :column="1" m="t-4">
             <template #title>
               <span text="xl">{{ draft.name }}</span>
