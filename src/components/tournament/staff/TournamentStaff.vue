@@ -71,8 +71,8 @@ async function upToAdmin(staffId: number, roles: Exclude<Role, 'admin'>[], secon
   await init();
 }
 
-async function addToAnotherRole(role: Exclude<Role, 'admin'>) {
-  const data = await addStaff(props.tournamentId, role === 'referee' ? 'mappooler' : 'referee', true);
+async function addToAnotherRole(role: Exclude<Role, 'admin'>, userId: number) {
+  const data = await addStaff(props.tournamentId, role === 'referee' ? 'mappooler' : 'referee', true, userId);
   ElNotification({
     title: (<TemplateNotification>data).subject,
     message: (<TemplateNotification>data).message,
@@ -125,7 +125,7 @@ async function addToAnotherRole(role: Exclude<Role, 'admin'>) {
                 <el-dropdown-item
                   v-if="!(scope.row.sources.includes('mappooler') && scope.row.sources.includes('referee'))"
                   :icon="Plus"
-                  @click="addToAnotherRole(scope.row.sources[0])"
+                  @click="addToAnotherRole(scope.row.sources[0], scope.row.userId)"
                 >
                   {{ scope.row.sources[0] === 'mappooler' ? 'add to referees' : 'add to mappoolers' }}
                 </el-dropdown-item>

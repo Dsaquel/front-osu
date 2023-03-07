@@ -105,9 +105,9 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
-  async function addStaff(tournamentId: number, role: Role, validate?: boolean) {
+  async function addStaff(tournamentId: number, role: Role, validate?: boolean, userId?: number) {
     try {
-      return await apiTournament.addStaff(tournamentId, role, validate);
+      return await apiTournament.addStaff(tournamentId, role, validate, userId);
     } catch (e) {
       if (e instanceof Error) {
         throw e.message;

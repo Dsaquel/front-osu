@@ -159,7 +159,9 @@ async function updateDraftPrivacyTemplate() {
               </div>
             </template>
           </el-popover>
-          <el-button v-else-if="user" type="success" @click="showDialog = true"> participate </el-button>
+          <el-button v-else-if="user" type="success" place="self-end" @click="showDialog = true">
+            participate
+          </el-button>
           <el-dialog v-model="showDialog" title="Entry form" w="5/10 min-[600px]" class="<sm:min-w-full">
             <div display="grid" grid="cols-1 gap-2" justify="items-center">
               <transition>

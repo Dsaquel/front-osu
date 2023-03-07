@@ -250,11 +250,11 @@ async function updateTournamentPrivacyTemplate() {
               }}
             </el-descriptions-item>
             <el-descriptions-item label="registration end">
-              {{ dayjs(tournament.registrationEndDate).format('LLLL') }}
+              {{ tournament.registrationEndDate ? dayjs(tournament.registrationEndDate).format('LLLL') : '' }}
             </el-descriptions-item>
             <el-descriptions-item label="start date">
               <div flex="~" align="items-center" justify="between">
-                {{ dayjs(tournament.startDate).format('LLLL') }}
+                {{ tournament.startDate ? dayjs(tournament.startDate).format('LLLL') : '' }}
                 <el-button
                   v-if="
                     (access?.isAdmin || access?.isOwner) &&
