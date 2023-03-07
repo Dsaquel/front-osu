@@ -401,8 +401,8 @@ function getDateString(date: string) {
       <template v-if="activeTab === 'matchDetail'">
         <div flex="~" align="items-center" justify="between">
           <el-button v-if="!match.superReferee" type="primary" @click="joinMatchAsReferee(match.id)"
-            >Join as referee</el-button
-          >
+            >Join as referee
+          </el-button>
           <div v-if="match.superReferee" flex="~" align="items-center">
             <div text="lg" m="r-3">Referee:</div>
             <el-avatar

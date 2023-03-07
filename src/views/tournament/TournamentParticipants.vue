@@ -3,7 +3,7 @@ import router from '~/router';
 import { TemplateNotification } from '~/types';
 
 const { fetchTournament, fetchControlAccess, fetchParticipants, removeParticipant } = tournamentStore();
-const { tournament, isAuthorized, access, participantsAccepted } = storeToRefs(tournamentStore());
+const { tournament, access, participantsAccepted } = storeToRefs(tournamentStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
 let removeLoading = $ref(false);
@@ -53,10 +53,7 @@ const goBack = () => {
 
 <template>
   <div v-if="!initLoading" class="sm:max-w-900px mx-auto">
-    <el-empty v-if="!isAuthorized || (!access?.isAdmin && !access?.isOwner)">
-      <template #description>Only admins have access to this page</template>
-    </el-empty>
-    <div v-else-if="tournament">
+    <div v-if="tournament">
       <div>
         <el-table
           ref="tableParticipant"
@@ -88,7 +85,7 @@ const goBack = () => {
             </template>
           </el-table-column>
 
-          <el-table-column label="Actions" align="right">
+          <el-table-column v-if="access?.isAdmin || access?.isOwner" label="Actions" align="right">
             <template #default="scope">
               <el-tooltip content="remove" placement="right">
                 <el-button

@@ -14,9 +14,9 @@ body {
   }
 }
 
-//side bar&toolbar
-section,
-header {
+// sidebar & toolbar
+.area > section,
+.area > header {
   @apply dark:text-gray-50 dark: bg-dark-[#212121] dark: text-[#c9d1d9] .dark:transition-colors transition-colors;
 
   box-shadow: 0px 0px 2px currentColor;

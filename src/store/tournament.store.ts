@@ -199,6 +199,7 @@ const useTournamentStore = defineStore('tournament', () => {
 
   async function passToBracketPhase(tournamentId: number) {
     await apiTournament.passToBracketPhase(tournamentId);
+    await fetchTournament(tournamentId);
   }
 
   async function updateTournamentPrivacy(tournamentId: number, isPublic: boolean) {

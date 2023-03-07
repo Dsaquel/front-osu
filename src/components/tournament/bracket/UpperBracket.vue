@@ -34,7 +34,8 @@ const { matchPlayerIdOver } = storeToRefs(matchStore());
           :key="z"
           class="tournament-bracket__item"
           :class="{
-            'last-item-disabled': (tournament?.winnerId && !matchesUpper.at(-1)?.player1Id) || !matchesUpper.at(-1)?.player2Id,
+            'last-item-disabled':
+              (tournament?.winnerId && !matchesUpper.at(-1)?.player1Id) || !matchesUpper.at(-1)?.player2Id,
           }"
         >
           <BracketMatch :match="match" :player-id-over="matchPlayerIdOver" />
