@@ -25,7 +25,7 @@ defineEmits([
 ]);
 
 const rankRang = computed(() =>
-  ((props.rangePlayerMin === 1 || props.rangePlayerMin === null) && props.rangePlayerMax === null) ||
+  (props.rangePlayerMin === 1 && props.rangePlayerMax === null) ||
   (props.rangePlayerMin === undefined && props.rangePlayerMax === undefined)
     ? 'Open rank'
     : `${props.rangePlayerMin} to ${props.rangePlayerMax}`,

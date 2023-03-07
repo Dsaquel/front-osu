@@ -13,7 +13,7 @@ const { tournaments } = storeToRefs(tournamentStore());
   <el-card shadow="never">
     <h2 text="xl">Tournaments</h2>
     <div display="flex" align="items-center" justify="end" m="b-6">
-      <router-link v-if="user" :to="`/users/${user.id}/tournaments`" m="l-4">
+      <router-link v-if="user" :to="`/users/${user.id}`" m="l-4">
         <el-button size="small" link> my tournaments</el-button>
       </router-link>
       <el-tooltip content="recruitment of all tournaments" placement="top">

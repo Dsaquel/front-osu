@@ -12,9 +12,19 @@ const useMappoolStore = defineStore('mappool', () => {
     return tournamentMappools.value
       .map((elem) => ({
         ...elem,
-        maps: elem.maps.sort((a, b) => typeOrder.indexOf(a.type) - typeOrder.indexOf(b.type)),
+        maps: elem.maps.sort((a, b) =>
+          a.type !== b.type ? typeOrder.indexOf(a.type) - typeOrder.indexOf(b.type) : a.numberOfType - b.numberOfType,
+        ),
       }))
       .sort((a, b) => a.round - b.round);
+  });
+
+  const qualifierMappoolSort = computed(() => {
+    if (!qualifierMappool.value) return undefined;
+    qualifierMappool.value.maps.sort((a, b) =>
+      a.type !== b.type ? typeOrder.indexOf(a.type) - typeOrder.indexOf(b.type) : a.numberOfType - b.numberOfType,
+    );
+    return qualifierMappool.value;
   });
 
   async function fetchTournamentMappools(tournamentId: number) {
@@ -73,7 +83,7 @@ const useMappoolStore = defineStore('mappool', () => {
 
   return {
     tournamentMappools: tournamentMappoolsSort,
-    qualifierMappool,
+    qualifierMappool: qualifierMappoolSort,
     fetchTournamentMappools,
     fetchQualifierMappool,
     updateQualifierMappool,

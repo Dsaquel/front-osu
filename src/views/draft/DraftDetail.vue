@@ -169,6 +169,7 @@ async function updateDraftPrivacyTemplate() {
               </transition>
 
               <el-select v-model="role" size="large" placeholder="I want to be">
+                <!-- <el-option disabled value="ekoro" /> -->
                 <el-option v-for="(item, i) in options" :key="i" :value="item" :disabled="selectDisabled(item)" />
               </el-select>
 
