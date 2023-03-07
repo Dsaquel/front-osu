@@ -218,7 +218,9 @@ async function updateTournamentPrivacyTemplate() {
                 m="l-2"
               >
                 <el-popover
-                  v-if="tournament.participants.length < tournament.numbersPlayers"
+                  v-if="
+                    (access?.isAdmin || access?.isOwner) && tournament.participants.length < tournament.numbersPlayers
+                  "
                   trigger="hover"
                   placement="top"
                   :hide-after="50"

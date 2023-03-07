@@ -55,12 +55,17 @@ async function remove(staffId: number, roles: Exclude<Role, 'admin'>[], secondSt
   }
 }
 
-async function upToAdmin(staffId: number, roles: Exclude<Role, 'admin'>[], secondStaffId?: number | undefined) {
+async function upToAdmin(
+  staffId: number,
+  roles: Exclude<Role, 'admin'>[],
+  userId: number,
+  secondStaffId?: number | undefined,
+) {
   await removeStaff(props.tournamentId, staffId, roles[0]);
   if (secondStaffId) {
     await removeStaff(props.tournamentId, secondStaffId, roles[1]);
   }
-  const data = await addStaff(props.tournamentId, 'admin', true);
+  const data = await addStaff(props.tournamentId, 'admin', true, userId);
   ElNotification({
     title: (<TemplateNotification>data).subject,
     message: (<TemplateNotification>data).message,
@@ -119,7 +124,7 @@ async function addToAnotherRole(role: Exclude<Role, 'admin'>, userId: number) {
               <template #dropdown>
                 <el-dropdown-item
                   :icon="Avatar"
-                  @click="upToAdmin(scope.row.id, scope.row.sources, scope.row.secondStaffId)"
+                  @click="upToAdmin(scope.row.id, scope.row.sources, scope.row.userId, scope.row.secondStaffId)"
                   >Up to admin
                 </el-dropdown-item>
                 <el-dropdown-item
