@@ -38,13 +38,6 @@ export type Role = 'referee' | 'mappooler' | 'admin';
 
 export type MapType = 'noMod' | 'hidden' | 'hardRock' | 'doubleTime' | 'freeMod' | 'tieBreaker';
 
-interface TournamentDraft {
-  name: string;
-  numbersPlayers: number;
-  description: string;
-  estimateStartDate: string;
-}
-
 export type Staff = Admin | Mappooler | Referee;
 
 export type Staffs = {

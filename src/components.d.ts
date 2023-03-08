@@ -7,9 +7,10 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ApiIndex: typeof import('./components/ApiIndex.vue')['default']
     AppLayout: typeof import('./components/Ui/Layout/AppLayout.vue')['default']
     BracketMatch: typeof import('./components/tournament/match/BracketMatch.vue')['default']
-    CommonDatepicker: typeof import('./components/Common/CommonDatepicker.vue')['default']
+    CommonDatepicker: typeof import('./components/common/CommonDatepicker.vue')['default']
     DraftHomeTable: typeof import('./components/draft/DraftHomeTable.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
@@ -48,6 +49,7 @@ declare module '@vue/runtime-core' {
     ElTimelineItem: typeof import('element-plus/es')['ElTimelineItem']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     EnProcess: typeof import('./components/EnProcess.md')['default']
+    Home: typeof import('./components/markdown/Home.md')['default']
     'IAkarIcons:cross': typeof import('~icons/akar-icons/cross')['default']
     'IAntDesign:caretRightFilled': typeof import('~icons/ant-design/caret-right-filled')['default']
     'IFa6Solid:usersGear': typeof import('~icons/fa6-solid/users-gear')['default']
