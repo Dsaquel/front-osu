@@ -130,7 +130,7 @@ async function updateDraftPrivacyTemplate() {
                 <el-button type="primary" plain round><i-material-symbols:edit /> </el-button>
               </router-link>
             </template>
-            <el-descriptions-item label="type">{{ `osu ${draft.type}` }}</el-descriptions-item>
+            <el-descriptions-item label="type">{{ `osu ${draft.mode}` }}</el-descriptions-item>
             <el-descriptions-item label="accept rank">
               {{
                 (draft.rangePlayerMin === 1 || !draft.rangePlayerMin) && !draft.rangePlayerMax
@@ -140,6 +140,7 @@ async function updateDraftPrivacyTemplate() {
             </el-descriptions-item>
             <el-descriptions-item label="estimation start date">{{ draft.estimateStartDate }}</el-descriptions-item>
             <el-descriptions-item label="number player">{{ draft.numbersPlayers }}</el-descriptions-item>
+            <el-descriptions-item label="type">{{ draft.type }}</el-descriptions-item>
           </el-descriptions>
 
           <div>

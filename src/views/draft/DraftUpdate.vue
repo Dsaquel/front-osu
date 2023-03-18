@@ -39,6 +39,7 @@ const timeout = useTimeoutFn(
         rangePlayerMax: draft.value?.rangePlayerMax as number,
         rangePlayerMin: draft.value?.rangePlayerMin as number,
         type: draft.value?.type,
+        mode: draft.value?.mode,
       },
       draft.value?.id as number,
     );
@@ -78,6 +79,7 @@ watch(
       v-model:rangePlayerMax="draft.rangePlayerMax"
       v-model:rangePlayerMin="draft.rangePlayerMin"
       v-model:type="draft.type"
+      v-model:mode="draft.mode"
     >
       <template #last>
         <div

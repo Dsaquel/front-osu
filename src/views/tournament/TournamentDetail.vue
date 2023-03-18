@@ -243,7 +243,7 @@ async function updateTournamentPrivacyTemplate() {
                 </el-button>
               </div>
             </template>
-            <el-descriptions-item label="type">{{ `osu ${tournament.type}` }}</el-descriptions-item>
+            <el-descriptions-item label="type">{{ `osu ${tournament.mode}` }}</el-descriptions-item>
             <el-descriptions-item label="accept rank">
               {{
                 (tournament.rangePlayerMin === 1 || !tournament.rangePlayerMin) && !tournament.rangePlayerMax
@@ -271,6 +271,7 @@ async function updateTournamentPrivacyTemplate() {
               </div>
             </el-descriptions-item>
             <el-descriptions-item label="number player">{{ tournament.numbersPlayers }}</el-descriptions-item>
+            <el-descriptions-item label="type">{{ tournament.type }}</el-descriptions-item>
             <el-descriptions-item label="has qualifier">{{ tournament.qualifier ? 'yes' : 'no' }}</el-descriptions-item>
           </el-descriptions>
 

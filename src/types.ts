@@ -221,7 +221,8 @@ export interface Draft extends Node {
   rangePlayerMax: number | null;
   estimateStartDate: string | null;
   numbersPlayers: number | null;
-  type: 'standard';
+  type: TournamentType;
+  mode: 'standard';
   owner: User;
   ownerId: number;
   tournament: Tournament;

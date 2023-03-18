@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { isEqual } from 'lodash';
 import router from '~/router';
+import { TournamentType } from '~/types';
 
 dayjs.extend(utc);
 
@@ -45,7 +46,7 @@ const timeout = useTimeoutFn(
       description: tournament.value?.description ?? '',
       rangePlayerMax: tournament.value?.rangePlayerMax,
       rangePlayerMin: tournament.value?.rangePlayerMin,
-      type: tournament.value?.type,
+      mode: tournament.value?.mode,
       registrationEndDate: tournament.value?.registrationEndDate,
       hasQualifier: tournament.value?.hasQualifier,
     });
@@ -102,6 +103,13 @@ const goBack = () => {
             <el-option :value="32" />
           </el-select>
         </div>
+        <div>
+          <span display="block" text="sm"> solo or team </span>
+          <el-select :model-value="tournament.type" size="large" w="full" @change="(val) => (tournament!.type = val)">
+            <el-option :value="TournamentType.Solo" />
+            <el-option :value="TournamentType.Team" />
+          </el-select>
+        </div>
         <div grid="col-span-2">
           <span text="sm">Details</span>
           <MarkdownTextarea
@@ -144,8 +152,8 @@ const goBack = () => {
           />
         </div>
         <div text="right">
-          <span display="block" text="sm"> type </span>
-          <el-select :model-value="tournament.type" size="large" w="full" @change="(val) => (tournament!.type = val)">
+          <span display="block" text="sm"> mode </span>
+          <el-select :model-value="tournament.mode" size="large" w="full" @change="(val) => (tournament!.mode = val)">
             <el-option value="standard" />
           </el-select>
         </div>
