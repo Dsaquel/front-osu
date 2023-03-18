@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import { TournamentType } from '~/types';
 
 dayjs.extend(utc);
 
@@ -11,7 +12,8 @@ const props = defineProps<{
   rangePlayerMin?: number | null;
   numbersPlayers?: number | null;
   estimateStartDate?: string | null;
-  type?: 'standard';
+  type: TournamentType;
+  mode?: 'standard';
 }>();
 
 defineEmits([
@@ -21,6 +23,7 @@ defineEmits([
   'update:rangePlayerMin',
   'update:numbersPlayers',
   'update:estimateStartDate',
+  'update:mode',
   'update:type',
 ]);
 
@@ -53,6 +56,15 @@ const rankRang = computed(() =>
           <el-option :value="32" />
         </el-select>
       </div>
+
+      <div>
+        <span display="block" text="sm"> solo or team </span>
+        <el-select :model-value="type" size="large" w="full" @change="(val) => $emit('update:type', val)">
+          <el-option :value="TournamentType.Solo" />
+          <el-option :value="TournamentType.Team" />
+        </el-select>
+      </div>
+
       <div grid="col-span-2">
         <span text="sm">Details</span>
         <MarkdownTextarea :text="details" @update:description="(val: string) =>  $emit('update:details', val)" />
