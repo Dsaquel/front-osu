@@ -147,7 +147,6 @@ const goBack = () => {
           <span display="block" text="sm"> type </span>
           <el-select :model-value="tournament.type" size="large" w="full" @change="(val) => (tournament!.type = val)">
             <el-option value="standard" />
-            <el-option value="taiko" />
           </el-select>
         </div>
         <div>

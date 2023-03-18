@@ -12,7 +12,7 @@ const rangePlayerMax = $ref(undefined);
 const rangePlayerMin = $ref(undefined);
 const numbersPlayers = $ref(undefined);
 const estimateStartDate = $ref(undefined);
-const type = $ref<'standard' | 'taiko'>('standard');
+const type = $ref<'standard'>('standard');
 
 async function submit() {
   const payload: DraftDto = {

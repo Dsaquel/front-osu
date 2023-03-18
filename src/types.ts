@@ -1,4 +1,16 @@
+/* eslint-disable no-shadow */
 /* eslint-disable no-use-before-define */
+
+export enum ParticipantType {
+  Individual = 'individual',
+  Team = 'team',
+}
+
+export enum TournamentType {
+  Solo = 'solo',
+  Team = 'team',
+}
+
 interface Node {
   id: number;
   createAt: string;
@@ -149,10 +161,38 @@ export interface User extends Node {
 }
 
 export interface Participant extends Node {
-  validate: boolean;
   tournamentId: number;
-  userId: number;
+  type: ParticipantType;
+}
+
+export interface ParticipantIndividual extends Participant {
+  validate: boolean;
   user: User;
+  userId: number;
+}
+
+export interface ParticipantTeam extends Participant {
+  validate: boolean;
+  users: User[];
+  numberPlayerMin: number;
+  numberPlayerMax: number;
+  captainId: number;
+  invitations: ParticipantInvitation[];
+}
+
+export interface InvitationTeam extends Node {
+  participantTeam: ParticipantTeam;
+  participantTeamId: number;
+  tournamentId: number;
+  status: 'pending' | 'accepted' | 'declined';
+}
+
+export interface ParticipantRequest extends InvitationTeam {
+  userRequests: User;
+}
+
+export interface ParticipantInvitation extends InvitationTeam {
+  userInvited: User[];
 }
 
 export interface DraftDto {
@@ -162,7 +202,8 @@ export interface DraftDto {
   rangePlayerMin?: number | null;
   numbersPlayers?: number | null;
   estimateStartDate?: string | null;
-  type?: 'standard' | 'taiko';
+  mode?: 'standard';
+  type?: TournamentType;
 }
 
 export interface CreateRescheduleDto {
@@ -180,23 +221,10 @@ export interface Draft extends Node {
   rangePlayerMax: number | null;
   estimateStartDate: string | null;
   numbersPlayers: number | null;
-  type: 'standard' | 'taiko';
+  type: 'standard';
   owner: User;
   ownerId: number;
   tournament: Tournament;
-}
-
-export interface CreateTournamentDto {
-  name: string;
-  startDate?: string;
-  description?: string;
-  rangePlayerMax?: number;
-  rangePlayerMin?: number;
-  numbersPlayers?: number;
-  commonSchedule?: string;
-  hasQualifier?: boolean;
-  isPublic?: boolean;
-  estimateStartDate?: string;
 }
 
 export interface Qualifier extends Node {
@@ -243,7 +271,8 @@ export interface Tournament extends Node {
   isPublic: boolean;
   name: string;
   startDate: string | null;
-  type: 'standard' | 'taiko';
+  mode: 'standard';
+  type: TournamentType;
   description: string | null;
   rangePlayerMax: number | null;
   rangePlayerMin: number;
@@ -311,7 +340,8 @@ export interface UpdateTournamentDto {
   isPublicable?: boolean;
   name?: string;
   startDate?: string | null;
-  type?: 'standard' | 'taiko';
+  mode?: 'standard';
+  type?: TournamentType;
   description?: string | null;
   rangePlayerMax?: number | null;
   rangePlayerMin?: number;

@@ -11,7 +11,7 @@ const props = defineProps<{
   rangePlayerMin?: number | null;
   numbersPlayers?: number | null;
   estimateStartDate?: string | null;
-  type?: 'standard' | 'taiko';
+  type?: 'standard';
 }>();
 
 defineEmits([
