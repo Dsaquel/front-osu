@@ -89,6 +89,7 @@ declare module '@vue/runtime-core' {
     NavigationDrawer: typeof import('./components/Ui/Layout/childs/NavigationDrawer.vue')['default']
     ParticipantIndividualTable: typeof import('./components/tournament/participant/ParticipantIndividualTable.vue')['default']
     ParticipantTeamTable: typeof import('./components/tournament/participant/ParticipantTeamTable.vue')['default']
+    ParticipationConfirm: typeof import('./components/tournament/participant/ParticipationConfirm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TemplateDraft: typeof import('./components/draft/TemplateDraft.vue')['default']
