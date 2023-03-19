@@ -7,7 +7,6 @@ import {
   TemplateNotification,
   Role,
   Staffs,
-  Participant,
   Player,
   ParticipantIndividual,
   ParticipantTeam,

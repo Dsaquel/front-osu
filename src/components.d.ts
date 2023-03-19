@@ -86,6 +86,8 @@ declare module '@vue/runtime-core' {
     MarkdownTextarea: typeof import('./components/Inputs/MarkdownTextarea.vue')['default']
     MatchDetail: typeof import('./components/tournament/match/MatchDetail.vue')['default']
     NavigationDrawer: typeof import('./components/Ui/Layout/childs/NavigationDrawer.vue')['default']
+    ParticipantIndividualTable: typeof import('./components/tournament/participant/ParticipantIndividualTable.vue')['default']
+    ParticipantTeamTable: typeof import('./components/tournament/participant/ParticipantTeamTable.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TemplateDraft: typeof import('./components/draft/TemplateDraft.vue')['default']

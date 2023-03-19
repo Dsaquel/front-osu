@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import router from '~/router';
-import { isParticipantIndividual, TemplateNotification, ParticipantIndividual, ParticipantTeam } from '~/types';
+import { isParticipantIndividual } from '~/types';
 
-const { fetchTournament, fetchControlAccess, fetchParticipants, removeParticipant } = tournamentStore();
-const { tournament, access, participantsAccepted } = storeToRefs(tournamentStore());
+const { fetchTournament, fetchControlAccess, fetchParticipants } = tournamentStore();
+const { tournament, participantsAccepted } = storeToRefs(tournamentStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
-let removeLoading = $ref(false);
 let initLoading = $ref(false);
-const tableParticipant = ref();
 
 async function init() {
   try {
@@ -26,24 +24,6 @@ onBeforeMount(async () => {
   initLoading = false;
 });
 
-async function remove(participantId: number) {
-  try {
-    removeLoading = true;
-    const data = await removeParticipant(participantId, tournamentId);
-    ElNotification({
-      title: (<TemplateNotification>data).subject,
-      message: (<TemplateNotification>data).message,
-      type: 'success',
-      zIndex: 10,
-      duration: 0,
-    });
-  } catch (e) {
-    console.log(e);
-  } finally {
-    removeLoading = false;
-  }
-}
-
 const goBack = () => {
   router.push({
     name: 'home',
@@ -53,64 +33,12 @@ const goBack = () => {
 
 <template>
   <div v-if="!initLoading" class="sm:max-w-900px mx-auto">
-    <div v-if="tournament">
-      <div>
-        <el-table
-          ref="tableParticipant"
-          :data="participantsAccepted"
-          row-key="id"
-          stripe
-          height="max-content"
-          w="full"
-          :highlight-current-row="true"
-        >
-          <el-table-column label="Participant">
-            <template #default="scope: { row: ParticipantIndividual | ParticipantTeam }">
-              <div v-if="isParticipantIndividual(scope.row)" display="flex" align="items-center">
-                <el-avatar :src="scope.row.user.avatarUrl"></el-avatar>
-                <span m="l-2">{{ scope.row.user.username }}</span>
-              </div>
-              <div v-else display="flex" align="items-center">
-                <span m="l-2">{{ scope.row.name }}</span>
-              </div>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="Rank">
-            <template #default="scope">
-              {{ scope.row.user.rank }}
-            </template>
-          </el-table-column>
-
-          <el-table-column label="Discord">
-            <template #default="scope">
-              {{ scope.row.user.discord }}
-            </template>
-          </el-table-column>
-
-          <el-table-column label="validate">
-            <template #default="scope">
-              {{ scope.row }}
-            </template>
-          </el-table-column>
-
-          <el-table-column v-if="access?.isAdmin || access?.isOwner" label="Actions" align="right">
-            <template #default="scope">
-              <el-tooltip content="remove" placement="right">
-                <el-button
-                  :loading="removeLoading"
-                  type="danger"
-                  size="small"
-                  round
-                  m="l-1"
-                  @click="remove(scope.row.id)"
-                  ><i-akar-icons:cross />
-                </el-button>
-              </el-tooltip>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
+    <div v-if="tournament && participantsAccepted">
+      <ParticipantIndividualTable
+        v-if="isParticipantIndividual(participantsAccepted)"
+        :participants-individuals="participantsAccepted"
+      />
+      <ParticipantTeamTable v-else :participants-teams="participantsAccepted" />
     </div>
     <el-empty v-else>
       <template #description>

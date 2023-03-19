@@ -31,7 +31,7 @@ const useTournamentStore = defineStore('tournament', () => {
     ),
   );
 
-  const participantsAccepted = computed(() => {
+  const participantsAccepted = computed<ParticipantIndividual[] | ParticipantTeam[] | undefined>(() => {
     if (!participants.value) return undefined;
     if (isParticipantIndividual(participants.value)) {
       return participants.value.filter((elem) => elem.validate).sort((a, b) => a.user.rank - b.user.rank);
