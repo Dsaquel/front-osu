@@ -9,6 +9,8 @@ import {
   Staffs,
   Participant,
   Player,
+  ParticipantIndividual,
+  ParticipantTeam,
 } from '~/types';
 
 const TournamentApi = {
@@ -28,7 +30,8 @@ const TournamentApi = {
     service.delete<TemplateNotification>(`/tournament/${tournamentId}/staff/${staffId}`, { role }),
   addParticipant: (tournamentId: number) =>
     service.post<TemplateNotification>(`/tournament/${tournamentId}/participant`),
-  fetchParticipants: (tournamentId: number) => service.get<Participant[]>(`/tournament/${tournamentId}/participant`),
+  fetchParticipants: (tournamentId: number) =>
+    service.get<ParticipantIndividual[] | ParticipantTeam[]>(`/tournament/${tournamentId}/participant`),
   removeParticipant: (tournamentId: number, participantId: number) =>
     service.put<TemplateNotification>(`/tournament/${tournamentId}/participant/${participantId}`),
   startTournament: (tournamentId: number) => service.post<void>(`/tournament/${tournamentId}/start`),

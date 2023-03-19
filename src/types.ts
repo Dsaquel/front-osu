@@ -24,6 +24,17 @@ export function groupBy<T extends Record<K, PropertyKey>, K extends keyof T>(ite
   }, {} as Record<T[K], T[]>);
 }
 
+export function isParticipantIndividual(p: ParticipantIndividual | ParticipantTeam): p is ParticipantIndividual;
+export function isParticipantIndividual(p: ParticipantIndividual[] | ParticipantTeam[]): p is ParticipantIndividual[];
+export function isParticipantIndividual(
+  p: ParticipantIndividual | ParticipantTeam | ParticipantIndividual[] | ParticipantTeam[],
+): p is ParticipantIndividual | ParticipantTeam | ParticipantTeam[] | ParticipantIndividual[] {
+  if (Array.isArray(p)) {
+    return p.length > 0 && p[0].type === ParticipantType.Individual;
+  }
+  return p.type === ParticipantType.Individual || p.type === ParticipantType.Team;
+}
+
 interface Mappool extends Node {
   displayMappoolsSchedule: string | null;
   isVisible: boolean;
@@ -169,15 +180,18 @@ export interface ParticipantIndividual extends Participant {
   validate: boolean;
   user: User;
   userId: number;
+  qualifierParticipant: QualifierParticipant | null;
 }
 
 export interface ParticipantTeam extends Participant {
+  name: string;
   validate: boolean;
   users: User[];
   numberPlayerMin: number;
   numberPlayerMax: number;
   captainId: number;
   invitations: ParticipantInvitation[];
+  qualifierParticipant: QualifierParticipant | null;
 }
 
 export interface InvitationTeam extends Node {
@@ -242,7 +256,8 @@ export interface Lobby extends Node {
   participantsLobby: QualifierParticipant[];
 }
 
-export interface QualifierParticipant extends Participant {
+export interface QualifierParticipant extends Node {
+  validate: boolean;
   seed: number | null;
   totalRank: number | null;
   totalScore: number | null;

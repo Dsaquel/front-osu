@@ -9,8 +9,10 @@ import {
   Role,
   Staffs,
   User,
-  Participant,
   Player,
+  ParticipantIndividual,
+  ParticipantTeam,
+  isParticipantIndividual,
 } from '~/types';
 
 const useTournamentStore = defineStore('tournament', () => {
@@ -20,7 +22,7 @@ const useTournamentStore = defineStore('tournament', () => {
   const tournament = ref(undefined as Tournament | undefined);
   const tournaments = ref(undefined as Tournament[] | undefined);
   const staffs = ref(undefined as Staffs | undefined);
-  const participants = ref(undefined as Participant[] | undefined);
+  const participants = ref(undefined as ParticipantIndividual[] | ParticipantTeam[] | undefined);
   const winner = ref(undefined as Player | undefined | null);
 
   const staffRequests = computed(() =>
@@ -29,9 +31,13 @@ const useTournamentStore = defineStore('tournament', () => {
     ),
   );
 
-  const participantsAccepted = computed(() =>
-    participants.value?.filter((elem) => elem.validate).sort((a, b) => a.user.rank - b.user.rank),
-  );
+  const participantsAccepted = computed(() => {
+    if (!participants.value) return undefined;
+    if (isParticipantIndividual(participants.value)) {
+      return participants.value.filter((elem) => elem.validate).sort((a, b) => a.user.rank - b.user.rank);
+    }
+    return participants.value.filter((elem) => elem.validate).sort((a, b) => a.name.localeCompare(b.name));
+  });
 
   const staffsAccepted = computed(() => {
     const accepted: (

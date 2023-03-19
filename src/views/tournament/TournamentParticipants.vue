@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import router from '~/router';
-import { TemplateNotification } from '~/types';
+import { isParticipantIndividual, TemplateNotification, ParticipantIndividual, ParticipantTeam } from '~/types';
 
 const { fetchTournament, fetchControlAccess, fetchParticipants, removeParticipant } = tournamentStore();
 const { tournament, access, participantsAccepted } = storeToRefs(tournamentStore());
@@ -65,10 +65,13 @@ const goBack = () => {
           :highlight-current-row="true"
         >
           <el-table-column label="Participant">
-            <template #default="scope">
-              <div display="flex" align="items-center">
+            <template #default="scope: { row: ParticipantIndividual | ParticipantTeam }">
+              <div v-if="isParticipantIndividual(scope.row)" display="flex" align="items-center">
                 <el-avatar :src="scope.row.user.avatarUrl"></el-avatar>
                 <span m="l-2">{{ scope.row.user.username }}</span>
+              </div>
+              <div v-else display="flex" align="items-center">
+                <span m="l-2">{{ scope.row.name }}</span>
               </div>
             </template>
           </el-table-column>
@@ -82,6 +85,12 @@ const goBack = () => {
           <el-table-column label="Discord">
             <template #default="scope">
               {{ scope.row.user.discord }}
+            </template>
+          </el-table-column>
+
+          <el-table-column label="validate">
+            <template #default="scope">
+              {{ scope.row }}
             </template>
           </el-table-column>
 
