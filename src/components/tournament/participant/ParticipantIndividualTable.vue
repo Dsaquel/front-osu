@@ -5,17 +5,17 @@ defineProps<{
   participantsIndividuals: ParticipantIndividual[];
 }>();
 
-const { removeParticipant } = tournamentStore();
-const { access } = storeToRefs(tournamentStore());
+const { updateParticipantValidation } = tournamentStore();
+const { isOwnerOrAdmin } = storeToRefs(tournamentStore());
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
 
-let removeLoading = $ref(false);
+const updateLoading = ref(false);
 const tableParticipant = ref();
 
-async function remove(participantId: number) {
+async function udpateParticipantValidationTemplate(participantId: number, validate: boolean) {
   try {
-    removeLoading = true;
-    const data = await removeParticipant(participantId, tournamentId);
+    updateLoading.value = true;
+    const data = await updateParticipantValidation(participantId, tournamentId, validate);
     ElNotification({
       title: (<TemplateNotification>data).subject,
       message: (<TemplateNotification>data).message,
@@ -26,7 +26,7 @@ async function remove(participantId: number) {
   } catch (e) {
     console.log(e);
   } finally {
-    removeLoading = false;
+    updateLoading.value = false;
   }
 }
 </script>
@@ -44,7 +44,7 @@ async function remove(participantId: number) {
     <el-table-column label="Participant">
       <template #default="scope: { row: ParticipantIndividual }">
         <div display="flex" align="items-center">
-          <el-avatar :src="scope.row.user.avatarUrl"></el-avatar>
+          <el-avatar :src="scope.row.user.avatarUrl" />
           <span m="l-2">{{ scope.row.user.username }}</span>
         </div>
       </template>
@@ -62,19 +62,24 @@ async function remove(participantId: number) {
       </template>
     </el-table-column>
 
-    <el-table-column label="validate">
+    <el-table-column v-if="isOwnerOrAdmin" label="validate">
       <template #default="scope: { row: ParticipantIndividual }">
         {{ scope.row.validate ? 'yes' : 'no' }}
       </template>
     </el-table-column>
 
-    <el-table-column v-if="access?.isAdmin || access?.isOwner" label="Actions" align="right">
+    <el-table-column v-if="isOwnerOrAdmin" label="Actions" align="right">
       <template #default="scope: { row: ParticipantIndividual }">
-        <el-tooltip content="remove" placement="right">
-          <el-button :loading="removeLoading" type="danger" size="small" round m="l-1" @click="remove(scope.row.id)"
-            ><i-akar-icons:cross />
-          </el-button>
-        </el-tooltip>
+        <el-switch
+          v-model="scope.row.validate"
+          inline-prompt
+          size="large"
+          style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+          active-text="validate"
+          inactive-text="invalidate"
+          :loading="updateLoading"
+          @change="udpateParticipantValidationTemplate(scope.row.id, scope.row.validate)"
+        />
       </template>
     </el-table-column>
   </el-table>

@@ -34,9 +34,9 @@ const useTournamentStore = defineStore('tournament', () => {
   const participantsAccepted = computed<ParticipantIndividual[] | ParticipantTeam[] | undefined>(() => {
     if (!participants.value) return undefined;
     if (isParticipantIndividual(participants.value)) {
-      return participants.value.filter((elem) => elem.validate).sort((a, b) => a.user.rank - b.user.rank);
+      return participants.value.sort((a, b) => a.user.rank - b.user.rank);
     }
-    return participants.value.filter((elem) => elem.validate).sort((a, b) => a.name.localeCompare(b.name));
+    return participants.value.sort((a, b) => a.name.localeCompare(b.name));
   });
 
   const staffsAccepted = computed(() => {
@@ -69,6 +69,8 @@ const useTournamentStore = defineStore('tournament', () => {
       access.value &&
       (access.value.isAdmin || access.value.isMappooler || access.value.isOwner || access.value.isReferee),
   );
+
+  const isOwnerOrAdmin = computed(() => access.value && (access.value.isAdmin || access.value.isOwner));
 
   async function fetchTournaments() {
     const data = await apiTournament.fetchAll();
@@ -178,10 +180,10 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
-  async function removeParticipant(participantId: number, tournamentId: number) {
+  async function updateParticipantValidation(participantId: number, tournamentId: number, validate: boolean) {
     try {
-      const data = await apiTournament.removeParticipant(tournamentId, participantId);
-      fetchParticipants(tournamentId);
+      const data = await apiTournament.updateParticipantValidation(tournamentId, participantId, validate);
+      await fetchParticipants(tournamentId);
       return data;
     } catch (e) {
       console.log(e);
@@ -217,6 +219,7 @@ const useTournamentStore = defineStore('tournament', () => {
     access,
     winner,
     isAuthorized,
+    isOwnerOrAdmin,
     fetchControlAccess,
     fetchParticipationOfUser,
     tournament,
@@ -234,7 +237,7 @@ const useTournamentStore = defineStore('tournament', () => {
     addParticipant,
     fetchParticipants,
     participantsAccepted,
-    removeParticipant,
+    updateParticipantValidation,
     startTournament,
     fetchPlayer,
     passToBracketPhase,

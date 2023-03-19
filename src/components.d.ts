@@ -50,6 +50,7 @@ declare module '@vue/runtime-core' {
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     EnProcess: typeof import('./components/EnProcess.md')['default']
     Home: typeof import('./components/markdown/Home.md')['default']
+    'IAkarIcons:check': typeof import('~icons/akar-icons/check')['default']
     'IAkarIcons:cross': typeof import('~icons/akar-icons/cross')['default']
     'IAntDesign:caretRightFilled': typeof import('~icons/ant-design/caret-right-filled')['default']
     'IFa6Solid:usersGear': typeof import('~icons/fa6-solid/users-gear')['default']
