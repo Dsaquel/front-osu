@@ -24,6 +24,7 @@ const useTournamentStore = defineStore('tournament', () => {
   const staffs = ref(undefined as Staffs | undefined);
   const participants = ref(undefined as ParticipantIndividual[] | ParticipantTeam[] | undefined);
   const winner = ref(undefined as Player | undefined | null);
+  const teams = ref(undefined as ParticipantTeam[] | undefined);
 
   const staffRequests = computed(() =>
     Object.entries(staffs.value ?? {}).flatMap(([key, array]) =>
@@ -215,6 +216,11 @@ const useTournamentStore = defineStore('tournament', () => {
     Object.assign(tournament.value as Tournament, data);
   }
 
+  async function fetchTeams(tournamentId: number) {
+    const data = await apiTournament.fetchTeams(tournamentId);
+    teams.value = data;
+  }
+
   return {
     access,
     winner,
@@ -224,6 +230,7 @@ const useTournamentStore = defineStore('tournament', () => {
     fetchParticipationOfUser,
     tournament,
     tournaments,
+    teams,
     fetchTournaments,
     participationUser,
     addStaff,
@@ -236,6 +243,7 @@ const useTournamentStore = defineStore('tournament', () => {
     updateTournament,
     addParticipant,
     fetchParticipants,
+    fetchTeams,
     participantsAccepted,
     updateParticipantValidation,
     startTournament,

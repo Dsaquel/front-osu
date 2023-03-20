@@ -39,6 +39,7 @@ const TournamentApi = {
   passToBracketPhase: (tournamentId: number) => service.post<void>(`/tournament/${tournamentId}/bracket-phase`),
   updateTournamentPrivacy: (tournamentId: number, isPublic: boolean) =>
     service.put<Tournament>(`/tournament/${tournamentId}/public`, { isPublic }),
+  fetchTeams: (tournamentId: number) => service.get<ParticipantTeam[]>(`/tournament/${tournamentId}/teams`),
 };
 
 export default TournamentApi;

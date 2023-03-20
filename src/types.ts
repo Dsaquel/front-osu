@@ -304,6 +304,8 @@ export interface Tournament extends Node {
   draftId: number;
   draft: Draft;
   participants: Participant[];
+  teamNumberMax: number | null;
+  teamNumberMin: number;
 }
 
 export interface Match extends Node {

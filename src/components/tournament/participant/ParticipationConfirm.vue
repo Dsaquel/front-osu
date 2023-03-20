@@ -1,19 +1,27 @@
 <script setup lang="ts">
 import { TemplateNotification, TournamentType } from '~/types';
 
-const { addParticipant } = tournamentStore();
+const { addParticipant, fetchTeams } = tournamentStore();
 const { user } = storeToRefs(userStore());
-const { tournament, isAuthorized } = storeToRefs(tournamentStore());
+const { tournament, isAuthorized, teams } = storeToRefs(tournamentStore());
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
 
 const showDialog = ref(false);
 const participantLoading = ref(false);
+const teamsLoading = ref(false);
+const selectValue = ref(undefined as string | undefined);
 
-async function participate() {
+onBeforeMount(async () => {
+  teamsLoading.value = true;
+  await fetchTeams(tournamentId);
+  teamsLoading.value = false;
+});
+
+async function participate(teamName?: string) {
   participantLoading.value = true;
   showDialog.value = false;
   try {
-    const notification = await addParticipant(tournamentId);
+    const notification = await addParticipant(tournamentId, teamName);
 
     ElNotification({
       title: (<TemplateNotification>notification).subject,
@@ -62,12 +70,27 @@ async function participate() {
   >
     participate
   </el-button>
-  <el-dialog v-model="showDialog" title="Confirmation" width="auto" align-center>
+  <el-dialog v-model="showDialog" title="Confirmation" w="5/10 min-[600px]" align-center>
     <div v-if="tournament!.type === TournamentType.Solo">
       <div text="lg center">Are you sure to participate ?</div>
       <div text="sm center space-nowrap">If you have any participation in the staff they will be removed</div>
     </div>
-    <div v-else>yooo</div>
+    <div v-else>
+      <div>
+        to validate a team you must be
+        {{
+          tournament!.teamNumberMax === tournament!.teamNumberMin
+            ? tournament!.teamNumberMax
+            : `in range ${tournament!.teamNumberMin} to ${tournament!.teamNumberMax}`
+        }}
+      </div>
+      <el-select v-model="selectValue" filterable allow-create>
+        <el-option v-for="team in teams" :key="team.id" :value="team.name" />
+        <template #empty>
+          <div class="el-select-dropdown__empty">no teams yet</div>
+        </template>
+      </el-select>
+    </div>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="showDialog = false">Cancel</el-button>
