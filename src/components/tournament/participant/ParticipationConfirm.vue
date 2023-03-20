@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { TemplateNotification, TournamentType } from '~/types';
 
-const { addParticipant, fetchTeams } = tournamentStore();
+const { addIndividualParticipant, addTeamParticipant, fetchTeams } = tournamentStore();
 const { user } = storeToRefs(userStore());
 const { tournament, isAuthorized, teams } = storeToRefs(tournamentStore());
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
@@ -17,11 +17,13 @@ onBeforeMount(async () => {
   teamsLoading.value = false;
 });
 
-async function participate(teamName?: string) {
+async function participate(teamName?: string, id?: number) {
   participantLoading.value = true;
   showDialog.value = false;
   try {
-    const notification = await addParticipant(tournamentId, teamName);
+    const notification = teamName
+      ? await addTeamParticipant(tournamentId, teamName, id)
+      : await addIndividualParticipant(tournamentId);
 
     ElNotification({
       title: (<TemplateNotification>notification).subject,
@@ -84,7 +86,7 @@ async function participate(teamName?: string) {
             : `in range ${tournament!.teamNumberMin} to ${tournament!.teamNumberMax}`
         }}
       </div>
-      <el-select v-model="selectValue" filterable allow-create>
+      <el-select v-model="selectValue" filterable allow-create clearable>
         <el-option v-for="team in teams" :key="team.id" :value="team.name" />
         <template #empty>
           <div class="el-select-dropdown__empty">no teams yet</div>
@@ -94,7 +96,7 @@ async function participate(teamName?: string) {
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="showDialog = false">Cancel</el-button>
-        <el-button type="primary" @click="participate"> Confirm </el-button>
+        <el-button type="primary" @click="() => participate"> Confirm </el-button>
       </span>
     </template>
   </el-dialog>

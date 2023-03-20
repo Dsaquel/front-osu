@@ -163,9 +163,18 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
-  async function addParticipant(tournamentId: number) {
+  async function addIndividualParticipant(tournamentId: number) {
     try {
-      return await apiTournament.addParticipant(tournamentId);
+      return await apiTournament.addIndividualParticipant(tournamentId);
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+
+  async function addTeamParticipant(tournamentId: number, teamName: string, id?: number) {
+    try {
+      return await apiTournament.addTeamParticipant(tournamentId, teamName, id);
     } catch (e) {
       console.log(e);
       throw e;
@@ -241,7 +250,8 @@ const useTournamentStore = defineStore('tournament', () => {
     fetchStaffs,
     fetchTournament,
     updateTournament,
-    addParticipant,
+    addIndividualParticipant,
+    addTeamParticipant,
     fetchParticipants,
     fetchTeams,
     participantsAccepted,
