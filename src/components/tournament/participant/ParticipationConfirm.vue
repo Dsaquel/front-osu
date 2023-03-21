@@ -10,7 +10,8 @@ const showDialog = ref(false);
 const participantLoading = ref(false);
 const teamsLoading = ref(false);
 const creatingTeam = ref(false);
-const selectValue = ref(undefined as string | undefined);
+const teamId = ref(undefined as number | undefined);
+const newTeamName = ref(undefined as string | undefined);
 
 onBeforeMount(async () => {
   teamsLoading.value = true;
@@ -19,14 +20,29 @@ onBeforeMount(async () => {
 });
 
 async function participate() {
-  // teamName?: string, id?: number
   participantLoading.value = true;
   showDialog.value = false;
   try {
-    console.log(bla.value);
-    const notification = teamName
-      ? await addTeamParticipant(tournamentId, teamName, id)
-      : await addIndividualParticipant(tournamentId);
+    if (!tournament.value) return;
+    if (tournament.value.type === TournamentType.Team) {
+      const teamNumber =
+        tournament.value.teamNumberMax === tournament.value.teamNumberMin
+          ? tournament.value.teamNumberMax
+          : `in range ${tournament.value.teamNumberMin} to ${tournament.value.teamNumberMax}`;
+
+      await ElMessageBox.confirm(`To validate a team, you be ${teamNumber} players.`, 'keep in mind', {
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
+        type: 'info',
+      });
+    }
+
+    const notification =
+      tournament.value.type === TournamentType.Team && creatingTeam
+        ? await addTeamParticipant(tournamentId, newTeamName.value) // create team
+        : tournament.value.type === TournamentType.Team && !creatingTeam
+        ? await addTeamParticipant(tournamentId, undefined, teamId.value) // join team
+        : await addIndividualParticipant(tournamentId);
 
     ElNotification({
       title: (<TemplateNotification>notification).subject,
@@ -39,6 +55,8 @@ async function participate() {
     console.log(e);
   } finally {
     participantLoading.value = false;
+    newTeamName.value = undefined;
+    teamId.value = undefined;
   }
 }
 </script>
@@ -81,23 +99,21 @@ async function participate() {
       <div text="sm center space-nowrap">If you have any participation in the staff they will be removed</div>
     </div>
     <div v-else>
-      <el-alert type="info" title="Keep in mind" :closable="false">
-        to validate a team you must be
-        {{
-          tournament!.teamNumberMax === tournament!.teamNumberMin
-            ? tournament!.teamNumberMax
-            : `in range ${tournament!.teamNumberMin} to ${tournament!.teamNumberMax}`
-        }}
-      </el-alert>
-      <el-switch v-model="creatingTeam" size="large" active-text="create team" inactive-text="join team" />
+      <div grid="~ cols-2">
+        <div>
+          <el-switch v-model="creatingTeam" size="large" active-text="create team" inactive-text="join team" />
+        </div>
 
-      <el-input v-if="creatingTeam" placeholder="team name"></el-input>
-      <el-select v-else v-model="selectValue" clearable filterable size="large">
-        <el-option v-for="team in teams" :key="team.id" :value="team.name" />
-        <template #empty>
-          <div class="el-select-dropdown__empty">no teams yet</div>
-        </template>
-      </el-select>
+        <div>
+          <el-input v-if="creatingTeam" v-model="newTeamName" size="large" placeholder="team name" />
+          <el-select v-else v-model="teamId" clearable filterable size="large">
+            <el-option v-for="team in teams" :key="team.id" :label="team.name" :value="team.id" />
+            <template #empty>
+              <div class="el-select-dropdown__empty">no teams yet</div>
+            </template>
+          </el-select>
+        </div>
+      </div>
     </div>
     <template #footer>
       <span class="dialog-footer">

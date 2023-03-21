@@ -172,7 +172,7 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
-  async function addTeamParticipant(tournamentId: number, teamName: string, id?: number) {
+  async function addTeamParticipant(tournamentId: number, teamName?: string, id?: number) {
     try {
       return await apiTournament.addTeamParticipant(tournamentId, teamName, id);
     } catch (e) {
