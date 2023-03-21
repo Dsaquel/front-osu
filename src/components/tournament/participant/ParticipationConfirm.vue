@@ -9,6 +9,7 @@ const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10
 const showDialog = ref(false);
 const participantLoading = ref(false);
 const teamsLoading = ref(false);
+const creatingTeam = ref(false);
 const selectValue = ref(undefined as string | undefined);
 
 onBeforeMount(async () => {
@@ -17,10 +18,12 @@ onBeforeMount(async () => {
   teamsLoading.value = false;
 });
 
-async function participate(teamName?: string, id?: number) {
+async function participate() {
+  // teamName?: string, id?: number
   participantLoading.value = true;
   showDialog.value = false;
   try {
+    console.log(bla.value);
     const notification = teamName
       ? await addTeamParticipant(tournamentId, teamName, id)
       : await addIndividualParticipant(tournamentId);
@@ -78,15 +81,18 @@ async function participate(teamName?: string, id?: number) {
       <div text="sm center space-nowrap">If you have any participation in the staff they will be removed</div>
     </div>
     <div v-else>
-      <div>
+      <el-alert type="info" title="Keep in mind" :closable="false">
         to validate a team you must be
         {{
           tournament!.teamNumberMax === tournament!.teamNumberMin
             ? tournament!.teamNumberMax
             : `in range ${tournament!.teamNumberMin} to ${tournament!.teamNumberMax}`
         }}
-      </div>
-      <el-select v-model="selectValue" filterable allow-create clearable>
+      </el-alert>
+      <el-switch v-model="creatingTeam" size="large" active-text="create team" inactive-text="join team" />
+
+      <el-input v-if="creatingTeam" placeholder="team name"></el-input>
+      <el-select v-else v-model="selectValue" clearable filterable size="large">
         <el-option v-for="team in teams" :key="team.id" :value="team.name" />
         <template #empty>
           <div class="el-select-dropdown__empty">no teams yet</div>
@@ -96,7 +102,7 @@ async function participate(teamName?: string, id?: number) {
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="showDialog = false">Cancel</el-button>
-        <el-button type="primary" @click="() => participate"> Confirm </el-button>
+        <el-button type="primary" @click="participate"> Confirm </el-button>
       </span>
     </template>
   </el-dialog>
