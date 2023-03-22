@@ -38,7 +38,8 @@ const rankRang = computed(() =>
 
 const timeout = useTimeoutFn(
   async () => {
-    if (!tournament.value) loading = true;
+    if (!tournament.value) return;
+    loading = true;
     await updateTournament({
       name: tournament.value?.name,
       numbersPlayers: tournament.value?.numbersPlayers ?? undefined,
@@ -49,6 +50,9 @@ const timeout = useTimeoutFn(
       mode: tournament.value?.mode,
       registrationEndDate: tournament.value?.registrationEndDate,
       hasQualifier: tournament.value?.hasQualifier,
+      type: tournament.value?.type,
+      teamNumberMin: tournament.value?.teamNumberMin,
+      teamNumberMax: tournament.value?.teamNumberMax,
     });
     loading = false;
     timeout.stop();
@@ -110,6 +114,16 @@ const goBack = () => {
             <el-option :value="TournamentType.Team" />
           </el-select>
         </div>
+        <div v-if="tournament.type === TournamentType.Team" grid="~ cols-2">
+          <div m="x-2">
+            <span display="block" text="sm">team number min</span>
+            <el-input-number v-model="tournament.teamNumberMin" size="large" :min="2" :value-on-clear="2" :step="1" />
+          </div>
+          <div m="x-2">
+            <span display="block" text="sm">team number max</span>
+            <el-input-number v-model="tournament.teamNumberMax" size="large" :min="2" :value-on-clear="2" :step="1" />
+          </div>
+        </div>
         <div grid="col-span-2">
           <span text="sm">Details</span>
           <MarkdownTextarea
@@ -164,17 +178,17 @@ const goBack = () => {
             ><el-button>qualifier detail</el-button></router-link
           >
         </div>
+
         <div
-          v-if="loading"
           v-loading="loading"
+          element-loading-background="rgba(33, 33, 33)"
+          element-loading-text="Updating..."
           grid="col-end-3"
           w="min-content"
           place="self-end"
-          text="black"
-          bg="light-50"
-          m="r-8"
-        />
-        <div v-else grid="col-end-3" w="min-content" place="self-end" class="whitespace-nowrap">
+          class="whitespace-nowrap"
+          :class="{ 'mb-6': loading }"
+        >
           last update: {{ useTimeAgo(tournament.updateAt).value }}
         </div>
       </div>

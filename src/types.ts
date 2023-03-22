@@ -218,6 +218,8 @@ export interface DraftDto {
   estimateStartDate?: string | null;
   mode?: 'standard';
   type?: TournamentType;
+  teamNumberMin?: number;
+  teamNumberMax?: number;
 }
 
 export interface CreateRescheduleDto {
@@ -240,6 +242,8 @@ export interface Draft extends Node {
   owner: User;
   ownerId: number;
   tournament: Tournament;
+  teamNumberMin: number;
+  teamNumberMax: number;
 }
 
 export interface Qualifier extends Node {
@@ -295,7 +299,6 @@ export interface Tournament extends Node {
   numbersPlayers: number | null;
   registrationEndDate: string | null;
   registrationEnd: boolean;
-  commonSchedule: string | null;
   hasQualifier: boolean;
   qualifier: Qualifier | null;
   ownerId: number;
@@ -304,7 +307,7 @@ export interface Tournament extends Node {
   draftId: number;
   draft: Draft;
   participants: Participant[];
-  teamNumberMax: number | null;
+  teamNumberMax: number;
   teamNumberMin: number;
 }
 
@@ -365,8 +368,9 @@ export interface UpdateTournamentDto {
   rangePlayerMin?: number;
   numbersPlayers?: number;
   registrationEndDate?: string | null;
-  commonSchedule?: string | null;
   hasQualifier?: boolean;
+  teamNumberMin?: number;
+  teamNumberMax?: number;
 }
 
 export interface Beatmap {

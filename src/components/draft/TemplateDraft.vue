@@ -14,6 +14,8 @@ const props = defineProps<{
   estimateStartDate?: string | null;
   type: TournamentType;
   mode?: 'standard';
+  teamNumberMin?: number;
+  teamNumberMax?: number;
 }>();
 
 defineEmits([
@@ -25,6 +27,8 @@ defineEmits([
   'update:estimateStartDate',
   'update:mode',
   'update:type',
+  'update:teamNumberMin',
+  'update:teamNumberMax',
 ]);
 
 const rankRang = computed(() =>
@@ -63,6 +67,31 @@ const rankRang = computed(() =>
           <el-option :value="TournamentType.Solo" />
           <el-option :value="TournamentType.Team" />
         </el-select>
+      </div>
+
+      <div v-if="type === TournamentType.Team" grid="~ cols-2">
+        <div m="x-2">
+          <span display="block" text="sm">team number min</span>
+          <el-input-number
+            :model-value="teamNumberMin"
+            size="large"
+            :min="2"
+            :value-on-clear="2"
+            :step="1"
+            @input="(val) => $emit('update:teamNumberMin', val)"
+          />
+        </div>
+        <div m="x-2">
+          <span display="block" text="right sm">team number max</span>
+          <el-input-number
+            :model-value="teamNumberMax"
+            size="large"
+            :min="2"
+            :value-on-clear="2"
+            :step="1"
+            @input="(val) => $emit('update:teamNumberMax', val)"
+          />
+        </div>
       </div>
 
       <div grid="col-span-2">

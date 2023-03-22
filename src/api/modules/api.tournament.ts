@@ -28,9 +28,9 @@ const TournamentApi = {
   removeStaff: (tournamentId: number, staffId: number, role: Role) =>
     service.delete<TemplateNotification>(`/tournament/${tournamentId}/staff/${staffId}`, { role }),
   addIndividualParticipant: (tournamentId: number) =>
-    service.post<TemplateNotification>(`/tournament/${tournamentId}/participant`),
+    service.post<TemplateNotification>(`/tournament/${tournamentId}/participant/individual`),
   addTeamParticipant: (tournamentId: number, teamName?: string, id?: number) =>
-    service.post<TemplateNotification>(`/tournament/${tournamentId}/participant`, { teamName, id }),
+    service.post<TemplateNotification>(`/tournament/${tournamentId}/participant/team`, { teamName, id }),
   fetchParticipants: (tournamentId: number) =>
     service.get<ParticipantIndividual[] | ParticipantTeam[]>(`/tournament/${tournamentId}/participant`),
   updateParticipantValidation: (tournamentId: number, participantId: number, validate: boolean) =>

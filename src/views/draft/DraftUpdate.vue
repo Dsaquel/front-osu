@@ -29,17 +29,20 @@ watch(
 
 const timeout = useTimeoutFn(
   async () => {
-    if (!draft.value) loading = true;
+    if (!draft.value) return;
+    loading = true;
     await update(
       {
-        name: draft.value?.name,
-        numbersPlayers: draft.value?.numbersPlayers as number,
-        estimateStartDate: draft.value?.estimateStartDate as string,
-        details: draft.value?.details as string,
-        rangePlayerMax: draft.value?.rangePlayerMax as number,
-        rangePlayerMin: draft.value?.rangePlayerMin as number,
-        type: draft.value?.type,
-        mode: draft.value?.mode,
+        name: draft.value.name,
+        numbersPlayers: draft.value.numbersPlayers as number,
+        estimateStartDate: draft.value.estimateStartDate as string,
+        details: draft.value.details as string,
+        rangePlayerMax: draft.value.rangePlayerMax as number,
+        rangePlayerMin: draft.value.rangePlayerMin as number,
+        type: draft.value.type,
+        mode: draft.value.mode,
+        teamNumberMin: draft.value.teamNumberMin,
+        teamNumberMax: draft.value.teamNumberMax,
       },
       draft.value?.id as number,
     );
@@ -78,21 +81,22 @@ watch(
       v-model:estimateStartDate="draft.estimateStartDate"
       v-model:rangePlayerMax="draft.rangePlayerMax"
       v-model:rangePlayerMin="draft.rangePlayerMin"
-      v-model:type="draft.type"
       v-model:mode="draft.mode"
+      v-model:type="draft.type"
+      v-model:teamNumberMin="draft.teamNumberMin"
+      v-model:teamNumberMax="draft.teamNumberMax"
     >
       <template #last>
         <div
-          v-if="loading"
           v-loading="loading"
+          element-loading-background="rgba(33, 33, 33)"
+          element-loading-text="Updating..."
           grid="col-end-3"
           w="min-content"
           place="self-end"
-          text="black"
-          bg="light-50"
-          m="r-8"
-        />
-        <div v-else grid="col-end-3" w="min-content" place="self-end" class="whitespace-nowrap">
+          class="whitespace-nowrap"
+          :class="{ 'mb-6': loading }"
+        >
           last update: {{ useTimeAgo(draft.updateAt).value }}
         </div>
       </template>
