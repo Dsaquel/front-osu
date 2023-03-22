@@ -192,6 +192,7 @@ export interface ParticipantTeam extends Participant {
   captainId: number;
   invitations: ParticipantInvitation[];
   qualifierParticipant: QualifierParticipant | null;
+  captain: User;
 }
 
 export interface InvitationTeam extends Node {

@@ -163,9 +163,20 @@ const useTournamentStore = defineStore('tournament', () => {
     }
   }
 
+  async function fetchParticipants(tournamentId: number) {
+    try {
+      const data = await apiTournament.fetchParticipants(tournamentId);
+      participants.value = data;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   async function addIndividualParticipant(tournamentId: number) {
     try {
-      return await apiTournament.addIndividualParticipant(tournamentId);
+      const data = await apiTournament.addIndividualParticipant(tournamentId);
+      await fetchParticipants(tournamentId);
+      return data;
     } catch (e) {
       console.log(e);
       throw e;
@@ -174,19 +185,14 @@ const useTournamentStore = defineStore('tournament', () => {
 
   async function addTeamParticipant(tournamentId: number, teamName?: string, id?: number) {
     try {
-      return await apiTournament.addTeamParticipant(tournamentId, teamName, id);
+      console.log(teamName);
+      console.log(id);
+      const data = await apiTournament.addTeamParticipant(tournamentId, teamName, id);
+      await fetchParticipants(tournamentId);
+      return data;
     } catch (e) {
       console.log(e);
       throw e;
-    }
-  }
-
-  async function fetchParticipants(tournamentId: number) {
-    try {
-      const data = await apiTournament.fetchParticipants(tournamentId);
-      participants.value = data;
-    } catch (e) {
-      console.log(e);
     }
   }
 

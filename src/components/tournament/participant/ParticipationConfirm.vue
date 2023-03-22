@@ -19,9 +19,15 @@ onBeforeMount(async () => {
   teamsLoading.value = false;
 });
 
+const getCaptain = () => teams.value?.find((team) => team.id === teamId.value)?.captain;
+
+function resetData() {
+  newTeamName.value = undefined;
+  teamId.value = undefined;
+  creatingTeam.value = false;
+}
+
 async function participate() {
-  participantLoading.value = true;
-  showDialog.value = false;
   try {
     if (!tournament.value) return;
     if (tournament.value.type === TournamentType.Team) {
@@ -29,18 +35,20 @@ async function participate() {
         tournament.value.teamNumberMax === tournament.value.teamNumberMin
           ? tournament.value.teamNumberMax
           : `in range ${tournament.value.teamNumberMin} to ${tournament.value.teamNumberMax}`;
-
-      await ElMessageBox.confirm(`To validate a team, you be ${teamNumber} players.`, 'keep in mind', {
+      const createTeamMessage = `After confirm you need to be ${teamNumber} players.`;
+      const joinTeamMessage = `After confirm ${getCaptain()?.username} must validate you.`;
+      await ElMessageBox.confirm(creatingTeam.value ? createTeamMessage : joinTeamMessage, 'keep in mind', {
         confirmButtonText: 'Confirm',
         cancelButtonText: 'Cancel',
         type: 'info',
       });
     }
-
+    participantLoading.value = true;
+    showDialog.value = false;
     const notification =
-      tournament.value.type === TournamentType.Team && creatingTeam
+      tournament.value.type === TournamentType.Team && creatingTeam.value
         ? await addTeamParticipant(tournamentId, newTeamName.value) // create team
-        : tournament.value.type === TournamentType.Team && !creatingTeam
+        : tournament.value.type === TournamentType.Team && !creatingTeam.value
         ? await addTeamParticipant(tournamentId, undefined, teamId.value) // join team
         : await addIndividualParticipant(tournamentId);
 
@@ -51,12 +59,11 @@ async function participate() {
       zIndex: 10,
       duration: 0,
     });
+    resetData();
   } catch (e) {
     console.log(e);
   } finally {
     participantLoading.value = false;
-    newTeamName.value = undefined;
-    teamId.value = undefined;
   }
 }
 </script>
@@ -93,7 +100,7 @@ async function participate() {
   >
     participate
   </el-button>
-  <el-dialog v-model="showDialog" title="Confirmation" w="5/10 min-[600px]" align-center>
+  <el-dialog v-model="showDialog" title="Confirmation" w="5/10 min-[600px]" align-center @closed="resetData">
     <div v-if="tournament!.type === TournamentType.Solo">
       <div text="lg center">Are you sure to participate ?</div>
       <div text="sm center space-nowrap">If you have any participation in the staff they will be removed</div>
