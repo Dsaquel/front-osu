@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { TemplateNotification, TournamentType } from '~/types';
 
-const { addIndividualParticipant, addTeamParticipant, fetchTeams } = tournamentStore();
+const { addIndividualParticipant, addTeamParticipant, fetchTeams, fetchParticipationOfParticipantTeam } =
+  tournamentStore();
 const { user } = storeToRefs(userStore());
 const { tournament, isAuthorized, teams } = storeToRefs(tournamentStore());
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
@@ -15,6 +16,7 @@ const newTeamName = ref(undefined as string | undefined);
 
 onBeforeMount(async () => {
   teamsLoading.value = true;
+  await fetchParticipationOfParticipantTeam(tournamentId);
   await fetchTeams(tournamentId);
   teamsLoading.value = false;
 });
