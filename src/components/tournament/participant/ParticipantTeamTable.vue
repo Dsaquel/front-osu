@@ -5,17 +5,17 @@ defineProps<{
   participantsTeams: ParticipantTeam[];
 }>();
 
-const { removeParticipant } = tournamentStore();
-const { access } = storeToRefs(tournamentStore());
+const { updateParticipantValidation } = tournamentStore();
+const { isOwnerOrAdmin, tournament } = storeToRefs(tournamentStore());
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
 
-let removeLoading = $ref(false);
+const updateLoading = ref(false);
 const tableParticipant = ref();
 
-async function remove(participantId: number) {
+async function udpateParticipantValidationTemplate(participantId: number, validate: boolean) {
   try {
-    removeLoading = true;
-    const data = await removeParticipant(participantId, tournamentId);
+    updateLoading.value = true;
+    const data = await updateParticipantValidation(participantId, tournamentId, validate);
     ElNotification({
       title: (<TemplateNotification>data).subject,
       message: (<TemplateNotification>data).message,
@@ -26,13 +26,14 @@ async function remove(participantId: number) {
   } catch (e) {
     console.log(e);
   } finally {
-    removeLoading = false;
+    updateLoading.value = false;
   }
 }
 </script>
 
 <template>
   <el-table
+    v-if="tournament"
     ref="tableParticipant"
     :data="participantsTeams"
     row-key="id"
@@ -41,24 +42,37 @@ async function remove(participantId: number) {
     w="full"
     :highlight-current-row="true"
   >
-    <el-table-column label="Participant">
+    <el-table-column label="Captain">
       <template #default="scope: { row: ParticipantTeam }">
         <div display="flex" align="items-center">
-          <el-avatar :src="scope.row.user.avatarUrl"></el-avatar>
-          <span m="l-2">{{ scope.row.user.username }}</span>
+          <el-avatar :src="scope.row.captain.avatarUrl"></el-avatar>
+          <span m="l-2">{{ scope.row.captain.username }}</span>
         </div>
       </template>
     </el-table-column>
 
-    <el-table-column label="Rank">
-      <template #default="scope">
-        {{ scope.row.user.rank }}
+    <el-table-column :label="`minimum ${tournament.teamNumberMin}`">
+      <template #default="scope: { row: ParticipantTeam }">
+        {{ scope.row.users.length }}
       </template>
     </el-table-column>
 
-    <el-table-column label="Discord">
+    <el-table-column label="players">
       <template #default="scope: { row: ParticipantTeam }">
-        {{ scope.row.user.discord }}
+        <template v-for="user in scope.row.users" :key="user.osuId">
+          <el-popover
+            trigger="hover"
+            width="auto"
+            placement="bottom"
+            :hide-after="50"
+            :title="user.username"
+            :content="`rank: ${user.rank}\ndiscord: ${user.discord || 'no discord'}`"
+          >
+            <template #reference>
+              <el-avatar class="float-left ml-[-10px]" :src="user.avatarUrl" />
+            </template>
+          </el-popover>
+        </template>
       </template>
     </el-table-column>
 
@@ -68,13 +82,18 @@ async function remove(participantId: number) {
       </template>
     </el-table-column>
 
-    <el-table-column v-if="access?.isAdmin || access?.isOwner" label="Actions" align="right">
+    <el-table-column v-if="isOwnerOrAdmin" label="Actions" align="right">
       <template #default="scope: { row: ParticipantTeam }">
-        <el-tooltip content="remove" placement="right">
-          <el-button :loading="removeLoading" type="danger" size="small" round m="l-1" @click="remove(scope.row.id)"
-            ><i-akar-icons:cross />
-          </el-button>
-        </el-tooltip>
+        <el-switch
+          v-model="scope.row.validate"
+          inline-prompt
+          size="large"
+          style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+          active-text="validate"
+          inactive-text="invalidate"
+          :loading="updateLoading"
+          @change="udpateParticipantValidationTemplate(scope.row.id, scope.row.validate)"
+        />
       </template>
     </el-table-column>
   </el-table>

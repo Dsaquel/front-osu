@@ -204,6 +204,7 @@ export interface InvitationTeam extends Node {
 
 export interface ParticipantRequest extends InvitationTeam {
   userRequests: User;
+  userRequestId: number;
 }
 
 export interface ParticipantInvitation extends InvitationTeam {
