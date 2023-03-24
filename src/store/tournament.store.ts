@@ -25,7 +25,7 @@ const useTournamentStore = defineStore('tournament', () => {
   const participants = ref(undefined as ParticipantIndividual[] | ParticipantTeam[] | undefined);
   const winner = ref(undefined as Player | undefined | null);
   const teams = ref(undefined as ParticipantTeam[] | undefined);
-  const participationTeamIds = ref(undefined as number[] | undefined);
+  const participationOfParticipantTeam = ref(undefined as number[] | undefined);
 
   const staffRequests = computed(() =>
     Object.entries(staffs.value ?? {}).flatMap(([key, array]) =>
@@ -237,7 +237,7 @@ const useTournamentStore = defineStore('tournament', () => {
 
   async function fetchParticipationOfParticipantTeam(tournamentId: number) {
     const data = await apiTournament.fetchParticipationOfParticipantTeam(tournamentId);
-    participationTeamIds.value = data;
+    participationOfParticipantTeam.value = data;
   }
 
   return {
@@ -271,7 +271,7 @@ const useTournamentStore = defineStore('tournament', () => {
     fetchPlayer,
     passToBracketPhase,
     updateTournamentPrivacy,
-    participationTeamIds,
+    participationOfParticipantTeam,
   };
 });
 

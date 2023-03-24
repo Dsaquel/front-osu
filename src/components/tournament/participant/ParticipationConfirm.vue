@@ -4,7 +4,7 @@ import { TemplateNotification, TournamentType } from '~/types';
 const { addIndividualParticipant, addTeamParticipant, fetchTeams, fetchParticipationOfParticipantTeam } =
   tournamentStore();
 const { user } = storeToRefs(userStore());
-const { tournament, isAuthorized, teams } = storeToRefs(tournamentStore());
+const { tournament, isAuthorized, teams, participationOfParticipantTeam } = storeToRefs(tournamentStore());
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
 
 const showDialog = ref(false);
@@ -108,7 +108,7 @@ async function participate() {
       <div text="sm center space-nowrap">If you have any participation in the staff they will be removed</div>
     </div>
     <div v-else>
-      <div grid="~ cols-2">
+      <div v-if="participationOfParticipantTeam" grid="~ cols-2">
         <div>
           <el-switch v-model="creatingTeam" size="large" active-text="create team" inactive-text="join team" />
         </div>
@@ -116,7 +116,20 @@ async function participate() {
         <div>
           <el-input v-if="creatingTeam" v-model="newTeamName" size="large" placeholder="team name" />
           <el-select v-else v-model="teamId" clearable filterable size="large">
-            <el-option v-for="team in teams" :key="team.id" :label="team.name" :value="team.id" />
+            <template v-for="team in teams" :key="team.id">
+              <el-tooltip
+                :model-value:visible="participationOfParticipantTeam.includes(team.id)"
+                content="You have already a request or invitation from this team"
+                placement="auto"
+              >
+                <el-option
+                  :label="team.name"
+                  :value="team.id"
+                  :disabled="participationOfParticipantTeam.includes(team.id)"
+                />
+              </el-tooltip>
+            </template>
+
             <template #empty>
               <div class="el-select-dropdown__empty">no teams yet</div>
             </template>
