@@ -10,6 +10,7 @@ import {
   Player,
   ParticipantIndividual,
   ParticipantTeam,
+  ParticipantRequest,
 } from '~/types';
 
 const TournamentApi = {
@@ -44,6 +45,8 @@ const TournamentApi = {
   fetchTeams: (tournamentId: number) => service.get<ParticipantTeam[]>(`/tournament/${tournamentId}/team`),
   fetchParticipationOfParticipantTeam: (tournamentId: number) =>
     service.get<number[]>(`/tournament/${tournamentId}/participant/team/participation`),
+  fetchParticipantsTeamRequest: (tournamentId: number, teamId: number) =>
+    service.get<ParticipantRequest[]>(`/tournament/${tournamentId}/participant/team/${teamId}/requests`),
 };
 
 export default TournamentApi;

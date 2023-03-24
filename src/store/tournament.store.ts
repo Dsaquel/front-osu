@@ -13,6 +13,7 @@ import {
   ParticipantIndividual,
   ParticipantTeam,
   isParticipantIndividual,
+  ParticipantRequest,
 } from '~/types';
 
 const useTournamentStore = defineStore('tournament', () => {
@@ -26,6 +27,7 @@ const useTournamentStore = defineStore('tournament', () => {
   const winner = ref(undefined as Player | undefined | null);
   const teams = ref(undefined as ParticipantTeam[] | undefined);
   const participationOfParticipantTeam = ref(undefined as number[] | undefined);
+  const participantsRequest = ref(undefined as ParticipantRequest[] | undefined);
 
   const staffRequests = computed(() =>
     Object.entries(staffs.value ?? {}).flatMap(([key, array]) =>
@@ -235,6 +237,11 @@ const useTournamentStore = defineStore('tournament', () => {
     teams.value = data;
   }
 
+  async function fetchParticipantsTeamRequest(tournamentId: number, teamId: number) {
+    const data = await apiTournament.fetchParticipantsTeamRequest(tournamentId, teamId);
+    participantsRequest.value = data;
+  }
+
   async function fetchParticipationOfParticipantTeam(tournamentId: number) {
     const data = await apiTournament.fetchParticipationOfParticipantTeam(tournamentId);
     participationOfParticipantTeam.value = data;
@@ -270,6 +277,7 @@ const useTournamentStore = defineStore('tournament', () => {
     startTournament,
     fetchPlayer,
     passToBracketPhase,
+    fetchParticipantsTeamRequest,
     updateTournamentPrivacy,
     participationOfParticipantTeam,
   };

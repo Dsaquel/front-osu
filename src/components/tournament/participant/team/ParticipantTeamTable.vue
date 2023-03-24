@@ -95,7 +95,7 @@ async function udpateParticipantValidationTemplate(participantId: number, valida
           :loading="updateLoading"
           @change="udpateParticipantValidationTemplate(scope.row.id, scope.row.validate)"
         />
-        <TeamManager v-if="user.id === scope.row.captainId" />
+        <TeamManager v-if="user.id === scope.row.captainId" :team="scope.row" :tournament-id="tournament.id" />
       </template>
     </el-table-column>
   </el-table>
