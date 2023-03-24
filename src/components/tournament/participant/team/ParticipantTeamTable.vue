@@ -7,6 +7,7 @@ defineProps<{
 
 const { updateParticipantValidation } = tournamentStore();
 const { isOwnerOrAdmin, tournament } = storeToRefs(tournamentStore());
+const { user } = storeToRefs(userStore());
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
 
 const updateLoading = ref(false);
@@ -33,7 +34,7 @@ async function udpateParticipantValidationTemplate(participantId: number, valida
 
 <template>
   <el-table
-    v-if="tournament"
+    v-if="tournament && user"
     ref="tableParticipant"
     :data="participantsTeams"
     row-key="id"
@@ -82,7 +83,7 @@ async function udpateParticipantValidationTemplate(participantId: number, valida
       </template>
     </el-table-column>
 
-    <el-table-column v-if="isOwnerOrAdmin" label="Actions" align="right">
+    <el-table-column v-if="isOwnerOrAdmin" label="Actions">
       <template #default="scope: { row: ParticipantTeam }">
         <el-switch
           v-model="scope.row.validate"
@@ -94,6 +95,7 @@ async function udpateParticipantValidationTemplate(participantId: number, valida
           :loading="updateLoading"
           @change="udpateParticipantValidationTemplate(scope.row.id, scope.row.validate)"
         />
+        <TeamManager v-if="user.id === scope.row.captainId" />
       </template>
     </el-table-column>
   </el-table>

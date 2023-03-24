@@ -20,7 +20,7 @@ const props = defineProps<{
 const firstToOptions = [5, 6, 7];
 const stateOptions = ['pending', 'playing', 'complete'];
 
-const { match } = toRefs(props); // TODO:  desactive refs after testing
+const { match } = toRefs(props); // TODO:  desactive refs after testing, pas utilisé parce que match dans props
 const activeTab = ref('matchDetail');
 
 const firstToTemplate = ref(props.match.firstTo);
