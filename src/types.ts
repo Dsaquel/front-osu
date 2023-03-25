@@ -203,7 +203,7 @@ export interface InvitationTeam extends Node {
 }
 
 export interface ParticipantRequest extends InvitationTeam {
-  userRequests: User;
+  userRequest: User;
   userRequestId: number;
 }
 

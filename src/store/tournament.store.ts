@@ -264,6 +264,7 @@ const useTournamentStore = defineStore('tournament', () => {
     removeStaff,
     staffsAccepted,
     staffRequests,
+    participantsRequest,
     fetchStaffs,
     fetchTournament,
     updateTournament,
