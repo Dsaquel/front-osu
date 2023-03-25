@@ -254,6 +254,7 @@ const useTournamentStore = defineStore('tournament', () => {
     teamId: number,
   ) {
     const notification = await apiTournament.changeRequestStatus(tournamentId, teamId, requestId, status);
+    await fetchParticipants(tournamentId);
     await fetchParticipantsTeamRequest(tournamentId, teamId);
     return notification;
   }

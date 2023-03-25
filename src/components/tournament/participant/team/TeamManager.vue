@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { InfoFilled } from '@element-plus/icons-vue';
 import { ParticipantRequest, ParticipantTeam, TemplateNotification } from '~/types';
 
 const { fetchParticipantsTeamRequest, changeRequestStatus } = tournamentStore();
@@ -108,14 +109,24 @@ async function changeRequestStatusTemplate(requestId: number, status: 'accepted'
               <el-input v-model="search" size="small" placeholder="Type to search" />
             </template>
             <template #default="scope: { row: ParticipantRequest }">
-              <el-button
-                type="success"
-                size="small"
-                :disabled="scope.row.id === loadingRequestId && loadingStatus === 'declined'"
-                :loading="scope.row.id === loadingRequestId && loadingStatus === 'accepted'"
-                @click="changeRequestStatusTemplate(scope.row.id, 'accepted')"
-                >accept
-              </el-button>
+              <el-popconfirm
+                width="250"
+                title="There will be no turning back"
+                confirm-button-text="Confirm"
+                cancel-button-text="Cancel"
+                :icon="InfoFilled"
+                @confirm="changeRequestStatusTemplate(scope.row.id, 'accepted')"
+              >
+                <template #reference>
+                  <el-button
+                    type="success"
+                    size="small"
+                    :disabled="scope.row.id === loadingRequestId && loadingStatus === 'declined'"
+                    :loading="scope.row.id === loadingRequestId && loadingStatus === 'accepted'"
+                    >accept
+                  </el-button>
+                </template>
+              </el-popconfirm>
               <el-button
                 v-if="scope.row.status === 'pending'"
                 type="danger"

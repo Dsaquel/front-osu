@@ -119,7 +119,7 @@ async function participate() {
             <template v-for="team in teams" :key="team.id">
               <el-tooltip
                 :model-value:visible="participationOfParticipantTeam.includes(team.id)"
-                content="You have already a request or invitation from this team"
+                content="You have requested or invitation from this team"
                 placement="auto"
               >
                 <el-option
