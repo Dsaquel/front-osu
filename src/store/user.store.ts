@@ -27,7 +27,17 @@ const useUserStore = defineStore('user', () => {
     userInvolvement.value = data;
   }
 
-  return { user, fetch, userDrafts, userInvolvement, fetchUserInvolvement, fetchUserDrafts };
+  async function fetchUsersByUsername(username: string) {
+    try {
+      console.log(username);
+      return await apiUser.fetchUsersByUsername(username);
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+
+  return { user, fetch, userDrafts, userInvolvement, fetchUserInvolvement, fetchUserDrafts, fetchUsersByUsername };
 });
 
 export default useUserStore;

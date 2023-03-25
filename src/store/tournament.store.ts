@@ -266,6 +266,12 @@ const useTournamentStore = defineStore('tournament', () => {
     return notification;
   }
 
+  async function sendInvitationsTeamToUser(tournamentId: number, teamId: number, usersId: number[]) {
+    const notification = await apiTournament.sendInvitationsTeamToUser(tournamentId, teamId, usersId);
+    await fetchParticipantTeamInvitations(tournamentId, teamId);
+    return notification;
+  }
+
   return {
     access,
     winner,
@@ -281,6 +287,7 @@ const useTournamentStore = defineStore('tournament', () => {
     addStaff,
     acceptCandidate,
     removeStaff,
+    sendInvitationsTeamToUser,
     staffsAccepted,
     staffRequests,
     participantsRequests,
