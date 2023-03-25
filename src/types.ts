@@ -200,6 +200,7 @@ export interface InvitationTeam extends Node {
   participantTeam: ParticipantTeam;
   participantTeamId: number;
   tournamentId: number;
+  tournament: Tournament;
   status: 'pending' | 'accepted' | 'declined';
 }
 
