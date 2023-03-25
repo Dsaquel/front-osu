@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ParticipantRequest, ParticipantTeam } from '~/types';
+import { ParticipantRequest, ParticipantTeam, TemplateNotification } from '~/types';
 
-const { fetchParticipantsTeamRequest } = tournamentStore();
+const { fetchParticipantsTeamRequest, changeRequestStatus } = tournamentStore();
 const { participantsRequest } = storeToRefs(tournamentStore());
 
 const props = defineProps<{
@@ -13,6 +13,8 @@ const showDialog = ref(false);
 const activeTab = ref('requests');
 const initLoading = ref(false);
 const search = ref('');
+const loadingStatus = ref(undefined as ParticipantRequest['status'] | undefined);
+const loadingRequestId = ref(undefined as number | undefined);
 
 async function init() {
   try {
@@ -29,7 +31,9 @@ onBeforeMount(async () => {
 });
 
 function resetData() {
-  //
+  loadingStatus.value = undefined;
+  loadingRequestId.value = undefined;
+  showDialog.value = false;
 }
 
 const filterRequestsByUsername = computed(() =>
@@ -40,6 +44,24 @@ const filterRequestsByUsername = computed(() =>
 
 function filterRequests(value: ParticipantRequest['status'], row: ParticipantRequest) {
   return value === row.status;
+}
+
+async function changeRequestStatusTemplate(requestId: number, status: 'accepted' | 'declined') {
+  loadingStatus.value = status;
+  loadingRequestId.value = requestId;
+  try {
+    const notification = await changeRequestStatus(props.tournamentId, requestId, status, props.team.id);
+    ElMessage({
+      message: (<TemplateNotification>notification).message,
+      type: 'success',
+      zIndex: 10,
+      duration: 2000,
+    });
+  } catch (e) {
+    console.log(e);
+  } finally {
+    resetData();
+  }
 }
 </script>
 
@@ -86,7 +108,23 @@ function filterRequests(value: ParticipantRequest['status'], row: ParticipantReq
               <el-input v-model="search" size="small" placeholder="Type to search" />
             </template>
             <template #default="scope: { row: ParticipantRequest }">
-              <!--  -->
+              <el-button
+                type="success"
+                size="small"
+                :disabled="scope.row.id === loadingRequestId && loadingStatus === 'declined'"
+                :loading="scope.row.id === loadingRequestId && loadingStatus === 'accepted'"
+                @click="changeRequestStatusTemplate(scope.row.id, 'accepted')"
+                >accept
+              </el-button>
+              <el-button
+                v-if="scope.row.status === 'pending'"
+                type="danger"
+                size="small"
+                :disabled="scope.row.id === loadingRequestId && loadingStatus === 'declined'"
+                :loading="scope.row.id === loadingRequestId && loadingStatus === 'declined'"
+                @click="changeRequestStatusTemplate(scope.row.id, 'declined')"
+                >declined
+              </el-button>
             </template>
           </el-table-column>
         </el-table>

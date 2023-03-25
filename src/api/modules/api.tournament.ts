@@ -46,7 +46,11 @@ const TournamentApi = {
   fetchParticipationOfParticipantTeam: (tournamentId: number) =>
     service.get<number[]>(`/tournament/${tournamentId}/participant/team/participation`),
   fetchParticipantsTeamRequest: (tournamentId: number, teamId: number) =>
-    service.get<ParticipantRequest[]>(`/tournament/${tournamentId}/participant/team/${teamId}/requests`),
+    service.get<ParticipantRequest[]>(`/tournament/${tournamentId}/participant/team/${teamId}/request`),
+  changeRequestStatus: (tournamentId: number, teamId: number, requestId: number, status: 'accepted' | 'declined') =>
+    service.put<TemplateNotification>(`/tournament/${tournamentId}/participant/team/${teamId}/request/${requestId}`, {
+      status,
+    }),
 };
 
 export default TournamentApi;

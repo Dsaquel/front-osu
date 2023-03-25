@@ -247,6 +247,17 @@ const useTournamentStore = defineStore('tournament', () => {
     participationOfParticipantTeam.value = data;
   }
 
+  async function changeRequestStatus(
+    tournamentId: number,
+    requestId: number,
+    status: 'accepted' | 'declined',
+    teamId: number,
+  ) {
+    const notification = await apiTournament.changeRequestStatus(tournamentId, teamId, requestId, status);
+    await fetchParticipantsTeamRequest(tournamentId, teamId);
+    return notification;
+  }
+
   return {
     access,
     winner,
@@ -277,6 +288,7 @@ const useTournamentStore = defineStore('tournament', () => {
     updateParticipantValidation,
     startTournament,
     fetchPlayer,
+    changeRequestStatus,
     passToBracketPhase,
     fetchParticipantsTeamRequest,
     updateTournamentPrivacy,
