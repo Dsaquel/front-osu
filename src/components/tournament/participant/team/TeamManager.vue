@@ -1,3 +1,4 @@
+<!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
 import { InfoFilled } from '@element-plus/icons-vue';
 import { ParticipantInvitation, ParticipantRequest, ParticipantTeam, TemplateNotification, User } from '~/types';
@@ -106,6 +107,8 @@ async function sendInvitationsTeamToUserTemplate() {
     console.log(e);
   } finally {
     sendingInvitation.value = false;
+    selectedUsersId.value = [];
+    suggestionsUser.value = undefined;
   }
 }
 </script>
@@ -233,9 +236,10 @@ async function sendInvitationsTeamToUserTemplate() {
             type="success"
             plain
             m="l-2"
+            :loading="sendingInvitation"
             @click="sendInvitationsTeamToUserTemplate"
-            >Send</el-button
-          >
+            >Send
+          </el-button>
         </div>
         <el-table :data="participantsInvitations" empty-text="no invitation sent">
           <el-table-column label="user invited">

@@ -169,6 +169,7 @@ export interface User extends Node {
   avatarUrl: string;
   rank: number;
   discord: string | null;
+  invitationsFromTeams: ParticipantInvitation[];
 }
 
 export interface Participant extends Node {

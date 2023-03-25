@@ -31,6 +31,8 @@ onClickOutside(wrapper, () => {
   <header display="flex" z="2" align="items-center" justify="between" p="x-6 y-12" shadow=" current">
     <div flex="grow" />
 
+    <NotificationTeamTable v-if="user" :invitations-from-teams="user.invitationsFromTeams" m="r-6" />
+
     <el-tooltip :content="isDark ? 'change light' : 'change dark'" placement="top">
       <button class="icon-btn mr-6 !outline-none" @click="toggleDark()">
         <i-ph-cloud-moon-bold v-if="isDark" class="icon-footer" />

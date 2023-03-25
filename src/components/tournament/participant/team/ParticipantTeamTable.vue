@@ -60,17 +60,17 @@ async function udpateParticipantValidationTemplate(participantId: number, valida
 
     <el-table-column label="players">
       <template #default="scope: { row: ParticipantTeam }">
-        <template v-for="user in scope.row.users" :key="user.osuId">
+        <template v-for="item in scope.row.users" :key="item.osuId">
           <el-popover
             trigger="hover"
             width="auto"
             placement="bottom"
             :hide-after="50"
-            :title="user.username"
-            :content="`rank: ${user.rank}\ndiscord: ${user.discord || 'no discord'}`"
+            :title="item.username"
+            :content="`rank: ${item.rank}\ndiscord: ${item.discord || 'no discord'}`"
           >
             <template #reference>
-              <el-avatar class="float-left ml-[-10px]" :src="user.avatarUrl" />
+              <el-avatar class="float-left ml-[-10px]" :src="item.avatarUrl" />
             </template>
           </el-popover>
         </template>
