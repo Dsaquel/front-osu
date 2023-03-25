@@ -208,7 +208,8 @@ export interface ParticipantRequest extends InvitationTeam {
 }
 
 export interface ParticipantInvitation extends InvitationTeam {
-  userInvited: User[];
+  userInvited: User;
+  userInvitedId: number;
 }
 
 export interface DraftDto {

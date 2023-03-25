@@ -14,6 +14,7 @@ import {
   ParticipantTeam,
   isParticipantIndividual,
   ParticipantRequest,
+  ParticipantInvitation,
 } from '~/types';
 
 const useTournamentStore = defineStore('tournament', () => {
@@ -27,7 +28,8 @@ const useTournamentStore = defineStore('tournament', () => {
   const winner = ref(undefined as Player | undefined | null);
   const teams = ref(undefined as ParticipantTeam[] | undefined);
   const participationOfParticipantTeam = ref(undefined as number[] | undefined);
-  const participantsRequest = ref(undefined as ParticipantRequest[] | undefined);
+  const participantsRequests = ref(undefined as ParticipantRequest[] | undefined);
+  const participantsInvitations = ref(undefined as ParticipantInvitation[] | undefined);
 
   const staffRequests = computed(() =>
     Object.entries(staffs.value ?? {}).flatMap(([key, array]) =>
@@ -237,9 +239,14 @@ const useTournamentStore = defineStore('tournament', () => {
     teams.value = data;
   }
 
-  async function fetchParticipantsTeamRequest(tournamentId: number, teamId: number) {
-    const data = await apiTournament.fetchParticipantsTeamRequest(tournamentId, teamId);
-    participantsRequest.value = data;
+  async function fetchParticipantTeamRequests(tournamentId: number, teamId: number) {
+    const data = await apiTournament.fetchParticipantTeamRequests(tournamentId, teamId);
+    participantsRequests.value = data;
+  }
+
+  async function fetchParticipantTeamInvitations(tournamentId: number, teamId: number) {
+    const data = await apiTournament.fetchParticipantTeamInvitations(tournamentId, teamId);
+    participantsInvitations.value = data;
   }
 
   async function fetchParticipationOfParticipantTeam(tournamentId: number) {
@@ -255,7 +262,7 @@ const useTournamentStore = defineStore('tournament', () => {
   ) {
     const notification = await apiTournament.changeRequestStatus(tournamentId, teamId, requestId, status);
     await fetchParticipants(tournamentId);
-    await fetchParticipantsTeamRequest(tournamentId, teamId);
+    await fetchParticipantTeamRequests(tournamentId, teamId);
     return notification;
   }
 
@@ -276,8 +283,10 @@ const useTournamentStore = defineStore('tournament', () => {
     removeStaff,
     staffsAccepted,
     staffRequests,
-    participantsRequest,
+    participantsRequests,
+    participantsInvitations,
     fetchStaffs,
+    fetchParticipantTeamInvitations,
     fetchTournament,
     updateTournament,
     addIndividualParticipant,
@@ -291,7 +300,7 @@ const useTournamentStore = defineStore('tournament', () => {
     fetchPlayer,
     changeRequestStatus,
     passToBracketPhase,
-    fetchParticipantsTeamRequest,
+    fetchParticipantTeamRequests,
     updateTournamentPrivacy,
     participationOfParticipantTeam,
   };

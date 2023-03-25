@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { InfoFilled } from '@element-plus/icons-vue';
-import { ParticipantRequest, ParticipantTeam, TemplateNotification } from '~/types';
+import { ParticipantInvitation, ParticipantRequest, ParticipantTeam, TemplateNotification } from '~/types';
 
-const { fetchParticipantsTeamRequest, changeRequestStatus } = tournamentStore();
-const { participantsRequest, tournament } = storeToRefs(tournamentStore());
+const { fetchParticipantTeamRequests, changeRequestStatus, fetchParticipantTeamInvitations } = tournamentStore();
+const { participantsRequests, participantsInvitations, tournament } = storeToRefs(tournamentStore());
 
 const props = defineProps<{
   team: ParticipantTeam;
@@ -17,9 +17,12 @@ const search = ref('');
 const loadingStatus = ref(undefined as ParticipantRequest['status'] | undefined);
 const loadingRequestId = ref(undefined as number | undefined);
 
+const 
+
 async function init() {
   try {
-    await fetchParticipantsTeamRequest(props.tournamentId, props.team.id);
+    await fetchParticipantTeamRequests(props.tournamentId, props.team.id);
+    await fetchParticipantTeamInvitations(props.tournamentId, props.team.id);
   } catch (e) {
     console.log('init error', e);
   }
@@ -38,7 +41,7 @@ function resetData() {
 }
 
 const filterRequestsByUsername = computed(() =>
-  participantsRequest.value?.filter(
+  participantsRequests.value?.filter(
     (data) => !search.value || data.userRequest.username.toLowerCase().includes(search.value.toLowerCase()),
   ),
 );
@@ -82,7 +85,7 @@ async function changeRequestStatusTemplate(requestId: number, status: 'accepted'
   </el-popover>
   <el-button v-else type="primary" round @click="showDialog = true">manage</el-button>
   <el-dialog
-    v-if="participantsRequest"
+    v-if="participantsRequests"
     v-model="showDialog"
     title="Manage your team"
     w="5/10 min-[600px]"
@@ -91,7 +94,7 @@ async function changeRequestStatusTemplate(requestId: number, status: 'accepted'
   >
     <el-tabs v-model="activeTab">
       <el-tab-pane label="Requests" name="requests">
-        <el-table :data="filterRequestsByUsername">
+        <el-table :data="filterRequestsByUsername" empty-text="no request for now">
           <el-table-column label="user request">
             <template #default="scope: { row: ParticipantRequest }">
               <div display="flex" align="items-center">
@@ -152,7 +155,44 @@ async function changeRequestStatusTemplate(requestId: number, status: 'accepted'
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="Invitations" name="invitations">invitations</el-tab-pane>
+      <el-tab-pane label="Invitations" name="invitations">
+        <el-table :data="participantsInvitations" empty-text="no invitation sent">
+          <el-table-column label="user invited">
+            <template #default="scope: { row: ParticipantInvitation }">
+              <div display="flex" align="items-center">
+                <el-avatar :src="scope.row.userInvited.avatarUrl" />
+                <span m="l-2" text="overflow-ellipsis space-nowrap" overflow="hidden">
+                  {{ scope.row.userInvited.username }}
+                </span>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="status" align="center">
+            <template #default="scope: { row: ParticipantInvitation }">
+              <el-tag :type="scope.row.status === 'pending' ? 'warning' : 'danger'">{{ scope.row.status }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column align="right">
+            <template #header> bonsoir </template>
+            <template #default="scope: { row: ParticipantInvitation }">
+              <el-select
+                v-model="value"
+                multiple
+                filterable
+                remote
+                reserve-keyword
+                placeholder="Please enter a keyword"
+                :remote-method="remoteMethod"
+                :loading="loading"
+              >
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+
+                </el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
     </el-tabs>
   </el-dialog>
 </template>

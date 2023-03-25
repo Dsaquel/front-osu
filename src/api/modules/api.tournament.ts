@@ -11,6 +11,7 @@ import {
   ParticipantIndividual,
   ParticipantTeam,
   ParticipantRequest,
+  ParticipantInvitation,
 } from '~/types';
 
 const TournamentApi = {
@@ -45,8 +46,10 @@ const TournamentApi = {
   fetchTeams: (tournamentId: number) => service.get<ParticipantTeam[]>(`/tournament/${tournamentId}/team`),
   fetchParticipationOfParticipantTeam: (tournamentId: number) =>
     service.get<number[]>(`/tournament/${tournamentId}/participant/team/participation`),
-  fetchParticipantsTeamRequest: (tournamentId: number, teamId: number) =>
+  fetchParticipantTeamRequests: (tournamentId: number, teamId: number) =>
     service.get<ParticipantRequest[]>(`/tournament/${tournamentId}/participant/team/${teamId}/request`),
+  fetchParticipantTeamInvitations: (tournamentId: number, teamId: number) =>
+    service.get<ParticipantInvitation[]>(`/tournament/${tournamentId}/participant/team/${teamId}/invitation`),
   changeRequestStatus: (tournamentId: number, teamId: number, requestId: number, status: 'accepted' | 'declined') =>
     service.put<TemplateNotification>(`/tournament/${tournamentId}/participant/team/${teamId}/request/${requestId}`, {
       status,
