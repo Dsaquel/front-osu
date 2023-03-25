@@ -3,7 +3,7 @@ import { InfoFilled } from '@element-plus/icons-vue';
 import { ParticipantRequest, ParticipantTeam, TemplateNotification } from '~/types';
 
 const { fetchParticipantsTeamRequest, changeRequestStatus } = tournamentStore();
-const { participantsRequest } = storeToRefs(tournamentStore());
+const { participantsRequest, tournament } = storeToRefs(tournamentStore());
 
 const props = defineProps<{
   team: ParticipantTeam;
@@ -67,8 +67,20 @@ async function changeRequestStatusTemplate(requestId: number, status: 'accepted'
 </script>
 
 <template>
-  <el-button type="primary" round @click="showDialog = true">manage</el-button>
-
+  <el-popover
+    v-if="team.users.length === tournament?.teamNumberMax"
+    placement="left"
+    trigger="hover"
+    width="auto"
+    :content="'team full'"
+  >
+    <template #reference>
+      <div display="inline-block">
+        <el-button pointer="auto" type="primary" disabled round>manage</el-button>
+      </div>
+    </template>
+  </el-popover>
+  <el-button v-else type="primary" round @click="showDialog = true">manage</el-button>
   <el-dialog
     v-if="participantsRequest"
     v-model="showDialog"

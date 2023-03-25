@@ -83,9 +83,10 @@ async function udpateParticipantValidationTemplate(participantId: number, valida
       </template>
     </el-table-column>
 
-    <el-table-column v-if="isOwnerOrAdmin" label="Actions">
+    <el-table-column label="Actions">
       <template #default="scope: { row: ParticipantTeam }">
         <el-switch
+          v-if="isOwnerOrAdmin"
           v-model="scope.row.validate"
           inline-prompt
           size="large"
