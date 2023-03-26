@@ -1,17 +1,32 @@
 <script setup lang="ts">
 import { ParticipantTeam, TemplateNotification } from '~/types';
 
-defineProps<{
+const props = defineProps<{
   participantsTeams: ParticipantTeam[];
 }>();
+
+const route = useRoute();
 
 const { updateParticipantValidation } = tournamentStore();
 const { isOwnerOrAdmin, tournament } = storeToRefs(tournamentStore());
 const { user } = storeToRefs(userStore());
-const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
+const tournamentId = $ref(parseInt(route.params?.tournamentId as string, 10));
 
 const updateLoading = ref(false);
 const tableParticipant = ref();
+
+function getCurrentRow() {
+  if (route.query.teamId && props.participantsTeams) {
+    const row = props.participantsTeams.find(
+      (participantTeam) => participantTeam.id === +(route.query.teamId as string),
+    );
+    tableParticipant.value.setCurrentRow(row);
+  }
+}
+
+onMounted(() => {
+  getCurrentRow();
+});
 
 async function udpateParticipantValidationTemplate(participantId: number, validate: boolean) {
   try {

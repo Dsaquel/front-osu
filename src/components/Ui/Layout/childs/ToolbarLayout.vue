@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { User } from '~/types';
+import { CurrentUser } from '~/types';
 import { isDark, toggleDark } from '~/utils/dark';
 
 defineProps<{
-  user: User | null;
+  user: CurrentUser | null;
 }>();
 
 const open = ref(false);

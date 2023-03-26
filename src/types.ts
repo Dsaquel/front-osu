@@ -169,7 +169,17 @@ export interface User extends Node {
   avatarUrl: string;
   rank: number;
   discord: string | null;
-  invitationsFromTeams: ParticipantInvitation[];
+}
+
+export interface InvitationFromTeam {
+  tournamentId: number;
+  tournament: { name: string };
+  participantTeamId: number;
+  participantTeam: { name: string };
+}
+
+export interface CurrentUser extends User {
+  invitationsFromTeams: InvitationFromTeam[];
 }
 
 export interface Participant extends Node {

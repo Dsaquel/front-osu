@@ -41,6 +41,7 @@ async function init() {
 onBeforeMount(async () => {
   initLoading.value = true;
   await init();
+
   initLoading.value = false;
 });
 
