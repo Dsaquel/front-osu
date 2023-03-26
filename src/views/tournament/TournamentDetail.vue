@@ -15,7 +15,7 @@ dayjs.extend(LocalizedFormat);
 const router = useRouter();
 const { fetchTournament, fetchControlAccess, passToBracketPhase, startTournament, updateTournamentPrivacy } =
   tournamentStore();
-const { tournament, isAuthorized, access } = storeToRefs(tournamentStore());
+const { tournament, isAuthorized, access, isOwnerOrAdmin } = storeToRefs(tournamentStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
 
@@ -53,7 +53,7 @@ const goRequests = () => {
   });
 };
 
-async function bracketPhase(tournamentId: number) {
+async function bracketPhase() {
   try {
     bracketPhaseLoading.value = true;
     await passToBracketPhase(tournamentId);
@@ -63,15 +63,15 @@ async function bracketPhase(tournamentId: number) {
   bracketPhaseLoading.value = false;
 }
 
-async function startTournamentTemplate(tournamentId: number) {
+async function startTournamentTemplate() {
   if (!tournament.value || tournament.value?.participants.length < (tournament.value?.numbersPlayers as number)) return;
-  ElMessageBox.confirm(
+  await ElMessageBox.confirm(
     `This action will start earlier the tournament that will set participants into ${
       tournament.value.hasQualifier ? 'qualifier' : 'tournament bracket'
     } and is it not reversible.`,
     'Wait a second',
     {
-      confirmButtonText: 'Understand',
+      confirmButtonText: 'i understand',
       cancelButtonText: 'Cancel',
       type: 'warning',
     },
@@ -188,9 +188,7 @@ async function updateTournamentPrivacyTemplate() {
                 m="l-2"
               >
                 <el-popover
-                  v-if="
-                    (access?.isAdmin || access?.isOwner) && tournament.participants.length < tournament.numbersPlayers
-                  "
+                  v-if="isOwnerOrAdmin && tournament.participants.length < tournament.numbersPlayers"
                   trigger="hover"
                   placement="top"
                   :hide-after="50"
@@ -208,7 +206,7 @@ async function updateTournamentPrivacyTemplate() {
                   plain
                   round
                   :loading="bracketPhaseLoading"
-                  @click="bracketPhase(tournament!.id)"
+                  @click="bracketPhase"
                   >pass in bracket phase
                 </el-button>
               </div>
@@ -227,9 +225,34 @@ async function updateTournamentPrivacyTemplate() {
             <el-descriptions-item label="start date">
               <div flex="~" align="items-center" justify="between">
                 {{ tournament.startDate ? dayjs(tournament.startDate).format('LLLL') : '' }}
-                <el-button
+                <div
+                  v-if="isOwnerOrAdmin && tournament.isPublic && tournament.hasQualifier && tournament.numbersPlayers"
+                >
+                  <el-popover
+                    v-if="tournament.participants.length < tournament.numbersPlayers"
+                    trigger="hover"
+                    placement="top"
+                    :hide-after="50"
+                    :content="`${tournament.participants.length}/${tournament.numbersPlayers} participants minimum`"
+                  >
+                    <template #reference>
+                      <div>
+                        <el-button type="primary" plain disabled>start before </el-button>
+                      </div>
+                    </template>
+                  </el-popover>
+                  <el-button
+                    v-else-if="tournament.participants.length >= tournament.numbersPlayers"
+                    type="primary"
+                    plain
+                    :loading="bracketPhaseLoading"
+                    @click="startTournamentTemplate"
+                    >start before
+                  </el-button>
+                </div>
+                <!-- <el-button
                   v-if="
-                    (access?.isAdmin || access?.isOwner) &&
+                    isOwnerOrAdmin &&
                     !tournament.isPublic &&
                     tournament.numbersPlayers &&
                     tournament.participants.length >= tournament.numbersPlayers
@@ -237,7 +260,7 @@ async function updateTournamentPrivacyTemplate() {
                   type="success"
                   @click="startTournamentTemplate(tournamentId)"
                   >start before
-                </el-button>
+                </el-button> -->
               </div>
             </el-descriptions-item>
             <el-descriptions-item label="number player">{{ tournament.numbersPlayers }}</el-descriptions-item>

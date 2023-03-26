@@ -37,7 +37,7 @@ async function udpateParticipantValidationTemplate(participantId: number, valida
       message: (<TemplateNotification>data).message,
       type: 'success',
       zIndex: 10,
-      duration: 0,
+      duration: 2000,
     });
   } catch (e) {
     console.log(e);

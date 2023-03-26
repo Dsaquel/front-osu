@@ -13,7 +13,7 @@ const useUserStore = defineStore('user', () => {
 
   async function fetch() {
     const data = await apiUser.fetch();
-    data.id = 5;
+    // data.id = 5;
     store(data);
   }
 
@@ -29,7 +29,6 @@ const useUserStore = defineStore('user', () => {
 
   async function fetchUsersByUsername(username: string) {
     try {
-      console.log(username);
       return await apiUser.fetchUsersByUsername(username);
     } catch (e) {
       console.log(e);
