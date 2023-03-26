@@ -89,11 +89,11 @@ const goBack = () => {
     <div v-if="tournament">
       <div class="card" p="10" grid="~ rows-1 cols-2 gap-6">
         <div grid="col-span-2" text="center xl">Tournament settings</div>
-        <div>
+        <div v-if="!tournament.registrationEnd">
           <span display="block" text="sm"> Name </span>
           <el-input v-model="tournament.name" size="large" />
         </div>
-        <div text="right">
+        <div v-if="!tournament.registrationEnd" text="right">
           <span display="block" text="sm"> Number of players max </span>
           <el-select
             :model-value="(tournament.numbersPlayers as number)"
@@ -107,14 +107,14 @@ const goBack = () => {
             <el-option :value="32" />
           </el-select>
         </div>
-        <div>
+        <div v-if="!tournament.registrationEnd">
           <span display="block" text="sm"> solo or team </span>
           <el-select :model-value="tournament.type" size="large" w="full" @change="(val) => (tournament!.type = val)">
             <el-option :value="TournamentType.Solo" />
             <el-option :value="TournamentType.Team" />
           </el-select>
         </div>
-        <div v-if="tournament.type === TournamentType.Team" grid="~ cols-2">
+        <div v-if="tournament.type === TournamentType.Team && !tournament.registrationEnd" grid="~ cols-2">
           <div m="x-2">
             <span display="block" text="sm">team number min</span>
             <el-input-number v-model="tournament.teamNumberMin" size="large" :min="2" :value-on-clear="2" :step="1" />
@@ -132,12 +132,13 @@ const goBack = () => {
           />
         </div>
         <CommonDatepicker
+          v-if="!tournament.registrationEnd"
           :model-value="tournament.startDate"
           :title="'Start date'"
           :type="'datetime'"
           @update:model-value="(val) => (tournament!.startDate = dayjs(val).utc().format())"
         />
-        <div grid="~ cols-2">
+        <div v-if="!tournament.registrationEnd" grid="~ cols-2">
           <div m="x-2">
             <span display="block" text="sm">player rank mini</span>
             <el-input-number
@@ -159,24 +160,22 @@ const goBack = () => {
         </div>
         <div>
           <CommonDatepicker
+            v-if="!tournament.registrationEnd"
             :model-value="tournament.registrationEndDate"
             :title="'End of registration'"
             :type="'datetime'"
             @update:model-value="(val) => (tournament!.registrationEndDate = dayjs(val).utc().format())"
           />
         </div>
-        <div text="right">
+        <div v-if="!tournament.registrationEnd" text="right">
           <span display="block" text="sm"> mode </span>
           <el-select :model-value="tournament.mode" size="large" w="full" @change="(val) => (tournament!.mode = val)">
             <el-option value="standard" />
           </el-select>
         </div>
-        <div>
+        <div v-if="!tournament.registrationEnd">
           <span text="sm"> Create qualifier </span>
           <el-switch v-model="tournament.hasQualifier" />
-          <router-link v-if="tournament.hasQualifier" :to="{ name: 'qualifier-detail' }" display="block"
-            ><el-button>qualifier detail</el-button></router-link
-          >
         </div>
 
         <div
@@ -191,12 +190,6 @@ const goBack = () => {
         >
           last update: {{ useTimeAgo(tournament.updateAt).value }}
         </div>
-      </div>
-      <div v-if="tournament.qualifier" class="card" m="t-6" p="10">
-        <div text="center xl">Qualifier settings</div>
-
-        <router-link class="bare" :to="{ name: 'mappool-manager' }">See mappool qualifier</router-link>
-        <router-link class="bare" :to="{ name: 'qualifier-lobbies' }">See lobbies qualifier</router-link>
       </div>
     </div>
     <el-empty v-else>

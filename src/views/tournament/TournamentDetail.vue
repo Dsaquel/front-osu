@@ -226,7 +226,13 @@ async function updateTournamentPrivacyTemplate() {
               <div flex="~" align="items-center" justify="between">
                 {{ tournament.startDate ? dayjs(tournament.startDate).format('LLLL') : '' }}
                 <div
-                  v-if="isOwnerOrAdmin && tournament.isPublic && tournament.hasQualifier && tournament.numbersPlayers"
+                  v-if="
+                    isOwnerOrAdmin &&
+                    tournament.isPublic &&
+                    tournament.hasQualifier &&
+                    tournament.numbersPlayers &&
+                    !tournament.registrationEnd
+                  "
                 >
                   <el-popover
                     v-if="tournament.participants.length < tournament.numbersPlayers"
@@ -250,17 +256,6 @@ async function updateTournamentPrivacyTemplate() {
                     >start before
                   </el-button>
                 </div>
-                <!-- <el-button
-                  v-if="
-                    isOwnerOrAdmin &&
-                    !tournament.isPublic &&
-                    tournament.numbersPlayers &&
-                    tournament.participants.length >= tournament.numbersPlayers
-                  "
-                  type="success"
-                  @click="startTournamentTemplate(tournamentId)"
-                  >start before
-                </el-button> -->
               </div>
             </el-descriptions-item>
             <el-descriptions-item label="number player">{{ tournament.numbersPlayers }}</el-descriptions-item>
@@ -272,7 +267,7 @@ async function updateTournamentPrivacyTemplate() {
             <span display="inline-block">Description</span>
             <MarkdownRender :text="tournament.description" />
           </div>
-          <ParticipationConfirm />
+          <ParticipationConfirm v-if="!tournament.registrationEnd" />
         </div>
       </div>
       <TournamentStaff

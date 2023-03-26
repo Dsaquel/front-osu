@@ -14,6 +14,7 @@ const tournamentId = $ref(parseInt(route.params?.tournamentId as string, 10));
 
 const updateLoading = ref(false);
 const tableParticipant = ref();
+const participantIdLoading = ref(undefined as number | undefined);
 
 function getCurrentRow() {
   if (route.query.teamId && props.participantsTeams) {
@@ -31,6 +32,7 @@ onMounted(() => {
 async function udpateParticipantValidationTemplate(participantId: number, validate: boolean) {
   try {
     updateLoading.value = true;
+    participantIdLoading.value = participantId;
     const data = await updateParticipantValidation(participantId, tournamentId, validate);
     ElNotification({
       title: (<TemplateNotification>data).subject,
@@ -43,6 +45,7 @@ async function udpateParticipantValidationTemplate(participantId: number, valida
     console.log(e);
   } finally {
     updateLoading.value = false;
+    participantIdLoading.value = undefined;
   }
 }
 </script>
@@ -67,11 +70,12 @@ async function udpateParticipantValidationTemplate(participantId: number, valida
       </template>
     </el-table-column>
 
-    <el-table-column :label="`minimum ${tournament.teamNumberMin}`">
+    <!-- TODO: really necessay ? -->
+    <!-- <el-table-column :label="`minimum ${tournament.teamNumberMin}`">
       <template #default="scope: { row: ParticipantTeam }">
         {{ scope.row.users.length }}
       </template>
-    </el-table-column>
+    </el-table-column> -->
 
     <el-table-column label="players">
       <template #default="scope: { row: ParticipantTeam }">
@@ -108,7 +112,7 @@ async function udpateParticipantValidationTemplate(participantId: number, valida
           style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
           active-text="validate"
           inactive-text="invalidate"
-          :loading="updateLoading"
+          :loading="updateLoading && participantIdLoading === scope.row.id"
           @change="udpateParticipantValidationTemplate(scope.row.id, scope.row.validate)"
         />
         <TeamManager v-if="user.id === scope.row.captainId" :team="scope.row" :tournament-id="tournament.id" />

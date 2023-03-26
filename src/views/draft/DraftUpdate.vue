@@ -85,6 +85,7 @@ watch(
       v-model:type="draft.type"
       v-model:teamNumberMin="draft.teamNumberMin"
       v-model:teamNumberMax="draft.teamNumberMax"
+      v-model:isTournamentPublic="draft.tournament.isPublic"
     >
       <template #last>
         <div

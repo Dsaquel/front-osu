@@ -16,6 +16,7 @@ const props = defineProps<{
   mode?: 'standard';
   teamNumberMin?: number;
   teamNumberMax?: number;
+  isTournamentPublic?: boolean;
 }>();
 
 defineEmits([
@@ -42,12 +43,12 @@ const rankRang = computed(() =>
 <template>
   <div class="card">
     <div p="10" grid="~ rows-1 cols-2 gap-6">
-      <div>
-        <span display="block" text="sm"> Name </span>
+      <div v-if="!isTournamentPublic">
+        <span display="block" text="sm"> Name </span> {{ isTournamentPublic }}
         <el-input :model-value="name" size="large" @input="(val) => $emit('update:name', val)" />
       </div>
 
-      <div text="right">
+      <div v-if="!isTournamentPublic" text="right">
         <span display="block" text="sm"> Number of players max </span>
         <el-select
           :model-value="(numbersPlayers as number)"
@@ -61,7 +62,7 @@ const rankRang = computed(() =>
         </el-select>
       </div>
 
-      <div>
+      <div v-if="!isTournamentPublic">
         <span display="block" text="sm"> solo or team </span>
         <el-select :model-value="type" size="large" w="full" @change="(val) => $emit('update:type', val)">
           <el-option :value="TournamentType.Solo" />
@@ -69,7 +70,7 @@ const rankRang = computed(() =>
         </el-select>
       </div>
 
-      <div v-if="type === TournamentType.Team" grid="~ cols-2">
+      <div v-if="type === TournamentType.Team && !isTournamentPublic" grid="~ cols-2">
         <div m="x-2">
           <span display="block" text="sm">team number min</span>
           <el-input-number
@@ -99,12 +100,13 @@ const rankRang = computed(() =>
         <MarkdownTextarea :text="details" @update:description="(val: string) =>  $emit('update:details', val)" />
       </div>
       <CommonDatepicker
+        v-if="!isTournamentPublic"
         :model-value="estimateStartDate"
         :title="'Estimation start'"
         :type="'month'"
         @update:model-value="(val) => $emit('update:estimateStartDate', dayjs(val).utc().format())"
       />
-      <div grid="~ cols-2">
+      <div v-if="!isTournamentPublic" grid="~ cols-2">
         <div m="x-2">
           <span display="block" text="sm">player rank mini</span>
           <el-input-number
@@ -116,7 +118,7 @@ const rankRang = computed(() =>
             @input="(val) => $emit('update:rangePlayerMin', val)"
           />
         </div>
-        <div m="x-2">
+        <div v-if="!isTournamentPublic" m="x-2">
           <span display="block" text="right sm">player rank max</span>
           <el-input-number
             :model-value="rangePlayerMax"
@@ -125,7 +127,7 @@ const rankRang = computed(() =>
             @input="(val) => $emit('update:rangePlayerMax', val)"
           />
         </div>
-        <div grid="col-span-2" text="center" m="t-5">
+        <div v-if="!isTournamentPublic" grid="col-span-2" text="center" m="t-5">
           rank range:
           {{ rankRang }}
         </div>
