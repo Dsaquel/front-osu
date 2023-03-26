@@ -99,25 +99,26 @@ function getHost(superReferee: SuperReferee) {
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column label="actions" align="center">
+      <el-table-column label="actions">
         <template #default="scope">
           <!-- TODO: verify if user is a participant and he playe already in a lobby -->
-          <el-button
-            type="success"
-            size="small"
-            m="l-1"
-            @click="addParticipantToLobby(getLobby(scope.row).id, qualifier?.id as number)"
-          >
-            join
-          </el-button>
-          <LobbySettings
-            :lobby-id="getLobby(scope.row).id"
-            :status="getLobby(scope.row).status"
-            :schedule="getLobby(scope.row).schedule"
-            :update-at="getLobby(scope.row).updateAt"
-            :title="getHost(getLobby(scope.row).superReferee)"
-          />
-          <LobbySetScores :title="getHost(getLobby(scope.row).superReferee)" />
+          <div flex="~ row" align="items-center content-center">
+            <el-button
+              type="success"
+              m="l-1"
+              @click="addParticipantToLobby(getLobby(scope.row).id, qualifier?.id as number)"
+            >
+              join
+            </el-button>
+            <LobbySettings
+              :lobby-id="getLobby(scope.row).id"
+              :status="getLobby(scope.row).status"
+              :schedule="getLobby(scope.row).schedule"
+              :update-at="getLobby(scope.row).updateAt"
+              :title="getHost(getLobby(scope.row).superReferee)"
+            />
+            <LobbySetScores :title="getHost(getLobby(scope.row).superReferee)" />
+          </div>
         </template>
       </el-table-column>
     </el-table>

@@ -10,7 +10,7 @@ import { QualifierParticipant } from '~/types';
 const { fetchQualifier, fetchMapsScore, fetchParticipantsRanking, passQualifierToFinished } = qualifierStore();
 const { fetchTournament, fetchControlAccess } = tournamentStore();
 const { qualifier, mapsScore, participantsRanking } = storeToRefs(qualifierStore());
-const { tournament, isAuthorized } = storeToRefs(tournamentStore());
+const { tournament, isAuthorized, isOwnerOrAdmin } = storeToRefs(tournamentStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
 let initLoading = $ref(false);
@@ -68,13 +68,6 @@ function calculMedian(numbers: number[]) {
         m="b-3"
       />
 
-      <el-button
-        v-if="!tournament.isInBracketPhase"
-        type="success"
-        @click="passQualifierToFinished(qualifier?.id as number, tournament?.id as number)"
-        >pass qualifier to finished
-      </el-button>
-
       <div v-if="participantsRanking" flex="~ wrap" grid="gap-5" justify="center">
         <div class="lg:basis-4/5 md:basis-full">
           <el-descriptions border direction="vertical" :column="4">
@@ -82,6 +75,14 @@ function calculMedian(numbers: number[]) {
               <router-link :to="{ name: 'qualifier-lobbies', params: { tournamentId } }">
                 <el-button link>lobbies</el-button>
               </router-link>
+              <el-button
+                v-if="isOwnerOrAdmin && !tournament.isInBracketPhase"
+                m="l-2"
+                type="success"
+                size="small"
+                @click="passQualifierToFinished(qualifier?.id as number, tournament?.id as number)"
+                >pass qualifier to finished
+              </el-button>
             </template>
             <el-descriptions-item label="average total score" min-width="min-content">
               {{
