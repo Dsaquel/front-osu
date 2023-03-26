@@ -266,6 +266,18 @@ const useTournamentStore = defineStore('tournament', () => {
     return notification;
   }
 
+  async function changeInvitationStatus(
+    tournamentId: number,
+    invitationId: number,
+    status: 'accepted' | 'declined',
+    teamId: number,
+  ) {
+    const notification = await apiTournament.changeInvitationStatus(tournamentId, teamId, invitationId, status);
+    await fetchParticipants(tournamentId);
+    await userStore().fetch();
+    return notification;
+  }
+
   async function sendInvitationsTeamToUser(tournamentId: number, teamId: number, usersId: number[]) {
     const notification = await apiTournament.sendInvitationsTeamToUser(tournamentId, teamId, usersId);
     await fetchParticipantTeamInvitations(tournamentId, teamId);
@@ -297,6 +309,7 @@ const useTournamentStore = defineStore('tournament', () => {
     fetchTournament,
     updateTournament,
     addIndividualParticipant,
+    changeInvitationStatus,
     addTeamParticipant,
     fetchParticipants,
     fetchTeams,

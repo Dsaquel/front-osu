@@ -172,6 +172,7 @@ export interface User extends Node {
 }
 
 export interface InvitationFromTeam {
+  id: number;
   tournamentId: number;
   tournament: { name: string };
   participantTeamId: number;

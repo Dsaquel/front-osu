@@ -116,3 +116,9 @@ async function udpateParticipantValidationTemplate(participantId: number, valida
     </el-table-column>
   </el-table>
 </template>
+
+<style scoped lang="scss">
+:deep(.el-table__inner-wrapper::before) {
+  z-index: 1;
+}
+</style>

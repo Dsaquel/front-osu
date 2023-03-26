@@ -54,6 +54,18 @@ const TournamentApi = {
     service.put<TemplateNotification>(`/tournament/${tournamentId}/participant/team/${teamId}/request/${requestId}`, {
       status,
     }),
+  changeInvitationStatus: (
+    tournamentId: number,
+    teamId: number,
+    invitationId: number,
+    status: 'accepted' | 'declined',
+  ) =>
+    service.put<TemplateNotification>(
+      `/tournament/${tournamentId}/participant/team/${teamId}/invitation/${invitationId}`,
+      {
+        status,
+      },
+    ),
   sendInvitationsTeamToUser: (tournamentId: number, teamId: number, usersId: number[]) =>
     service.post<TemplateNotification>(`/tournament/${tournamentId}/participant/team/${teamId}/invitation`, {
       usersId,
