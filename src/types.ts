@@ -187,6 +187,8 @@ export interface CurrentUser extends User {
 export interface Participant extends Node {
   tournamentId: number;
   type: ParticipantType;
+  lobbyId: number | null;
+  lobby: Lobby | null;
 }
 
 export interface ParticipantIndividual extends Participant {
@@ -274,7 +276,7 @@ export interface Lobby extends Node {
   superReferee: SuperReferee;
   superRefereeId: number;
   qualifierId: number;
-  participantsLobby: QualifierParticipant[];
+  participantsLobby: User[];
 }
 
 export interface QualifierParticipant extends Node {
@@ -282,7 +284,6 @@ export interface QualifierParticipant extends Node {
   seed: number | null;
   totalRank: number | null;
   totalScore: number | null;
-  lobbyId: number | null;
   qualifierId: number;
 }
 

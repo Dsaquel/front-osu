@@ -7,6 +7,7 @@ dayjs.extend(LocalizedFormat);
 
 const { fetchQualifier, fetchQualifierLobbies, addParticipantToLobby } = qualifierStore();
 const { fetchTournament } = tournamentStore();
+const { user } = storeToRefs(userStore());
 const { tournament } = storeToRefs(tournamentStore());
 const { qualifier, lobbies } = storeToRefs(qualifierStore());
 
@@ -15,7 +16,7 @@ let initLoading = $ref(false);
 async function init() {
   await fetchQualifier(tournamentId);
   await fetchTournament(tournamentId);
-  fetchQualifierLobbies(qualifier.value?.id as number);
+  await fetchQualifierLobbies(qualifier.value?.id as number);
 }
 
 onBeforeMount(async () => {
@@ -23,10 +24,6 @@ onBeforeMount(async () => {
   await init();
   initLoading = false;
 });
-
-function getLobby(row: Lobby) {
-  return row;
-}
 
 function getHost(superReferee: SuperReferee) {
   return `host by ${
@@ -43,19 +40,19 @@ function getHost(superReferee: SuperReferee) {
     </div>
     <el-table :data="lobbies" cell-class-name="cell-padding">
       <el-table-column label="referee host">
-        <template #default="scope">
+        <template #default="scope: { row: Lobby }">
           <div display="flex" align="items-center">
             <el-avatar
               :src="
-                getLobby(scope.row).superReferee.admin?.user.avatarUrl ||
-                getLobby(scope.row).superReferee.referee?.user.avatarUrl ||
+                scope.row.superReferee.admin?.user.avatarUrl ||
+                scope.row.superReferee.referee?.user.avatarUrl ||
                 tournament?.owner.avatarUrl
               "
             />
             <span m="l-2" text="overflow-ellipsis space-nowrap" overflow="hidden">
               {{
-                getLobby(scope.row).superReferee.admin?.user.username ||
-                getLobby(scope.row).superReferee.referee?.user.username ||
+                scope.row.superReferee.admin?.user.username ||
+                scope.row.superReferee.referee?.user.username ||
                 tournament?.owner.username
               }}
             </span>
@@ -63,61 +60,52 @@ function getHost(superReferee: SuperReferee) {
         </template>
       </el-table-column>
       <el-table-column label="participants">
-        <template #default="scope">
-          <template v-for="(participant, i) in getLobby(scope.row).participantsLobby" :key="i">
-            <el-popover
-              trigger="hover"
-              width="auto"
-              placement="bottom"
-              :hide-after="50"
-              :title="participant.user.username"
-              :content="`rank: ${participant.user.rank}\ndiscord: ${participant.user.discord || 'no discord'}`"
-            >
-              <template #reference>
-                <el-avatar class="float-left ml-[-10px]" :src="participant.user.avatarUrl" />
-              </template>
-            </el-popover>
+        <template #default="scope: { row: Lobby }">
+          <template v-for="participant in scope.row.participantsLobby" :key="participant.id">
+            <el-tooltip :content="participant.username">
+              <el-avatar class="float-left ml-[-10px]" :src="participant.avatarUrl" />
+            </el-tooltip>
           </template>
         </template>
       </el-table-column>
       <el-table-column label="status" :width="100">
-        <template #default="scope">
-          {{ getLobby(scope.row).status }}
+        <template #default="scope: { row: Lobby }">
+          {{ scope.row.status }}
         </template>
       </el-table-column>
       <el-table-column label="scheduled" :width="100">
-        <template #default="scope">
+        <template #default="scope: { row: Lobby }">
           <el-popover
             trigger="hover"
             width="auto"
             placement="bottom"
-            :content="dayjs(getLobby(scope.row).schedule).format('LLLL')"
+            :content="dayjs(scope.row.schedule).format('LLLL')"
           >
             <template #reference>
-              <span>{{ useTimeAgo(getLobby(scope.row).schedule).value }}</span>
+              <span>{{ useTimeAgo(scope.row.schedule).value }}</span>
             </template>
           </el-popover>
         </template>
       </el-table-column>
       <el-table-column label="actions">
-        <template #default="scope">
-          <!-- TODO: verify if user is a participant and he playe already in a lobby -->
+        <template #default="scope: { row: Lobby }">
           <div flex="~ row" align="items-center content-center">
             <el-button
+              v-if="user && tournament && tournament.participants.map((p) => p.id).includes(user.id)"
               type="success"
               m="l-1"
-              @click="addParticipantToLobby(getLobby(scope.row).id, qualifier?.id as number)"
+              @click="addParticipantToLobby(scope.row.id, qualifier?.id as number)"
             >
               join
             </el-button>
             <LobbySettings
-              :lobby-id="getLobby(scope.row).id"
-              :status="getLobby(scope.row).status"
-              :schedule="getLobby(scope.row).schedule"
-              :update-at="getLobby(scope.row).updateAt"
-              :title="getHost(getLobby(scope.row).superReferee)"
+              :lobby-id="scope.row.id"
+              :status="scope.row.status"
+              :schedule="scope.row.schedule"
+              :update-at="scope.row.updateAt"
+              :title="getHost(scope.row.superReferee)"
             />
-            <LobbySetScores :title="getHost(getLobby(scope.row).superReferee)" />
+            <LobbySetScores :title="getHost(scope.row.superReferee)" />
           </div>
         </template>
       </el-table-column>

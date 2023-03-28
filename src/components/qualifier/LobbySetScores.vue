@@ -1,8 +1,7 @@
 <script setup lang="ts">
 const { qualifier } = storeToRefs(qualifierStore());
 const { updateScoresLobby } = qualifierStore();
-const { access } = storeToRefs(tournamentStore());
-const { user } = storeToRefs(userStore());
+const { access, isOwnerOrAdmin } = storeToRefs(tournamentStore());
 
 const showSetScores = ref(false);
 let setScoresLoading = $ref(false);
@@ -27,7 +26,7 @@ async function searchLobby() {
 </script>
 
 <template>
-  <div v-if="qualifier && user && (access?.isAdmin || access?.isReferee || access?.isOwner)">
+  <div v-if="qualifier && (isOwnerOrAdmin || access?.isReferee)">
     <el-button m="l-1" type="primary" @click="showSetScores = true">set scores</el-button>
 
     <el-dialog v-model="showSetScores" v-bind="useAttrs()" w="5/10 min-[600px]" class="<sm:min-w-full" append-to-body>

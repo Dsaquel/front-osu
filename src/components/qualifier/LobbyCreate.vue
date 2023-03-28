@@ -7,7 +7,7 @@ dayjs.extend(utc);
 const { createLobby } = qualifierStore();
 const { fetchControlAccess } = tournamentStore();
 const { qualifier } = storeToRefs(qualifierStore());
-const { access } = storeToRefs(tournamentStore());
+const { access, isOwnerOrAdmin } = storeToRefs(tournamentStore());
 const { user } = storeToRefs(userStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
@@ -39,7 +39,7 @@ async function createLobbyTemplate(qualifierId: number) {
 </script>
 
 <template>
-  <div v-if="qualifier && user && (access?.isAdmin || access?.isReferee || access?.isOwner)">
+  <div v-if="qualifier && user && (isOwnerOrAdmin || access?.isReferee)">
     <el-button type="success" @click.stop="showCreate = true">create new lobby</el-button>
 
     <el-dialog v-model="showCreate" @close="resetSettings">

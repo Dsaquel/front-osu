@@ -126,18 +126,18 @@ function calculMedian(numbers: number[]) {
               </template>
             </el-table-column>
             <el-table-column label="total score">
-              <template #default="scope">
-                {{ scope.row.totalScore?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') || 0 }}
+              <template #default="scope: { row: ParticipantIndividual | ParticipantTeam }">
+                {{ scope.row.qualifierParticipant?.totalScore?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') || 0 }}
               </template>
             </el-table-column>
             <el-table-column label="points">
-              <template #default="scope">
-                {{ scope.row?.totalRank || 0 }}
+              <template #default="scope: { row: ParticipantIndividual | ParticipantTeam }">
+                {{ scope.row.qualifierParticipant?.totalRank || 0 }}
               </template>
             </el-table-column>
             <el-table-column label="seed">
-              <template #default="scope">
-                {{ scope.row.seed }}
+              <template #default="scope: { row: ParticipantIndividual | ParticipantTeam }">
+                {{ scope.row.qualifierParticipant?.seed }}
               </template>
             </el-table-column>
           </el-table>

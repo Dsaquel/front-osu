@@ -9,8 +9,7 @@ type LobbyStatus = 'pending' | 'started' | 'finished';
 
 const { updateLobby, deleteLobby } = qualifierStore();
 const { qualifier } = storeToRefs(qualifierStore());
-const { access } = storeToRefs(tournamentStore());
-const { user } = storeToRefs(userStore());
+const { access, isOwnerOrAdmin } = storeToRefs(tournamentStore());
 
 const showUpdate = ref(false);
 let globalLoading = $ref(false);
@@ -60,7 +59,7 @@ async function deleteLobbyTemplate() {
 </script>
 
 <template>
-  <div v-if="qualifier && user && (access?.isAdmin || access?.isReferee || access?.isOwner)">
+  <div v-if="qualifier && (isOwnerOrAdmin || access?.isReferee)">
     <el-button m="l-1" type="primary" :icon="Setting" @click="showUpdate = true" />
 
     <el-dialog v-model="showUpdate" v-bind="useAttrs()" align-center>
