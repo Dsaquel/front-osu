@@ -1,13 +1,10 @@
 <script lang="ts" setup>
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { QualifierMap, ParticipantMapScore, MapType } from '~/types';
 
 defineProps<{
   mapScore: QualifierMap;
 }>();
-
-function getQualifierParticipantMapPlayed(row: ParticipantMapScore) {
-  return row;
-}
 
 const { copy, copied } = useClipboard();
 
@@ -47,27 +44,26 @@ const formattedType = {
     </el-descriptions>
     <el-table :data="mapScore.participantsMapPlayed">
       <el-table-column label="player">
-        <template #default="scope">
-          <div display="flex" align="items-center">
-            <el-avatar :src="getQualifierParticipantMapPlayed(scope.row).participant.user.avatarUrl" />
+        <template #default="scope: { row: ParticipantMapScore }">
+          <div v-if="'user' in scope.row.participant" display="flex" align="items-center">
+            <el-avatar :src="scope.row.participant.user.avatarUrl" />
             <span m="l-2" text="overflow-ellipsis space-nowrap" overflow="hidden">
-              {{ getQualifierParticipantMapPlayed(scope.row).participant.user.username }}
+              {{ scope.row.participant.user.username }}
             </span>
+          </div>
+          <div v-else>
+            {{ scope.row.participant.name }}
           </div>
         </template>
       </el-table-column>
       <el-table-column label="score">
-        <template #default="scope">
-          {{
-            getQualifierParticipantMapPlayed(scope.row)
-              .score?.toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ' ') || 0
-          }}
+        <template #default="scope: { row: ParticipantMapScore }">
+          {{ scope.row.score?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') || 0 }}
         </template>
       </el-table-column>
       <el-table-column label="point">
-        <template #default="scope">
-          {{ getQualifierParticipantMapPlayed(scope.row).rank }}
+        <template #default="scope: { row: ParticipantMapScore }">
+          {{ scope.row.rank }}
         </template>
       </el-table-column>
     </el-table>

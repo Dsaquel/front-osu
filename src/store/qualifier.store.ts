@@ -1,13 +1,13 @@
 import { defineStore } from 'pinia';
 import apiQualifier from '~/api/modules/api.qualifier';
-import { Qualifier, Lobby, UpdateLobbyDto, QualifierMap, QualifierParticipant } from '~/types';
+import { Qualifier, Lobby, UpdateLobbyDto, QualifierMap, ParticipantIndividual, ParticipantTeam } from '~/types';
 
 const useQualifierStore = defineStore('qualifier', () => {
   const typeOrder = ['noMod', 'hidden', 'hardRock', 'doubleTime', 'freeMod', 'tieBreaker'];
   const qualifier = ref(undefined as Qualifier | undefined);
   const lobbies = ref(undefined as Lobby[] | undefined);
   const mapsScore = ref(undefined as QualifierMap[] | undefined);
-  const participantsRanking = ref(undefined as QualifierParticipant[] | undefined);
+  const participantsRanking = ref(undefined as ParticipantIndividual[] | ParticipantTeam[] | undefined);
 
   const mapsScoreSort = computed(() =>
     mapsScore.value?.sort((a, b) => typeOrder.indexOf(a.type) - typeOrder.indexOf(b.type)),

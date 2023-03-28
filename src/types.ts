@@ -117,10 +117,11 @@ export interface ParticipantMapScore extends Node {
   rank: number;
   score: number;
   qualifierMapPlayed: QualifierMap;
-  participant: QualifierParticipant;
+  participant: ParticipantIndividual | ParticipantTeam;
   participantId: number;
   qualifierMapPlayedId: number;
   qualifierId: number;
+  participantsHadScoredIds: number[];
 }
 
 export interface TournamentMap extends Map {

@@ -5,7 +5,8 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { QualifierParticipant } from '~/types';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { ParticipantIndividual, ParticipantTeam } from '~/types';
 
 const { fetchQualifier, fetchMapsScore, fetchParticipantsRanking, passQualifierToFinished } = qualifierStore();
 const { fetchTournament, fetchControlAccess } = tournamentStore();
@@ -32,10 +33,6 @@ onBeforeMount(async () => {
   await init();
   initLoading = false;
 });
-
-function getQualifierParticipant(row: QualifierParticipant) {
-  return row;
-}
 
 function calculMedian(numbers: number[]) {
   numbers.sort((a, b) => a - b);
@@ -86,57 +83,61 @@ function calculMedian(numbers: number[]) {
             </template>
             <el-descriptions-item label="average total score" min-width="min-content">
               {{
-                participantsRanking.map((participant) => participant.totalScore || 0).reduce((p, c) => p + c, 0) /
-                  participantsRanking.length || 'no score set yet'
+                participantsRanking
+                  .map((participant) => participant.qualifierParticipant?.totalScore || 0)
+                  .reduce((p, c) => p + c, 0) / participantsRanking.length || 'no score set yet'
               }}
             </el-descriptions-item>
             <el-descriptions-item label="average total points">
               {{
-                participantsRanking.map((participant) => participant.totalRank || 0).reduce((p, c) => p + c, 0) /
-                  participantsRanking.length || 'no score set yet'
+                participantsRanking
+                  .map((participant) => participant.qualifierParticipant?.totalRank || 0)
+                  .reduce((p, c) => p + c, 0) / participantsRanking.length || 'no score set yet'
               }}
             </el-descriptions-item>
             <el-descriptions-item label="total score median">
               {{
-                calculMedian(participantsRanking.map((participant) => participant.totalScore || 0)) ||
-                'no score set yet'
+                calculMedian(
+                  participantsRanking.map((participant) => participant.qualifierParticipant?.totalScore || 0),
+                ) || 'no score set yet'
               }}
             </el-descriptions-item>
             <el-descriptions-item label="median of total points">
               {{
-                calculMedian(participantsRanking.map((participant) => participant.totalRank || 0)) || 'no score set yet'
+                calculMedian(
+                  participantsRanking.map((participant) => participant.qualifierParticipant?.totalRank || 0),
+                ) || 'no score set yet'
               }}
             </el-descriptions-item>
           </el-descriptions>
 
           <el-table :data="participantsRanking">
-            <el-table-column label="player">
-              <template #default="scope">
-                <div display="flex" align="items-center">
-                  <el-avatar :src="getQualifierParticipant(scope.row).user.avatarUrl" />
+            <el-table-column label="players">
+              <template #default="scope: { row: ParticipantIndividual | ParticipantTeam }">
+                <div v-if="'user' in scope.row" display="flex" align="items-center">
+                  <el-avatar :src="scope.row.user.avatarUrl" />
                   <span m="l-2" text="overflow-ellipsis space-nowrap" overflow="hidden">
-                    {{ getQualifierParticipant(scope.row).user.username }}
+                    {{ scope.row.user.username }}
                   </span>
+                </div>
+                <div v-else>
+                  {{ scope.row.name }}
                 </div>
               </template>
             </el-table-column>
             <el-table-column label="total score">
               <template #default="scope">
-                {{
-                  getQualifierParticipant(scope.row)
-                    .totalScore?.toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ') || 0
-                }}
+                {{ scope.row.totalScore?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') || 0 }}
               </template>
             </el-table-column>
             <el-table-column label="points">
               <template #default="scope">
-                {{ getQualifierParticipant(scope.row)?.totalRank || 0 }}
+                {{ scope.row?.totalRank || 0 }}
               </template>
             </el-table-column>
             <el-table-column label="seed">
               <template #default="scope">
-                {{ getQualifierParticipant(scope.row).seed }}
+                {{ scope.row.seed }}
               </template>
             </el-table-column>
           </el-table>
