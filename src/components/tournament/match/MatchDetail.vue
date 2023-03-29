@@ -4,12 +4,12 @@ import dayjs from 'dayjs';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import utc from 'dayjs/plugin/utc';
 import { ElMessageBox } from 'element-plus';
-import { Match, ParticipantIndividual, ParticipantTeam } from '~/types';
+import { Match, ParticipantIndividual, ParticipantTeam, TournamentType } from '~/types';
 
 dayjs.extend(utc);
 dayjs.extend(LocalizedFormat);
 
-const { access, tournament } = storeToRefs(tournamentStore());
+const { access, tournament, isOwnerOrAdmin } = storeToRefs(tournamentStore());
 const { user } = storeToRefs(userStore());
 const { updateMatch, createRescheduleMatch, joinMatchAsReferee, undoMatchReferee } = matchStore();
 
@@ -130,6 +130,34 @@ function getDateString(date: string) {
   }
   return dayjs(date).format('lll');
 }
+
+function getInfoMessageReschedule() {
+  if (!match.value) return undefined;
+  const participant = [match.value.player1, match.value.player2].find(
+    (p) => p?.id !== match.value?.reschedules.at(-1)?.playerId,
+  );
+  if (!participant) return undefined;
+  return `waiting ${'user' in participant ? participant.user.username : participant?.captain.username}`;
+}
+
+const canReschedule = computed(() => {
+  if (!user.value) return false;
+  if (isOwnerOrAdmin.value || access.value?.isReferee) {
+    if (match.value?.reschedules.at(-1)?.status === 'accepted') return true;
+    return false;
+  }
+  return user.value.id !== match.value?.reschedules.at(-1)?.playerId;
+});
+
+const isCaptainOrOwnPlayer = computed(
+  () =>
+    (match.value.player1 &&
+      (('user' in match.value.player1 && match.value.player1.user.id === user.value?.id) ||
+        ('captain' in match.value.player1 && match.value.player1.captain.id === user.value?.id))) ||
+    (match.value.player2 &&
+      (('user' in match.value.player2 && match.value.player2.user.id === user.value?.id) ||
+        ('captain' in match.value.player2 && match.value.player2.captain.id === user.value?.id))),
+);
 </script>
 
 <template>
@@ -281,17 +309,18 @@ function getDateString(date: string) {
       </el-tab-pane>
 
       <el-tab-pane
-        v-if="
-          access?.isAdmin ||
-          access?.isReferee ||
-          access?.isOwner ||
-          match.player1Id === user?.id ||
-          match.player2Id === user?.id
-        "
+        v-if="access?.isAdmin || access?.isReferee || access?.isOwner || isCaptainOrOwnPlayer"
         label="Reschedule"
         name="matchReschedule"
         :disabled="match.state === 'complete' || match.state === 'playing'"
       >
+        <div v-if="!isCaptainOrOwnPlayer">
+          {{
+            tournament?.type === TournamentType.Solo
+              ? 'Only players can edit reschedule'
+              : 'Only captains can edit reschedule'
+          }}
+        </div>
         <el-timeline p="2">
           <el-timeline-item
             v-for="(reschedule, index) in match.reschedules"
@@ -338,7 +367,7 @@ function getDateString(date: string) {
                         }}
                         <span v-if="reschedule.superRefereeId" font="normal italic" text="sm" m="l-1">referee</span>
                       </div>
-                      <div>
+                      <div :class="{ italic: reschedule.status === 'accepted' || reschedule.status === 'refused' }">
                         {{ reschedule.shortMessage }}
                       </div>
                     </div>
@@ -364,23 +393,34 @@ function getDateString(date: string) {
                 ? 'Accept'
                 : statusNewReschedule === 'refused'
                 ? 'Refuse'
-                : 'Waiting your choice'
+                : getInfoMessageReschedule()
             "
           >
             <el-button-group v-if="match.reschedules.length > 0">
-              <el-tooltip content="reply with reschedule" placement="bottom">
+              <el-tooltip v-if="canReschedule" content="reply with reschedule" placement="bottom">
                 <el-button type="primary" @click="replyReschedule('request', true)"
                   ><i-fluent-mdl2:calendar-reply
                 /></el-button>
               </el-tooltip>
-              <el-button type="primary" @click="replyReschedule('accepted', false)">accept reschedule</el-button>
-              <el-button type="primary" @click="replyReschedule('refused', false)">don't accept reschedule</el-button>
+              <el-button
+                v-if="canReschedule && isCaptainOrOwnPlayer"
+                type="primary"
+                @click="replyReschedule('accepted', false)"
+                >accept reschedule
+              </el-button>
+              <el-button
+                v-if="canReschedule && isCaptainOrOwnPlayer"
+                type="primary"
+                @click="replyReschedule('refused', false)"
+                >don't accept thisreschedule
+              </el-button>
             </el-button-group>
             <el-card v-if="showCreateReschedule || !match.reschedules.length" shadow="never">
               <CommonDatepicker
                 :model-value="rescheduleDate"
                 type="datetime"
                 title="reschedule"
+                :disabled="!isCaptainOrOwnPlayer"
                 @update:model-value="(val) => (rescheduleDate = dayjs(val).utc().format())"
               />
               <div>
@@ -389,6 +429,7 @@ function getDateString(date: string) {
                   v-model="shortMessage"
                   type="textarea"
                   resize="none"
+                  :disabled="!isCaptainOrOwnPlayer"
                   :autosize="{ minRows: 2, maxRows: 3 }"
                   w="max-250px"
                 />
@@ -399,14 +440,7 @@ function getDateString(date: string) {
       </el-tab-pane>
 
       <el-tab-pane
-        v-if="
-          (access?.isAdmin ||
-            access?.isReferee ||
-            access?.isOwner ||
-            match.player1Id === user?.id ||
-            match.player2Id === user?.id) &&
-          match.rulesLobby
-        "
+        v-if="(access?.isAdmin || access?.isReferee || access?.isOwner || isCaptainOrOwnPlayer) && match.rulesLobby"
         label="rules in lobby"
         name="matchRules"
       >
@@ -445,8 +479,8 @@ function getDateString(date: string) {
               m="l-4"
               type="warning"
               @click="undoMatchReferee(match.id)"
-              >Undo Referee</el-button
-            >
+              >Undo Referee
+            </el-button>
           </div>
           <div>
             {{ match.startDate ? 'schedule: ' + dayjs(match.startDate).format('LLLL') : 'unscheduled yet' }}
@@ -470,7 +504,7 @@ function getDateString(date: string) {
           >Update
         </el-button>
       </template>
-      <template v-if="activeTab === 'matchReschedule'">
+      <template v-if="activeTab === 'matchReschedule' && isCaptainOrOwnPlayer">
         <el-button
           v-if="match.reschedules.at(-1)?.status !== 'accepted' && !match.reschedules.at(-1)?.superRefereeId"
           type="success"
