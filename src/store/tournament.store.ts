@@ -9,7 +9,6 @@ import {
   Role,
   Staffs,
   User,
-  Player,
   ParticipantIndividual,
   ParticipantTeam,
   isParticipantIndividual,
@@ -25,7 +24,7 @@ const useTournamentStore = defineStore('tournament', () => {
   const tournaments = ref(undefined as Tournament[] | undefined);
   const staffs = ref(undefined as Staffs | undefined);
   const participants = ref(undefined as ParticipantIndividual[] | ParticipantTeam[] | undefined);
-  const winner = ref(undefined as Player | undefined | null);
+  const winner = ref(undefined as ParticipantIndividual | ParticipantTeam | undefined | null);
   const teams = ref(undefined as ParticipantTeam[] | undefined);
   const participationOfParticipantTeam = ref(undefined as number[] | undefined);
   const participantsRequests = ref(undefined as ParticipantRequest[] | undefined);

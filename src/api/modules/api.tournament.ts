@@ -7,7 +7,6 @@ import {
   TemplateNotification,
   Role,
   Staffs,
-  Player,
   ParticipantIndividual,
   ParticipantTeam,
   ParticipantRequest,
@@ -39,7 +38,7 @@ const TournamentApi = {
     service.put<TemplateNotification>(`/tournament/${tournamentId}/participant/${participantId}`, { validate }),
   startTournament: (tournamentId: number) => service.post<void>(`/tournament/${tournamentId}/start`),
   fetchPlayer: (playerId: number, tournamentId: number) =>
-    service.get<Player | null>(`/tournament/${tournamentId}/player/${playerId}`),
+    service.get<ParticipantIndividual | ParticipantTeam | null>(`/tournament/${tournamentId}/player/${playerId}`),
   passToBracketPhase: (tournamentId: number) => service.post<void>(`/tournament/${tournamentId}/bracket-phase`),
   updateTournamentPrivacy: (tournamentId: number, isPublic: boolean) =>
     service.put<Tournament>(`/tournament/${tournamentId}/public`, { isPublic }),

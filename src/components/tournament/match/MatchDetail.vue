@@ -59,10 +59,10 @@ async function updateMatchTemplate() {
       await ElMessageBox.confirm(
         `${
           player1ScoreTemplate.value === firstToTemplate.value
-            ? (props.match.player1 as ParticipantIndividual).user.username ||
-              (props.match.player1 as ParticipantTeam).name
-            : (props.match.player2 as ParticipantIndividual).user.username ||
-              (props.match.player2 as ParticipantTeam).name
+            ? (props.match.player1 as ParticipantIndividual)?.user?.username ||
+              (props.match.player1 as ParticipantTeam)?.name
+            : (props.match.player2 as ParticipantIndividual)?.user?.username ||
+              (props.match.player2 as ParticipantTeam)?.name
         } will be the winner of the match`,
         'Warning',
         {

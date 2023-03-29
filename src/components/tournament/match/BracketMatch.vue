@@ -48,7 +48,7 @@ function getPlayerName(participant: ParticipantIndividual | ParticipantTeam | nu
               <div
                 class="match-player-stocks"
                 :class="{
-                  'winner-stocks': match.winnerId === match.player1Id,
+                  'winner-stocks': match.winnerId && match.winnerId === match.player1Id,
                 }"
               >
                 {{ match.state === 'pending' ? '' : match.player1Score }}
@@ -80,7 +80,7 @@ function getPlayerName(participant: ParticipantIndividual | ParticipantTeam | nu
               <div
                 class="match-player-stocks"
                 :class="{
-                  'winner-stocks': match.winnerId === match.player2Id,
+                  'winner-stocks': match.winnerId && match.winnerId === match.player2Id,
                 }"
               >
                 {{ match.state === 'pending' ? '' : match.player2Score }}

@@ -18,7 +18,7 @@ async function init() {
     await fetchControlAccess(tournamentId);
     await fetchTournament(tournamentId);
     if (tournament.value?.winnerId) {
-      await fetchPlayer(tournament.value.winnerId, tournamentId);
+      await fetchPlayer(tournament.value?.winnerId, tournamentId);
     }
   } catch (e) {
     console.log('init error', e);
@@ -70,11 +70,21 @@ onDeactivated(() => {
 </script>
 <template>
   <div v-if="!initLoading">
-    <el-card v-if="tournament?.winnerId" flex="~ col" align="items-center" shadow="never" m="b-4">
+    <el-card v-if="tournament?.winnerId && winner" flex="~ col" align="items-center" shadow="never" m="b-4">
       <template #header>Winner</template>
-      <div flex="~" align="items-center">
+      <div v-if="'user' in winner" flex="~" align="items-center">
         <el-avatar :src="winner?.user.avatarUrl" />
-        <div text="lg orange-500" m="l-3">{{ winner?.user.username }}</div>
+        <div text="lg orange-500" m="l-3">{{ winner.user.username }}</div>
+      </div>
+      <div v-else>
+        <div display="flex" justify="center" class="whitespace-nowrap" w="full">
+          <template v-for="user in winner.users" :key="user.id">
+            <el-tooltip :content="user.username">
+              <el-avatar class="float-left ml-[-10px]" :src="user.avatarUrl" />
+            </el-tooltip>
+          </template>
+        </div>
+        <div text="lg orange-500" m="l-3">{{ winner.name }}</div>
       </div>
     </el-card>
     <div
