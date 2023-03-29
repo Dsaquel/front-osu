@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Match } from '~/types';
+import { Match, ParticipantIndividual, ParticipantTeam } from '~/types';
 
 const { matchPlayerIdOver } = storeToRefs(matchStore());
 
@@ -13,6 +13,14 @@ const showMatchDetail = ref(false);
 function mouseUp(playerId: number | undefined) {
   matchPlayerIdOver.value = playerId;
 }
+
+function getPlayerName(participant: ParticipantIndividual | ParticipantTeam | null) {
+  if (!participant) return '';
+  if ('user' in participant) {
+    return participant.user.username;
+  }
+  return participant.name;
+}
 </script>
 
 <template>
@@ -20,7 +28,10 @@ function mouseUp(playerId: number | undefined) {
     <div class="match-affix-wrapper">
       <div class="match-section match-section-top">
         <div class="matchSectionWrapper">
-          <div class="match-player entrant" :class="{ '!bg-yellow-900': playerIdOver === match.player1Id }">
+          <div
+            class="match-player entrant hover:!bg-yellow-900"
+            :class="{ '!bg-yellow-900': playerIdOver === match.player1Id }"
+          >
             <div
               class="match-player-name"
               :class="{
@@ -30,7 +41,7 @@ function mouseUp(playerId: number | undefined) {
               @mouseleave="mouseUp(undefined)"
             >
               <div class="flex-item-grower text-ellipsis">
-                <span class="match-player-name-container">{{ match.player1?.user.username || '' }}</span>
+                <span class="match-player-name-container">{{ getPlayerName(match.player1) }}</span>
               </div>
             </div>
             <div class="match-player-info">
@@ -49,7 +60,10 @@ function mouseUp(playerId: number | undefined) {
       <div class="match-spacer"></div>
       <div class="match-section match-section-bottom">
         <div class="matchSectionWrapper">
-          <div class="match-player entrant" :class="{ '!bg-yellow-900': playerIdOver === match.player2Id }">
+          <div
+            class="match-player entrant hover:!bg-yellow-900"
+            :class="{ '!bg-yellow-900': playerIdOver === match.player2Id }"
+          >
             <div
               class="match-player-name"
               :class="{
@@ -59,7 +73,7 @@ function mouseUp(playerId: number | undefined) {
               @mouseleave="mouseUp(undefined)"
             >
               <div class="flex-item-grower text-ellipsis">
-                <span class="match-player-name-container">{{ match.player2?.user.username || '' }}</span>
+                <span class="match-player-name-container">{{ getPlayerName(match.player2) }}</span>
               </div>
             </div>
             <div class="match-player-info">

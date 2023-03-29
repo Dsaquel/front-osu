@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import utc from 'dayjs/plugin/utc';
 import { ElMessageBox } from 'element-plus';
-import { Match } from '~/types';
+import { Match, ParticipantIndividual, ParticipantTeam } from '~/types';
 
 dayjs.extend(utc);
 dayjs.extend(LocalizedFormat);
@@ -38,6 +38,17 @@ const formsError = ref<string>();
 
 let updateLoading = $ref(false);
 
+function getPlayerProprety(
+  participant: ParticipantIndividual | ParticipantTeam | null,
+  proprety: 'username' | 'avatarUrl',
+) {
+  if (!participant) return '';
+  if ('user' in participant) {
+    return participant.user[proprety];
+  }
+  return participant.captain[proprety];
+}
+
 async function updateMatchTemplate() {
   try {
     if (
@@ -48,8 +59,10 @@ async function updateMatchTemplate() {
       await ElMessageBox.confirm(
         `${
           player1ScoreTemplate.value === firstToTemplate.value
-            ? props.match.player1?.user.username
-            : props.match.player2?.user.username
+            ? (props.match.player1 as ParticipantIndividual).user.username ||
+              (props.match.player1 as ParticipantTeam).name
+            : (props.match.player2 as ParticipantIndividual).user.username ||
+              (props.match.player2 as ParticipantTeam).name
         } will be the winner of the match`,
         'Warning',
         {
@@ -156,8 +169,9 @@ function getDateString(date: string) {
             <el-card v-if="match.player1" shadow="never">
               <div flex="~" align="items-center" justify="between">
                 <div flex="~ col" align="items-center">
-                  <el-avatar size="large" :src="match.player1.user.avatarUrl" />
-                  <span text="base">{{ match.player1.user.username }}</span>
+                  <el-avatar v-if="'user' in match.player1" size="large" :src="match.player1.user.avatarUrl" />
+                  <span v-if="'user' in match.player1" text="base">{{ match.player1.user.username }}</span>
+                  <span v-else text="base">{{ match.player1.name }}</span>
                 </div>
                 <span :class="{ 'text-emerald-500': match.winnerId === match?.player1.id }" text="3xl">{{
                   match.player1Score
@@ -177,8 +191,9 @@ function getDateString(date: string) {
                   match.player2Score
                 }}</span>
                 <div flex="~ col" align="items-center">
-                  <el-avatar size="large" :src="match.player2.user.avatarUrl" />
-                  <span text="base">{{ match.player2.user.username }}</span>
+                  <el-avatar v-if="'user' in match.player2" size="large" :src="match.player2.user.avatarUrl" />
+                  <span v-if="'user' in match.player2" text="base">{{ match.player2.user.username }}</span>
+                  <span v-else text="base">{{ match.player2.name }}</span>
                 </div>
               </div>
             </el-card>
@@ -192,8 +207,9 @@ function getDateString(date: string) {
           <div grid="~ cols-2" align="items-center">
             <div flex="~" align="items-center">
               <div v-if="match.player1" flex="~ col" align="items-center" p="2">
-                <el-avatar :src="match.player1.user.avatarUrl" />
-                <span text="base">{{ match.player1.user.username }}</span>
+                <el-avatar v-if="'user' in match.player1" size="large" :src="match.player1.user.avatarUrl" />
+                <span v-if="'user' in match.player1" text="base">{{ match.player1.user.username }}</span>
+                <span v-else text="base">{{ match.player1.name }}</span>
               </div>
               <el-input-number
                 v-model="player1ScoreTemplate"
@@ -211,8 +227,9 @@ function getDateString(date: string) {
                 :max="props.match.firstTo"
               />
               <div flex="~ col" align="items-center" p="2">
-                <el-avatar :src="match.player2.user.avatarUrl" />
-                <span text="base">{{ match.player2.user.username }}</span>
+                <el-avatar v-if="'user' in match.player2" size="large" :src="match.player2.user.avatarUrl" />
+                <span v-if="'user' in match.player2" text="base">{{ match.player2.user.username }}</span>
+                <span v-else text="base">{{ match.player2.name }}</span>
               </div>
             </div>
           </div>
@@ -299,9 +316,9 @@ function getDateString(date: string) {
                   <el-avatar
                     :src="
                       reschedule.playerId === match.player1Id
-                        ? match.player1?.user.avatarUrl
+                        ? getPlayerProprety(match.player1, 'avatarUrl')
                         : reschedule.playerId === match.player2Id
-                        ? match.player2?.user.avatarUrl
+                        ? getPlayerProprety(match.player2, 'avatarUrl')
                         : reschedule.superReferee?.admin?.user.avatarUrl ||
                           reschedule.superReferee?.referee?.user.avatarUrl ||
                           tournament?.owner.avatarUrl
@@ -312,9 +329,9 @@ function getDateString(date: string) {
                       <div font="semibold">
                         {{
                           reschedule.playerId === match.player1Id
-                            ? match.player1?.user.username
+                            ? getPlayerProprety(match.player1, 'username')
                             : reschedule.playerId === match.player2Id
-                            ? match.player2?.user.username
+                            ? getPlayerProprety(match.player2, 'username')
                             : reschedule.superReferee?.admin?.user.username ||
                               reschedule.superReferee?.referee?.user.username ||
                               tournament?.owner.username

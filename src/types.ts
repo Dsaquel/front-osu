@@ -187,8 +187,8 @@ export interface CurrentUser extends User {
 export interface Participant extends Node {
   tournamentId: number;
   type: ParticipantType;
-  lobbyId: number | null;
-  lobby: Lobby | null;
+  qualifierParticipant: QualifierParticipant | null;
+  player: Player | null;
 }
 
 export interface ParticipantIndividual extends Participant {
@@ -206,7 +206,6 @@ export interface ParticipantTeam extends Participant {
   numberPlayerMax: number;
   captainId: number;
   invitations: ParticipantInvitation[];
-  qualifierParticipant: QualifierParticipant | null;
   captain: User;
 }
 
@@ -333,8 +332,8 @@ export interface Match extends Node {
   identifier: number;
   round: number;
   player1Score: number;
-  player1: Player | null;
-  player2: Player | null;
+  player1: ParticipantIndividual | ParticipantTeam | null;
+  player2: ParticipantIndividual | ParticipantTeam | null;
   player2Score: number;
   startDate: string | null;
   player1PrevIdentifier: number;
@@ -364,9 +363,7 @@ export interface Reschedule extends Node {
 
 export interface Player extends Node {
   validate: boolean;
-  user: User;
   tournamentId: number;
-  userId: number;
   seed: number;
 }
 
