@@ -26,7 +26,7 @@ const QualifierApi = {
   fetchParticipantsRanking: (qualifierId: number) =>
     service.get<ParticipantIndividual[] | ParticipantTeam[]>(`/qualifier/${qualifierId}/participant/ranking`),
   passQualifierToFinished: (qualifierId: number, tournamentId: number) =>
-    service.put<void>(`/qualifier/${qualifierId}/finished`, undefined, { tournamentId }),
+    service.put<TemplateNotification>(`/qualifier/${qualifierId}/finished`, undefined, { tournamentId }),
 };
 
 export default QualifierApi;

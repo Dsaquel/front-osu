@@ -13,14 +13,15 @@ const { fetchTournament, fetchControlAccess } = tournamentStore();
 const { qualifier, mapsScore, participantsRanking } = storeToRefs(qualifierStore());
 const { tournament, isAuthorized, isOwnerOrAdmin } = storeToRefs(tournamentStore());
 
-const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
-let initLoading = $ref(false);
+const tournamentId = ref(parseInt(useRoute().params?.tournamentId as string, 10));
+const initLoading = ref(false);
+const passQualifierToFinishedLoading = ref(false);
 
 async function init() {
   try {
-    await fetchQualifier(tournamentId);
-    await fetchControlAccess(tournamentId);
-    await fetchTournament(tournamentId);
+    await fetchQualifier(tournamentId.value);
+    await fetchControlAccess(tournamentId.value);
+    await fetchTournament(tournamentId.value);
     await fetchMapsScore(qualifier.value?.id as number);
     await fetchParticipantsRanking(qualifier.value?.id as number);
   } catch (e) {
@@ -29,9 +30,9 @@ async function init() {
 }
 
 onBeforeMount(async () => {
-  initLoading = true;
+  initLoading.value = true;
   await init();
-  initLoading = false;
+  initLoading.value = false;
 });
 
 function calculMedian(numbers: number[]) {
@@ -45,6 +46,28 @@ function calculMedian(numbers: number[]) {
   }
 
   return median;
+}
+
+async function passQualifierToFinishedTemplate() {
+  try {
+    if (!tournament.value || !qualifier.value) return;
+    await ElMessageBox.confirm(
+      `This action will set players into bracket. Make sure all users setted score, there will no turning back`,
+      'warning',
+      {
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
+        type: 'warning',
+      },
+    );
+    passQualifierToFinishedLoading.value = true;
+    const notification = await passQualifierToFinished(qualifier.value.id, tournament.value.id);
+    ElMessage.success(notification.message);
+  } catch (e) {
+    console.log(e);
+  } finally {
+    passQualifierToFinishedLoading.value = false;
+  }
 }
 </script>
 
@@ -77,7 +100,8 @@ function calculMedian(numbers: number[]) {
                 m="l-2"
                 type="success"
                 size="small"
-                @click="passQualifierToFinished(qualifier?.id as number, tournament?.id as number)"
+                :loading="passQualifierToFinishedLoading"
+                @click="passQualifierToFinishedTemplate()"
                 >pass qualifier to finished
               </el-button>
             </template>

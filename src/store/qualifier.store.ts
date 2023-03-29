@@ -66,8 +66,8 @@ const useQualifierStore = defineStore('qualifier', () => {
     participantsRanking.value = data;
   }
 
-  async function passQualifierToFinished(qualifierId: number, tournamentId: number) {
-    await apiQualifier.passQualifierToFinished(qualifierId, tournamentId);
+  function passQualifierToFinished(qualifierId: number, tournamentId: number) {
+    return apiQualifier.passQualifierToFinished(qualifierId, tournamentId);
   }
 
   return {
