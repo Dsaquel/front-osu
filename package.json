@@ -9,7 +9,10 @@
     "build": "vite build",
     "lint": "eslint src",
     "preview": "vite preview",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
     "@tinymce/tinymce-vue": "^5.0.0",
@@ -63,6 +66,7 @@
     "vite-plugin-vue-markdown": "^0.21.1",
     "vite-plugin-windicss": "^1.8.10",
     "vite-svg-loader": "^3.6.0",
+    "vitepress": "1.0.0-alpha.64",
     "vue-tsc": "^0.38.9"
   },
   "lint-staged": {
