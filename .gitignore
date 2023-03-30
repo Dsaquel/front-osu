@@ -5,5 +5,3 @@ dist-ssr
 *.local
 .npmrc
 .env
-docs/.vitepress/dist
-docs/.vitepress/cache

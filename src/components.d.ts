@@ -7,7 +7,6 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    ApiIndex: typeof import('./components/ApiIndex.vue')['default']
     AppLayout: typeof import('./components/Ui/Layout/AppLayout.vue')['default']
     BracketMatch: typeof import('./components/tournament/match/BracketMatch.vue')['default']
     CommonDatepicker: typeof import('./components/common/CommonDatepicker.vue')['default']
@@ -50,9 +49,7 @@ declare module '@vue/runtime-core' {
     ElTimeline: typeof import('element-plus/es')['ElTimeline']
     ElTimelineItem: typeof import('element-plus/es')['ElTimelineItem']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
-    EnProcess: typeof import('./components/EnProcess.md')['default']
     Home: typeof import('./components/markdown/Home.md')['default']
-    'IAkarIcons:check': typeof import('~icons/akar-icons/check')['default']
     'IAkarIcons:cross': typeof import('~icons/akar-icons/cross')['default']
     'IAntDesign:caretRightFilled': typeof import('~icons/ant-design/caret-right-filled')['default']
     'IEp:memo': typeof import('~icons/ep/memo')['default']
@@ -68,11 +65,8 @@ declare module '@vue/runtime-core' {
     'IMdi:bell': typeof import('~icons/mdi/bell')['default']
     'IMdi:bpm': typeof import('~icons/mdi/bpm')['default']
     'IMdi:clockTimeEight': typeof import('~icons/mdi/clock-time-eight')['default']
-    'IMdi:doc': typeof import('~icons/mdi/doc')['default']
     'IMdi:dotsVertical': typeof import('~icons/mdi/dots-vertical')['default']
     'IMdi:eye': typeof import('~icons/mdi/eye')['default']
-    'IMdi:fa6Solid:usersGear': typeof import('~icons/mdi/fa6-solid-users-gear')['default']
-    'IMdi:house': typeof import('~icons/mdi/house')['default']
     'IMdi:recycle': typeof import('~icons/mdi/recycle')['default']
     'IMdi:tournament': typeof import('~icons/mdi/tournament')['default']
     IPhCloudMoonBold: typeof import('~icons/ph/cloud-moon-bold')['default']
@@ -100,12 +94,10 @@ declare module '@vue/runtime-core' {
     RouterView: typeof import('vue-router')['RouterView']
     TeamManager: typeof import('./components/tournament/participant/team/TeamManager.vue')['default']
     TemplateDraft: typeof import('./components/draft/TemplateDraft.vue')['default']
-    TheFooter: typeof import('./components/TheFooter.vue')['default']
     ToolbarLayout: typeof import('./components/Ui/Layout/childs/ToolbarLayout.vue')['default']
     TournamentHomeTable: typeof import('./components/tournament/TournamentHomeTable.vue')['default']
     TournamentStaff: typeof import('./components/tournament/staff/TournamentStaff.vue')['default']
     UpperBracket: typeof import('./components/tournament/bracket/UpperBracket.vue')['default']
-    ZhProcess: typeof import('./components/ZhProcess.md')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']

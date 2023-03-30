@@ -8,13 +8,6 @@ const asyncRoutes: Array<RouteRecordRaw> = [
     meta: {
       breadcrumb: [{ text: 'home' }],
     },
-    children: [
-      {
-        path: '',
-        name: 'home',
-        component: () => import('~/views/home/HomeIndex.vue'),
-      },
-    ],
   },
   {
     path: '/users/:userId',
