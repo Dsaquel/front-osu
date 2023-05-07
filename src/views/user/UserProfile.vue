@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { Draft } from '~/types';
+import { Draft, Tournament } from '~/types';
 
 dayjs.extend(utc);
 const { fetchUserDrafts, fetchUserInvolvement } = userStore();
@@ -42,7 +42,7 @@ async function updateDraftPrivacyTemplate(draft: Draft) {
         <el-button type="primary" size="small" m="l-4">create new draft</el-button>
       </router-link>
     </div>
-    <el-table :data="userDrafts" w="full">
+    <el-table :data="userDrafts" w="full" empty-text="No drafts yet">
       <el-table-column prop="name" label="draft name" />
       <el-table-column label="estimate start date">
         <template #default="scope: { row: Draft }">
@@ -97,48 +97,16 @@ async function updateDraftPrivacyTemplate(draft: Draft) {
         <el-button type="primary" size="small" m="l-4">see new tournaments</el-button>
       </router-link>
     </div>
-    <el-table :data="userInvolvement" w="full">
-      <el-table-column prop="name" label="draft name" />
-      <el-table-column label="estimate start date">
-        <template #default="scope: { row: Draft }">
-          {{ dayjs(scope.row.estimateStartDate).format('MMMM') }}
-        </template>
-      </el-table-column>
-      <el-table-column label="last update">
-        <template #default="scope"> {{ useTimeAgo(scope.row.updateAt).value }} </template>
-      </el-table-column>
+    <el-table :data="userInvolvement" w="full" empty-text="No involvement yet">
+      <el-table-column prop="name" label="tournament name" />
       <el-table-column label="actions" align="center" width="150" fixed="right">
-        <template #default="scope: { row: Draft }">
-          <el-switch
-            v-if="scope.row.isPublicable"
-            v-model="scope.row.isPublic"
-            inline-prompt
-            style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
-            active-text="draft visible"
-            inactive-text="draft private"
-            :loading="scope.row.id === draftIdLoading"
-            @change="updateDraftPrivacyTemplate(scope.row)"
-          />
-          <el-tooltip
-            v-if="scope.row.tournament.isPublic || (user && scope.row.ownerId === user.id)"
-            content="tournament"
-            placement="left"
-          >
-            <router-link :to="`/tournaments/${scope.row.tournament.id}`">
-              <el-button type="primary" size="small" plain round><i-mdi:tournament /> </el-button>
-            </router-link>
-          </el-tooltip>
-          <el-tooltip v-if="user && scope.row.ownerId === user.id" content="see/edit" placement="top">
-            <router-link :to="`/tournaments/drafts/${scope.row.id}/update`">
-              <el-button type="primary" size="small" plain round m="l-1"><i-material-symbols:edit /> </el-button>
-            </router-link>
-          </el-tooltip>
+        <template #default="scope: { row: Tournament }">
           <el-tooltip
             v-if="scope.row.isPublic || (user && scope.row.ownerId === user.id)"
             content="see"
             placement="right"
           >
-            <router-link :to="`/tournaments/drafts/${scope.row.id}`">
+            <router-link :to="{ name: 'tournament-detail', params: { tournamentId: scope.row.id } }">
               <el-button type="primary" size="small" plain round m="l-1"><i-mdi:eye /> </el-button>
             </router-link>
           </el-tooltip>

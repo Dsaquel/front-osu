@@ -4,7 +4,7 @@ import { Draft, Tournament, User } from '~/types';
 const UserApi = {
   fetch: () => service.get<User>(`/user/me`),
   fetchUserDrafts: () => service.get<Draft[]>(`/user/drafts`),
-  fetchUserInvolvement: () => service.get<Tournament[]>(`/user/participation`),
+  fetchUserInvolvement: () => service.get<Tournament[]>(`/user/involvement`),
   fetchUsersByUsername: (username: string) => service.get<User[]>(`/user`, { username }),
 };
 

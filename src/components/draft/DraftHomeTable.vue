@@ -18,7 +18,7 @@ const { drafts } = storeToRefs(draftStore());
         <el-button type="primary" size="small" m="l-2">create</el-button>
       </router-link>
     </div>
-    <el-table :data="drafts">
+    <el-table :data="drafts" empty-text="no drafts yet">
       <el-table-column label="owner">
         <template #default="scope: { row: Draft }">
           <div display="flex" align="items-center">

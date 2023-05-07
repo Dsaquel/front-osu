@@ -10,10 +10,10 @@ defineProps<{
 <template>
   <section display="flex" flex="col" justify="between" z="2" shadow="current">
     <div class="<sm:flex <sm:justify-around">
-      <router-link to="/docs" class="nav">
+      <!-- <router-link to="/docs" class="nav">
         <i-ep:memo w="min-28px" m="b-7px" text="1.4rem" />
         <div class="<sm:hidden">Doc</div>
-      </router-link>
+      </router-link> -->
       <router-link v-if="user" :to="`/users/${user?.id}`" class="nav">
         <i-mdi:account w="min-28px" m="b-7px" text="1.4rem" />
         <div class="<sm:hidden">Me</div>

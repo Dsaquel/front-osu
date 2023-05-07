@@ -25,7 +25,7 @@ const { tournaments } = storeToRefs(tournamentStore());
         <el-button type="primary" size="small" m="l-4">create</el-button>
       </router-link>
     </div>
-    <el-table :data="tournaments">
+    <el-table :data="tournaments" empty-text="no tournaments yet">
       <el-table-column label="owner">
         <template #default="scope: { row: Tournament }">
           <div display="flex" align="items-center">
