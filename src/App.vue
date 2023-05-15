@@ -4,7 +4,6 @@ import en from 'element-plus/lib/locale/lang/en';
 const reSignin = async (retry?: number) => {
   if (retry) return;
 
-  await authStore().logout();
   document.cookie = 'cookie=; Max-Age=0';
   window.open(
     import.meta.env.PROD ? import.meta.env.VITE_OSU_PROD_CALLBACK_URL : import.meta.env.VITE_OSU_DEV_CALLBACK_URL,
