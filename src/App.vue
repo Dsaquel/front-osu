@@ -8,10 +8,6 @@ onBeforeMount(async () => {
       await userStore().fetch();
     } catch (e) {
       console.log(e);
-      window.open(
-        import.meta.env.PROD ? import.meta.env.VITE_OSU_PROD_CALLBACK_URL : import.meta.env.VITE_OSU_DEV_CALLBACK_URL,
-        '_self',
-      );
     }
   }
 });
