@@ -131,7 +131,7 @@ async function updateTournamentPrivacyTemplate() {
             >
             <template #extra>
               <el-switch
-                v-if="tournament.isPublicable && (access!.isAdmin || access!.isOwner)"
+                v-if="tournament.isPublicable && (access?.isAdmin || access?.isOwner)"
                 v-model="tournament.isPublic"
                 class="ml-2"
                 size="large"

@@ -106,7 +106,7 @@ async function updateDraftPrivacyTemplate() {
             </template>
             <template #extra>
               <el-switch
-                v-if="draft.isPublicable && (access!.isAdmin || access!.isOwner)"
+                v-if="draft.isPublicable && (access?.isAdmin || access?.isOwner)"
                 v-model="draft.isPublic"
                 class="ml-2"
                 size="large"
@@ -125,7 +125,7 @@ async function updateDraftPrivacyTemplate() {
                 <el-button type="primary" plain round> tournament </el-button>
               </router-link>
               <router-link
-                v-if="access!.isAdmin || access!.isOwner"
+                v-if="access?.isAdmin || access?.isOwner"
                 :to="{ name: 'draft-update', params: { draftId: draft.id } }"
                 m="l-2"
               >
@@ -154,7 +154,11 @@ async function updateDraftPrivacyTemplate() {
             placement="top-start"
             trigger="hover"
             width="auto"
-            :content="access!.isAdmin || access!.isOwner ? 'You have already all permissions' : 'Ask your admin to upgrade your status'"
+            :content="
+              access?.isAdmin || access?.isOwner
+                ? 'You have already all permissions'
+                : 'Ask your admin to upgrade your status'
+            "
           >
             <template #reference>
               <div m="t-4" place="self-end">

@@ -114,7 +114,7 @@ async function addToAnotherRole(role: Exclude<Role, 'admin'>, userId: number) {
           </template>
         </el-table-column>
 
-        <el-table-column v-if="isAuthorized && (access!.isAdmin || access!.isOwner)" width="40" align="right">
+        <el-table-column v-if="isAuthorized && (access?.isAdmin || access?.isOwner)" width="40" align="right">
           <template #default="scope">
             <el-dropdown
               v-if="scope.row.sources.includes('mappooler') || scope.row.sources.includes('referee')"
