@@ -30,8 +30,8 @@ async function init() {
     await fetchDraft(draftId);
     if (user.value) {
       await fetchControlAccess(draft.value?.tournament.id as number);
+      await fetchParticipationOfUser(draft.value?.tournament.id as number);
     }
-    await fetchParticipationOfUser(draft.value?.tournament.id as number);
   } catch (e) {
     console.log('init error', e);
   }
