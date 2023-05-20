@@ -28,7 +28,9 @@ const options: Role[] = ['referee', 'mappooler', 'admin'];
 async function init() {
   try {
     await fetchDraft(draftId);
-    await fetchControlAccess(draft.value?.tournament.id as number);
+    if (user.value) {
+      await fetchControlAccess(draft.value?.tournament.id as number);
+    }
     await fetchParticipationOfUser(draft.value?.tournament.id as number);
   } catch (e) {
     console.log('init error', e);

@@ -18,6 +18,7 @@ const { fetchTournament, fetchControlAccess, passToBracketPhase, startTournament
 const { tournament, isAuthorized, access, isOwnerOrAdmin } = storeToRefs(tournamentStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
+const { user } = storeToRefs(userStore());
 
 let initLoading = $ref(false);
 const bracketPhaseLoading = ref(false);
@@ -28,7 +29,9 @@ async function init() {
   try {
     if (!tournamentId) return;
     await fetchTournament(tournamentId);
-    await fetchControlAccess(tournamentId);
+    if (user.value) {
+      await fetchControlAccess(tournamentId);
+    }
   } catch (e) {
     console.log('init error');
   }
