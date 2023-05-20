@@ -202,7 +202,7 @@ async function updateDraftPrivacyTemplate() {
           </el-dialog>
         </div>
       </div>
-      <TournamentStaff grid="col-span-2" :tournament-id="draft.tournament.id">
+      <TournamentStaff v-if="access?.isAdmin || access?.isOwner" grid="col-span-2" :tournament-id="draft.tournament.id">
         <template #goRequests>
           <el-button @click="goRequests">see requestes</el-button>
         </template>
