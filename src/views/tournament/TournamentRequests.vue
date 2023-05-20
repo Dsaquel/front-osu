@@ -3,6 +3,7 @@ import { Role, TemplateNotification, Staff } from '~/types';
 
 const { fetchTournament, fetchControlAccess, acceptCandidate, removeStaff } = tournamentStore();
 const { tournament, isAuthorized, access, staffRequests } = storeToRefs(tournamentStore());
+const { user } = storeToRefs(userStore());
 
 const router = useRouter();
 
@@ -14,7 +15,9 @@ const tableStaff = ref();
 
 async function init() {
   try {
-    await fetchControlAccess(tournamentId);
+    if (user.value) {
+      await fetchControlAccess(tournamentId);
+    }
     await fetchTournament(tournamentId);
   } catch (e) {
     console.log('init error', e);

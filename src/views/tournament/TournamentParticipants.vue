@@ -4,13 +4,16 @@ import { isParticipantIndividual } from '~/types';
 
 const { fetchTournament, fetchControlAccess, fetchParticipants } = tournamentStore();
 const { tournament, participantsAccepted } = storeToRefs(tournamentStore());
+const { user } = storeToRefs(userStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
 let initLoading = $ref(false);
 
 async function init() {
   try {
-    await fetchControlAccess(tournamentId);
+    if (user.value) {
+      await fetchControlAccess(tournamentId);
+    }
     await fetchTournament(tournamentId);
     await fetchParticipants(tournamentId);
   } catch (e) {

@@ -8,6 +8,7 @@ const { fetchMatches } = matchStore();
 const { fetchControlAccess, fetchTournament, fetchPlayer } = tournamentStore();
 const { tournament, winner } = storeToRefs(tournamentStore());
 const { matchesGrouped } = storeToRefs(matchStore());
+const { user } = storeToRefs(userStore());
 
 const tournamentId = $ref(parseInt(useRoute().params?.tournamentId as string, 10));
 let initLoading = $ref(false);
@@ -15,7 +16,9 @@ let initLoading = $ref(false);
 async function init() {
   try {
     await fetchMatches(tournamentId);
-    await fetchControlAccess(tournamentId);
+    if (user.value) {
+      await fetchControlAccess(tournamentId);
+    }
     await fetchTournament(tournamentId);
     if (tournament.value?.winnerId) {
       await fetchPlayer(tournament.value?.winnerId, tournamentId);

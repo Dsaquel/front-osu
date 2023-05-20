@@ -9,6 +9,7 @@ const { fetchTournamentMappools, fetchQualifierMappool } = mappoolStore();
 const { fetchTournament, fetchControlAccess } = tournamentStore();
 const { qualifierMappool, tournamentMappools } = storeToRefs(mappoolStore());
 const { isAuthorized, access, tournament } = storeToRefs(tournamentStore());
+const { user } = storeToRefs(userStore());
 
 const activeCollapse = ref(['1']);
 
@@ -17,7 +18,9 @@ let initLoading = $ref(false);
 
 async function init() {
   await fetchTournament(tournamentId);
-  await fetchControlAccess(tournamentId);
+  if (user.value) {
+    await fetchControlAccess(tournamentId);
+  }
   await fetchTournamentMappools(tournamentId);
   if (tournament.value?.qualifier) await fetchQualifierMappool(tournament.value.qualifier.id);
 }

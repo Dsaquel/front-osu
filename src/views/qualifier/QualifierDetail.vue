@@ -12,6 +12,7 @@ const { fetchQualifier, fetchMapsScore, fetchParticipantsRanking, passQualifierT
 const { fetchTournament, fetchControlAccess } = tournamentStore();
 const { qualifier, mapsScore, participantsRanking } = storeToRefs(qualifierStore());
 const { tournament, isAuthorized, isOwnerOrAdmin } = storeToRefs(tournamentStore());
+const { user } = storeToRefs(userStore());
 
 const tournamentId = ref(parseInt(useRoute().params?.tournamentId as string, 10));
 const initLoading = ref(false);
@@ -20,7 +21,9 @@ const passQualifierToFinishedLoading = ref(false);
 async function init() {
   try {
     await fetchQualifier(tournamentId.value);
-    await fetchControlAccess(tournamentId.value);
+    if (user.value) {
+      await fetchControlAccess(tournamentId.value);
+    }
     await fetchTournament(tournamentId.value);
     await fetchMapsScore(qualifier.value?.id as number);
     await fetchParticipantsRanking(qualifier.value?.id as number);
